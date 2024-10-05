@@ -1,7 +1,19 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron';
+import { app, shell, BrowserWindow, ipcMain, dialog } from 'electron';
 import { join } from 'path';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import icon from '../../resources/icon.png?asset';
+
+import ffmpeg from 'fluent-ffmpeg';
+
+async function handleFileOpen() {
+	const { canceled, filePaths } = await dialog.showOpenDialog({
+		properties: ['openFile'],
+		filters: [{ name: 'Movies', extensions: ['mkv', 'avi', 'mp4', 'webm'] }],
+	});
+	if (!canceled) {
+		return filePaths[0];
+	}
+}
 
 function createWindow() {
 	// Create the browser window.
@@ -14,6 +26,9 @@ function createWindow() {
 		webPreferences: {
 			preload: join(__dirname, '../preload/index.js'),
 			sandbox: false,
+
+			// TODO: TMP for development only:
+			webSecurity: false,
 		},
 	});
 
@@ -33,6 +48,59 @@ function createWindow() {
 	} else {
 		mainWindow.loadFile(join(__dirname, '../renderer/index.html'));
 	}
+
+	let ffmpegProcess = null;
+
+	ipcMain.handle('generateOutputVideo', async (event, { input, output }) => {
+		let isError = false;
+		try {
+			await new Promise((resolve, reject) => {
+				ffmpegProcess = ffmpeg()
+					.input(input)
+					.outputOptions('-vf', 'scale=-2:720')
+					.saveToFile(output)
+					.on('progress', (progress) => {
+						if (progress.percent) {
+							const percent = Math.floor(progress.percent);
+							console.log(`Processing: ${percent}% done`);
+							// Wysyłanie komunikatu z postępem do renderera
+							mainWindow.webContents.send('encoding-progress', percent);
+						}
+					})
+					.on('end', () => {
+						ffmpegProcess = null;
+						console.log('FFmpeg has finished.');
+						resolve();
+					})
+					.on('error', (error) => {
+						ffmpegProcess = null;
+						console.error(error);
+						isError = true;
+						reject(error);
+					});
+			});
+		} catch (error) {
+			console.log(error);
+			isError = true;
+		}
+
+		if (isError) {
+			return { error: true };
+		} else {
+			return { error: false };
+		}
+	});
+
+	ipcMain.handle('stopVideoProcessing', () => {
+		if (ffmpegProcess) {
+			ffmpegProcess.kill('SIGINT');
+			console.log('FFmpeg process stopped.');
+			ffmpegProcess = null;
+			return { stopped: true };
+		} else {
+			return { stopped: false, error: 'No process running' };
+		}
+	});
 }
 
 // This method will be called when Electron has finished
@@ -51,6 +119,15 @@ app.whenReady().then(() => {
 
 	// IPC test
 	ipcMain.on('ping', () => console.log('pong'));
+
+	// My IPC
+	// ipcMain.on('pickFile', async (e, message) => {
+	// 	const file = dialog.showOpenDialogSync({ properties: ['openFile', 'multiSelections'] });
+	// 	console.log(file);
+	// 	return 'test xd';
+	// });
+
+	ipcMain.handle('dialog:openFile', handleFileOpen);
 
 	createWindow();
 
