@@ -1,17 +1,48 @@
 import { app, shell, BrowserWindow, ipcMain, dialog } from 'electron';
-import { join } from 'path';
+import { join, sep } from 'path';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import icon from '../../resources/icon.png?asset';
 
 import ffmpeg from 'fluent-ffmpeg';
+
+function getMetadata(filePath) {
+	return new Promise((resolve, reject) => {
+		ffmpeg.ffprobe(filePath, (error, metadata) => {
+			if (error) {
+				reject(error);
+			} else {
+				resolve(metadata);
+			}
+		});
+	});
+}
 
 async function handleFileOpen() {
 	const { canceled, filePaths } = await dialog.showOpenDialog({
 		properties: ['openFile'],
 		filters: [{ name: 'Movies', extensions: ['mkv', 'avi', 'mp4', 'webm'] }],
 	});
+
 	if (!canceled) {
-		return filePaths[0];
+		try {
+			const metadata = await getMetadata(filePaths[0]);
+			// console.log(metadata);
+
+			return { path: filePaths[0], metadata: metadata };
+		} catch (error) {
+			console.error('Error:', error);
+
+			return { error: 'Unable to open the selected file' };
+		}
+	}
+}
+
+async function handleFolderOpen() {
+	const { canceled, filePaths } = await dialog.showOpenDialog({
+		properties: ['openDirectory'],
+	});
+	if (!canceled) {
+		return filePaths[0] + sep;
 	}
 }
 
@@ -64,19 +95,33 @@ function createWindow() {
 
 	let ffmpegProcess = null;
 
-	ipcMain.handle('generateOutputVideo', async (event, { input, output }) => {
+	ipcMain.handle('generateOutputVideo', async (event, data) => {
+		console.log(' === New video processing: ', data);
+		// TODO: check if folder exists
+		// TODO: check if file exist and chose if overwrite
+
+		// Validation
+		if (!data.output.name) {
+			return { error: 'File name cannot be empty.' };
+		}
+
 		let isError = false;
 		try {
 			await new Promise((resolve, reject) => {
-				ffmpegProcess = ffmpeg()
-					.input(input)
-					.outputOptions('-vf', 'scale=-2:720')
-					.saveToFile(output)
+				ffmpegProcess = ffmpeg().input(data.input);
+				// .outputOptions('-vf', 'scale=-2:720')
+				// .outputOptions(...outputOptions)
+
+				if (data?.outputOptions?.length > 0) {
+					ffmpegProcess.outputOptions(...data.outputOptions);
+				}
+
+				ffmpegProcess
+					.saveToFile(data.output.path)
 					.on('progress', (progress) => {
 						if (progress.percent) {
 							const percent = Math.floor(progress.percent);
 							console.log(`Processing: ${percent}% done`);
-							// Wysyłanie komunikatu z postępem do renderera
 							mainWindow.webContents.send('encoding-progress', percent);
 						}
 					})
@@ -98,7 +143,7 @@ function createWindow() {
 		}
 
 		if (isError) {
-			return { error: true };
+			return { error: 'Unknown Error.' };
 		} else {
 			return { error: false };
 		}
@@ -141,6 +186,7 @@ app.whenReady().then(() => {
 	// });
 
 	ipcMain.handle('dialog:openFile', handleFileOpen);
+	ipcMain.handle('dialog:openFolder', handleFolderOpen);
 
 	createWindow();
 

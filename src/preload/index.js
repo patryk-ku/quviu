@@ -8,8 +8,9 @@ const api = {
 	maximize: () => ipcRenderer.invoke('maximize'),
 	close: () => ipcRenderer.invoke('close'),
 	openFile: () => ipcRenderer.invoke('dialog:openFile'),
-	generateOutputVideo: (input, output) =>
-		ipcRenderer.invoke('generateOutputVideo', { input, output }),
+	openFolder: () => ipcRenderer.invoke('dialog:openFolder'),
+	generateOutputVideo: (input, output, outputOptions) =>
+		ipcRenderer.invoke('generateOutputVideo', { input, output, outputOptions }),
 	onProgressUpdate: (callback) =>
 		ipcRenderer.on('encoding-progress', (_event, value) => callback(value)),
 	stopProcessingVideo: () => ipcRenderer.invoke('stopVideoProcessing'),

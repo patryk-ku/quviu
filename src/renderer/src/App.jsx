@@ -1,23 +1,43 @@
 import { useState, useEffect } from 'react';
 import { Button, Tabs, TextInput } from '@mantine/core';
-import { File, FrameCorners, SpeakerHigh } from '@phosphor-icons/react';
+import { useLocalStorage } from '@mantine/hooks';
+import { File, FrameCorners, SpeakerHigh, Star } from '@phosphor-icons/react';
 
 import TitleBar from './components/TitleBar';
 import VideoPicker from './components/VideoPicker';
+import FileTab from './components/Tabs.jsx/FileTab';
 import StatusBar from './components/StatusBar';
 // import electronLogo from './assets/electron.svg'
 
 function App() {
 	const [file, setFile] = useState(null);
-	const [outputPath, setOutputPath] = useState('/home/patryk/Desktop/');
-	const [outputName, setOutputName] = useState('test-video-001.mp4');
+	const [outputPath, setOutputPath] = useLocalStorage({
+		key: 'output-path',
+		defaultValue: '',
+	});
+	const [outputName, setOutputName] = useState('test-video-001');
+	const [outputExtension, setOutputExtension] = useState('.mp4');
 	const [progress, setProgress] = useState(0);
 	const [isProcessing, setIsProcessing] = useState(false);
+	const [error, setError] = useState(null);
+
+	const [outputOptions, setOutputOptions] = useState([
+		// '-vf scale=-2:720',
+		'-crf 40',
+		// '-deadline best',
+	]);
 
 	const handleFilePicker = async () => {
 		setProgress(0);
+		setError(null);
 		const filePath = await window.api.openFile();
-		setFile(filePath);
+
+		if (filePath.error) {
+			setError(filePath.error);
+			return;
+		}
+
+		setFile(filePath.path);
 		console.log('Selected video: ', filePath);
 	};
 
@@ -25,16 +45,28 @@ function App() {
 		console.log('Cleared video path: ', file);
 		setFile(null);
 		setProgress(0);
+		setError(null);
 	};
 
 	const handleProcess = async () => {
+		setError(null);
+		// tmp
+		// setOutputOptions((prevOptions) => [...prevOptions, '-vf', 'scale=-2:480']);
+
+		// setOutputOptions(['-vf', 'scale=-2:720', '-crf', '40']);
+
 		setProgress(0);
-		const output = outputPath + outputName;
+		const output = {
+			folder: outputPath,
+			name: outputName,
+			ext: outputExtension,
+			path: outputPath + outputName + outputExtension,
+		};
 		setIsProcessing(true);
-		const result = await window.api.generateOutputVideo(file, output);
+		const result = await window.api.generateOutputVideo(file, output, outputOptions);
 		setIsProcessing(false);
 		if (result.error) {
-			// TODO: show error info or smt
+			setError(result.error);
 			setProgress(0);
 		} else {
 			setProgress(100);
@@ -61,16 +93,26 @@ function App() {
 				<Tabs
 					defaultValue='File'
 					orientation='vertical'
+					variant='pills'
+					radius='xs'
 					className='h-0 min-h-full border-t-2 border-[--tab-border-color]'
 					styles={{
 						panel: { overflowY: 'auto', padding: '8px 16px', marginRight: '2px' },
 						tab: {
 							paddingLeft: '20px',
 							paddingRight: '24px',
+							paddingTop: '12px',
+							paddingBottom: '12px',
 						},
 					}}
 				>
-					<Tabs.List className='mr-0'>
+					<Tabs.List className='border-r-2 border-[--tab-border-color]'>
+						<Tabs.Tab
+							value='Presets'
+							leftSection={<Star size={14} color='gold' weight='fill' />}
+						>
+							Fast Presets
+						</Tabs.Tab>
 						<Tabs.Tab value='File' leftSection={<File size={14} weight='bold' />}>
 							File
 						</Tabs.Tab>
@@ -88,20 +130,17 @@ function App() {
 						</Tabs.Tab>
 					</Tabs.List>
 
+					<Tabs.Panel value='Presets'>Presety</Tabs.Panel>
+
 					<Tabs.Panel value='File'>
-						<div className='grid grid-cols-1 gap-2'>
-							<TextInput
-								label='Output Folder'
-								value={outputPath}
-								onChange={(event) => setOutputPath(event.currentTarget.value)}
-								disabled
-							/>
-							<TextInput
-								label='File Name'
-								value={outputName}
-								onChange={(event) => setOutputName(event.currentTarget.value)}
-							/>
-						</div>
+						<FileTab
+							outputPath={outputPath}
+							setOutputPath={setOutputPath}
+							outputName={outputName}
+							setOutputName={setOutputName}
+							outputExtension={outputExtension}
+							setOutputExtension={setOutputExtension}
+						/>
 					</Tabs.Panel>
 
 					<Tabs.Panel value='Video'></Tabs.Panel>
@@ -152,6 +191,7 @@ function App() {
 					isProcessing={isProcessing}
 					handleProcess={handleProcess}
 					progress={progress}
+					error={error}
 				/>
 			</div>
 		</div>
