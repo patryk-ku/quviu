@@ -4,6 +4,9 @@ import ffmpeg from 'fluent-ffmpeg';
 
 // Custom APIs for renderer
 const api = {
+	minimize: () => ipcRenderer.invoke('minimize'),
+	maximize: () => ipcRenderer.invoke('maximize'),
+	close: () => ipcRenderer.invoke('close'),
 	openFile: () => ipcRenderer.invoke('dialog:openFile'),
 	generateOutputVideo: (input, output) =>
 		ipcRenderer.invoke('generateOutputVideo', { input, output }),

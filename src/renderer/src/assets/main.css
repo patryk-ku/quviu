@@ -3,3 +3,11 @@
 }
 @tailwind components;
 @tailwind utilities;
+
+#title-bar {
+	-webkit-app-region: drag;
+}
+
+.title-bar-button {
+	-webkit-app-region: no-drag;
+}

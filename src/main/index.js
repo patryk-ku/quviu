@@ -20,6 +20,7 @@ function createWindow() {
 	const mainWindow = new BrowserWindow({
 		width: 900,
 		height: 670,
+		frame: false,
 		show: false,
 		autoHideMenuBar: true,
 		...(process.platform === 'linux' ? { icon } : {}),
@@ -48,6 +49,16 @@ function createWindow() {
 	} else {
 		mainWindow.loadFile(join(__dirname, '../renderer/index.html'));
 	}
+
+	ipcMain.handle('minimize', () => mainWindow.minimize());
+	ipcMain.handle('maximize', () => {
+		if (mainWindow.isMaximized()) {
+			mainWindow.unmaximize();
+		} else {
+			mainWindow.maximize();
+		}
+	});
+	ipcMain.handle('close', () => mainWindow.close());
 
 	let ffmpegProcess = null;
 
