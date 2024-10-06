@@ -25,6 +25,11 @@ function StatusBar({ file, isProcessing, handleProcess, progress, error }) {
 					</Button>
 				)}
 				{isProcessing && <Text>{progress} %</Text>}
+				{progress == 100 && (
+					<Text c='green.6' fw={700}>
+						Process Completed
+					</Text>
+				)}
 			</div>
 			{error ? (
 				<Text c='red.6' fw={700}>
