@@ -20,6 +20,7 @@ function App() {
 	const [progress, setProgress] = useState(0);
 	const [isProcessing, setIsProcessing] = useState(false);
 	const [error, setError] = useState(null);
+	const [metadata, setMetadata] = useState(null);
 
 	const [outputOptions, setOutputOptions] = useState([
 		// '-vf scale=-2:720',
@@ -38,12 +39,14 @@ function App() {
 		}
 
 		setFile(filePath.path);
+		setMetadata(filePath.metadata);
 		console.log('Selected video: ', filePath);
 	};
 
 	const clearFile = async () => {
 		console.log('Cleared video path: ', file);
 		setFile(null);
+		setMetadata(null);
 		setProgress(0);
 		setError(null);
 	};
@@ -88,6 +91,7 @@ function App() {
 					handleFilePicker={handleFilePicker}
 					isProcessing={isProcessing}
 					clearFile={clearFile}
+					metadata={metadata}
 				/>
 
 				<Tabs

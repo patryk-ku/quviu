@@ -28,7 +28,7 @@ function TitleBar() {
 			<div className='flex gap-2'>
 				<ActionIcon
 					variant='filled'
-					color='yellow'
+					color='yellow.5'
 					onClick={handleMinimize}
 					className='title-bar-button'
 				>

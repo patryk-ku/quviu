@@ -18,6 +18,7 @@ function getMetadata(filePath) {
 }
 
 async function handleFileOpen() {
+	// TODO: error handling when canceled
 	const { canceled, filePaths } = await dialog.showOpenDialog({
 		properties: ['openFile'],
 		filters: [{ name: 'Movies', extensions: ['mkv', 'avi', 'mp4', 'webm'] }],
@@ -132,12 +133,18 @@ function createWindow() {
 					})
 					.on('error', (error) => {
 						ffmpegProcess = null;
-						console.error(error);
+						// console.error(error);
 						isError = true;
 						reject(error);
 					});
 			});
 		} catch (error) {
+			if (
+				error?.message ===
+				'ffmpeg exited with code 255: Exiting normally, received signal 2.\n'
+			) {
+				return { error: 'Operation canceled' };
+			}
 			console.log(error);
 			isError = true;
 		}

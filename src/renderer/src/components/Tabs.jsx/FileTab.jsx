@@ -28,7 +28,7 @@ function FileTab({
 				// disabled
 				error={outputPath.length === 0 ? 'Set output path' : false}
 				leftSection={<FolderSimple size={18} weight='bold' />}
-				onChange={null}
+				onChange={() => null}
 			/>
 			<div className='grid grid-cols-[1fr,auto] gap-2'>
 				<TextInput
