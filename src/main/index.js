@@ -113,6 +113,11 @@ function createWindow() {
 				// .outputOptions('-vf', 'scale=-2:720')
 				// .outputOptions(...outputOptions)
 
+				if (data?.trim?.isEnabled) {
+					ffmpegProcess.seekInput(data.trim.start);
+					ffmpegProcess.duration(data.trim.end - data.trim.start);
+				}
+
 				if (data?.outputOptions?.length > 0) {
 					ffmpegProcess.outputOptions(...data.outputOptions);
 				}

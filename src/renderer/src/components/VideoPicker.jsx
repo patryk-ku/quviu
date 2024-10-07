@@ -1,5 +1,15 @@
 import { useState, useRef } from 'react';
-import { TextInput, Text, Button, Badge, Slider, ActionIcon } from '@mantine/core';
+import {
+	TextInput,
+	Text,
+	Button,
+	Badge,
+	Slider,
+	RangeSlider,
+	ActionIcon,
+	Switch,
+	Collapse,
+} from '@mantine/core';
 import {
 	Play,
 	Pause,
@@ -10,7 +20,7 @@ import {
 } from '@phosphor-icons/react';
 
 function formatDuration(seconds) {
-	if (!seconds) {
+	if (!seconds && seconds !== 0) {
 		return 'unknown duration';
 	}
 
@@ -63,10 +73,11 @@ function getFileExtension(filePath) {
 	}
 }
 
-function VideoPicker({ file, handleFilePicker, isProcessing, clearFile, metadata }) {
+function VideoPicker({ file, handleFilePicker, isProcessing, clearFile, metadata, trim, setTrim }) {
 	const videoRef = useRef(null);
 	const [currentTime, setCurrentTime] = useState(0);
 	const [isMuted, setIsMuted] = useState(true);
+	const [isPaused, setIsPaused] = useState(true);
 
 	const handleTimeUpdate = () => {
 		setCurrentTime(videoRef.current.currentTime);
@@ -102,6 +113,28 @@ function VideoPicker({ file, handleFilePicker, isProcessing, clearFile, metadata
 		}
 	};
 
+	const handleTrimChange = (range) => {
+		setTrim((prevTrim) => ({
+			...prevTrim,
+			start: range[0],
+			end: range[1],
+		}));
+	};
+
+	const handleTrimStart = () => {
+		setTrim((prevTrim) => ({
+			...prevTrim,
+			start: videoRef.current.currentTime,
+		}));
+	};
+
+	const handleTrimEnd = () => {
+		setTrim((prevTrim) => ({
+			...prevTrim,
+			end: videoRef.current.currentTime,
+		}));
+	};
+
 	return (
 		<div className='grid grid-cols-[1fr,auto] gap-3 p-4'>
 			<div className='grid grid-cols-1 grid-rows-[auto,1fr] content-start gap-3'>
@@ -116,7 +149,7 @@ function VideoPicker({ file, handleFilePicker, isProcessing, clearFile, metadata
 					)}
 					{file && <TextInput value={file} readOnly variant='filled' />}
 				</div>
-				<div className='grid grid-rows-[auto,1fr] gap-2'>
+				<div className='grid select-none grid-rows-[auto,1fr] gap-2'>
 					{metadata && (
 						<div className='flex gap-2'>
 							{metadata?.format?.duration && (
@@ -146,35 +179,119 @@ function VideoPicker({ file, handleFilePicker, isProcessing, clearFile, metadata
 							)}
 						</div>
 					)}
-					<div className='grid grid-rows-[1fr,auto] gap-2'>
-						<div>tmp</div>
-						<div className='grid grid-cols-[auto,1fr,auto] gap-2'>
+					<div className='grid grid-rows-[1fr,auto]'>
+						<div></div>
+						<div className='grid gap-3'>
 							{metadata?.format?.duration && (
-								<ActionIcon.Group>
-									<ActionIcon
-										variant='filled'
-										size='lg'
-										onClick={handlePlayPause}
-									>
-										{videoRef.current?.paused == true ? (
-											<Play size={20} weight='fill' />
+								<div className='flex items-center gap-2'>
+									<ActionIcon.Group>
+										<ActionIcon
+											variant='filled'
+											size='lg'
+											onClick={handlePlayPause}
+										>
+											{isPaused === true ? (
+												<Play size={20} weight='fill' />
+											) : (
+												<Pause size={20} weight='fill' />
+											)}
+										</ActionIcon>
+										<ActionIcon
+											variant='default'
+											size='lg'
+											onClick={handleRewind}
+										>
+											<SkipBack size={20} weight='fill' />
+										</ActionIcon>
+										<ActionIcon
+											variant='default'
+											size='lg'
+											onClick={handleForward}
+										>
+											<SkipForward size={20} weight='fill' />
+										</ActionIcon>
+									</ActionIcon.Group>
+
+									<ActionIcon variant='default' size='lg' onClick={handleVolume}>
+										{isMuted ? (
+											<SpeakerSimpleX size={20} weight='fill' />
 										) : (
-											<Pause size={20} weight='fill' />
+											<SpeakerHigh size={20} weight='fill' />
 										)}
 									</ActionIcon>
-									<ActionIcon variant='default' size='lg' onClick={handleRewind}>
-										<SkipBack size={20} weight='fill' />
-									</ActionIcon>
-									<ActionIcon variant='default' size='lg' onClick={handleForward}>
-										<SkipForward size={20} weight='fill' />
-									</ActionIcon>
-								</ActionIcon.Group>
+
+									<div className='ml-auto flex items-center gap-2'>
+										{trim.isEnabled && (
+											<Button
+												variant='default'
+												size='compact-sm'
+												onClick={handleTrimStart}
+											>
+												Set Start
+											</Button>
+										)}
+										{trim.isEnabled && (
+											<Button
+												variant='default'
+												size='compact-sm'
+												onClick={handleTrimEnd}
+											>
+												Set End
+											</Button>
+										)}
+										<Switch
+											label='Trim video'
+											radius='sm'
+											labelPosition='left'
+											checked={trim.isEnabled}
+											onChange={(event) =>
+												setTrim((prevTrim) => ({
+													...prevTrim,
+													start: 0,
+													end: metadata?.format?.duration,
+													isEnabled: event.target.checked,
+												}))
+											}
+										/>
+									</div>
+								</div>
 							)}
 
 							{metadata?.format?.duration && (
 								<div>
-									<div className='flex justify-between'>
-										<Text size='xs'>0:00</Text>
+									<Collapse in={trim.isEnabled}>
+										<RangeSlider
+											min={0}
+											max={metadata?.format?.duration}
+											step={0.001}
+											minRange={2}
+											marks={[
+												{ value: 0 },
+												{ value: metadata?.format?.duration / 2 },
+												{ value: metadata?.format?.duration },
+											]}
+											label={(value) => formatDuration(value)}
+											className='mb-2 mt-1'
+											styles={{
+												thumb: {
+													backgroundColor: 'white',
+													borderRadius: 0,
+													width: '2px',
+													borderWidth: '4px',
+												},
+												bar: {
+													marginLeft: '5px',
+												},
+											}}
+											value={[trim?.start, trim?.end]}
+											onChange={handleTrimChange}
+										/>
+									</Collapse>
+									<div className='mb-1.5 flex justify-between'>
+										<Text size='xs'>00:00</Text>
+										<Text size='xs'>
+											{formatDuration(metadata?.format?.duration / 2)}
+										</Text>
 										<Text size='xs'>
 											{formatDuration(metadata?.format?.duration)}
 										</Text>
@@ -182,23 +299,23 @@ function VideoPicker({ file, handleFilePicker, isProcessing, clearFile, metadata
 									<Slider
 										min={0}
 										max={metadata?.format?.duration}
-										step={1}
-										value={currentTime.toFixed(0)}
+										step={0.001}
+										marks={[
+											{ value: 0 },
+											{ value: metadata?.format?.duration / 2 },
+											{ value: metadata?.format?.duration },
+										]}
+										value={currentTime}
 										// onChange={setCurrentTime}
 										onChange={handleSeek}
 										label={(value) => formatDuration(value)}
+										styles={{
+											thumb: {
+												backgroundColor: 'white',
+											},
+										}}
 									/>
 								</div>
-							)}
-
-							{metadata?.format?.duration && (
-								<ActionIcon variant='default' size='lg' onClick={handleVolume}>
-									{videoRef.current?.volume > 0 ? (
-										<SpeakerHigh size={20} weight='fill' />
-									) : (
-										<SpeakerSimpleX size={20} weight='fill' />
-									)}
-								</ActionIcon>
 							)}
 						</div>
 					</div>
@@ -209,6 +326,8 @@ function VideoPicker({ file, handleFilePicker, isProcessing, clearFile, metadata
 					<video
 						ref={videoRef}
 						onTimeUpdate={handleTimeUpdate}
+						onPlay={() => setIsPaused(false)}
+						onPause={() => setIsPaused(true)}
 						className='w-ful aspect-video h-[200px] cursor-pointer rounded bg-[--mantine-color-dark-9]'
 						src={`file://${file}`}
 						// controls

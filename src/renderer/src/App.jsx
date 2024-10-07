@@ -22,6 +22,7 @@ function App() {
 	const [error, setError] = useState(null);
 	const [metadata, setMetadata] = useState(null);
 
+	const [trim, setTrim] = useState({ isEnabled: false, start: 0, end: 0 });
 	const [outputOptions, setOutputOptions] = useState([
 		// '-vf scale=-2:720',
 		'-crf 40',
@@ -66,7 +67,7 @@ function App() {
 			path: outputPath + outputName + outputExtension,
 		};
 		setIsProcessing(true);
-		const result = await window.api.generateOutputVideo(file, output, outputOptions);
+		const result = await window.api.generateOutputVideo(file, output, trim, outputOptions);
 		setIsProcessing(false);
 		if (result.error) {
 			setError(result.error);
@@ -92,6 +93,8 @@ function App() {
 					isProcessing={isProcessing}
 					clearFile={clearFile}
 					metadata={metadata}
+					trim={trim}
+					setTrim={setTrim}
 				/>
 
 				<Tabs
