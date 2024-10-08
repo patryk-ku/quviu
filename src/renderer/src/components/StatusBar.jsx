@@ -1,9 +1,9 @@
 import { Progress, Text, Button } from '@mantine/core';
 
-function StatusBar({ file, isProcessing, handleProcess, progress, error }) {
+function StatusBar({ file, isProcessing, handleProcess, progress, error, success }) {
 	return (
-		<div className='grid grid-cols-[auto,1fr] items-center gap-2 bg-[--mantine-color-dark-9] p-2'>
-			<div className='flex items-center gap-2'>
+		<div className='grid grid-cols-[auto,1fr] items-center gap-3 bg-[--mantine-color-dark-9] p-2'>
+			<div className='flex items-center gap-3'>
 				{isProcessing ? (
 					<Button
 						variant='filled'
@@ -25,17 +25,10 @@ function StatusBar({ file, isProcessing, handleProcess, progress, error }) {
 					</Button>
 				)}
 				{isProcessing && <Text>{progress} %</Text>}
-				{progress == 100 && (
-					<Text c='green.6' fw={700}>
-						Process Completed
-					</Text>
-				)}
+				{progress == 100 && <Text>File ready:</Text>}
 			</div>
-			{error ? (
-				<Text c='red.6' fw={700}>
-					Error: {error}
-				</Text>
-			) : (
+			{error && <Text c='red.6'>Error: {error}</Text>}
+			{isProcessing && (
 				<Progress
 					value={progress}
 					animated={isProcessing}
@@ -43,6 +36,11 @@ function StatusBar({ file, isProcessing, handleProcess, progress, error }) {
 					striped
 					transitionDuration={300}
 				/>
+			)}
+			{success && (
+				<Text c='blue' size='sm' lineClamp={1}>
+					{success}
+				</Text>
 			)}
 		</div>
 	);

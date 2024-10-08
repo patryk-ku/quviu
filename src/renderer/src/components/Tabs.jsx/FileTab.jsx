@@ -8,6 +8,8 @@ function FileTab({
 	setOutputName,
 	outputExtension,
 	setOutputExtension,
+	isOverwrite,
+	setIsOverwrite,
 }) {
 	const handleFolderPicker = async () => {
 		const folderPath = await window.api.openFolder();
@@ -46,7 +48,13 @@ function FileTab({
 					allowDeselect={false}
 				/>
 			</div>
-			<Switch label='Overwrite file if exists' mt={8} disabled />
+			<Switch
+				label='Overwrite file if exists'
+				mt={8}
+				radius='sm'
+				checked={isOverwrite}
+				onChange={(event) => setIsOverwrite(event.currentTarget.checked)}
+			/>
 			<div className='mt-4'>
 				<Text size='xs'>Final file path:</Text>
 				<Text c='blue'>

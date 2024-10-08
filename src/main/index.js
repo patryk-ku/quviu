@@ -4,18 +4,8 @@ import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import icon from '../../resources/icon.png?asset';
 
 import ffmpeg from 'fluent-ffmpeg';
-
-function getMetadata(filePath) {
-	return new Promise((resolve, reject) => {
-		ffmpeg.ffprobe(filePath, (error, metadata) => {
-			if (error) {
-				reject(error);
-			} else {
-				resolve(metadata);
-			}
-		});
-	});
-}
+import { getMetadata, generateUniqueFileName } from './utils';
+import { timestampToSeconds } from '../renderer/src/utils';
 
 async function handleFileOpen() {
 	// TODO: error handling when canceled
@@ -96,37 +86,84 @@ function createWindow() {
 
 	let ffmpegProcess = null;
 
-	ipcMain.handle('generateOutputVideo', async (event, data) => {
-		console.log(' === New video processing: ', data);
-		// TODO: check if folder exists
-		// TODO: check if file exist and chose if overwrite
+	ipcMain.handle('generateOutputVideo', async (event, config) => {
+		console.log(' === New video processing: ', config);
+
+		if (!config.output.isOverwrite) {
+			config.output.path = generateUniqueFileName(config.output.path);
+		}
 
 		// Validation
-		if (!data.output.name) {
+		if (!config.output.name) {
 			return { error: 'File name cannot be empty.' };
+		}
+
+		if (config.trim.isEnabled && config.trim.start == config.trim.end) {
+			return { error: 'Trim start and end time cannot be the same.' };
 		}
 
 		let isError = false;
 		try {
 			await new Promise((resolve, reject) => {
-				ffmpegProcess = ffmpeg().input(data.input);
+				ffmpegProcess = ffmpeg().input(config.input);
 				// .outputOptions('-vf', 'scale=-2:720')
-				// .outputOptions(...outputOptions)
 
-				if (data?.trim?.isEnabled) {
-					ffmpegProcess.seekInput(data.trim.start);
-					ffmpegProcess.duration(data.trim.end - data.trim.start);
+				if (config.trim.isEnabled) {
+					ffmpegProcess.seekInput(config.trim.start);
+					ffmpegProcess.duration(config.trim.end - config.trim.start);
 				}
 
-				if (data?.outputOptions?.length > 0) {
-					ffmpegProcess.outputOptions(...data.outputOptions);
+				// Video options
+				if (config.video.res) {
+					ffmpegProcess.size(`?x${config.video.res}`);
+				}
+
+				// Audio options
+				if (config.audio.isMuted) {
+					ffmpegProcess.noAudio();
+				} else {
+					if (config.audio.isMerge) {
+						const audioStreamsCount = config.metadata.streams.filter(
+							(stream) => stream.codec_type === 'audio'
+						).length;
+
+						console.log('audio streams: ', audioStreamsCount);
+						if (audioStreamsCount > 1) {
+							ffmpegProcess.complexFilter(`amerge=inputs=${audioStreamsCount}`);
+						}
+					}
+
+					// tmp
+					ffmpegProcess.audioCodec('opus').audioBitrate('64k');
+					// .audioChannels(2)
+					// .outputOptions([
+					// 	'-compression_level',
+					// 	'10',
+					// 	'-vbr',
+					// 	'on',
+					// ]);
+				}
+
+				console.log(config.outputOptions);
+				if (config.outputOptions?.length > 0) {
+					ffmpegProcess.outputOptions(...config.outputOptions);
 				}
 
 				ffmpegProcess
-					.saveToFile(data.output.path)
+					.saveToFile(config.output.path)
 					.on('progress', (progress) => {
 						if (progress.percent) {
-							const percent = Math.floor(progress.percent);
+							let percent;
+							// Fix for incorrect progress percent when trim is enabled
+							if (config.trim.isEnabled) {
+								percent = Math.floor(
+									(timestampToSeconds(progress.timemark) /
+										(config.trim.end - config.trim.start)) *
+										100
+								);
+							} else {
+								percent = Math.floor(progress.percent);
+							}
 							console.log(`Processing: ${percent}% done`);
 							mainWindow.webContents.send('encoding-progress', percent);
 						}
@@ -157,7 +194,7 @@ function createWindow() {
 		if (isError) {
 			return { error: 'Unknown Error.' };
 		} else {
-			return { error: false };
+			return { error: false, success: config.output.path };
 		}
 	});
 

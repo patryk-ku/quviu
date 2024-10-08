@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import {
 	TextInput,
 	Text,
@@ -25,6 +25,11 @@ function VideoPicker({ file, handleFilePicker, isProcessing, clearFile, metadata
 	const [currentTime, setCurrentTime] = useState(0);
 	const [isMuted, setIsMuted] = useState(true);
 	const [isPaused, setIsPaused] = useState(true);
+	const prevTrimValues = useRef();
+
+	useEffect(() => {
+		prevTrimValues.current = trim;
+	}, [trim]);
 
 	const handleTimeUpdate = () => {
 		setCurrentTime(videoRef.current.currentTime);
@@ -61,6 +66,14 @@ function VideoPicker({ file, handleFilePicker, isProcessing, clearFile, metadata
 	};
 
 	const handleTrimChange = (range) => {
+		console.log(range, prevTrimValues.current);
+
+		if (range[0] !== prevTrimValues.current.start) {
+			videoRef.current.currentTime = prevTrimValues.current.start;
+		} else if (range[1] !== prevTrimValues.current.end) {
+			videoRef.current.currentTime = prevTrimValues.current.end;
+		}
+
 		setTrim((prevTrim) => ({
 			...prevTrim,
 			start: range[0],

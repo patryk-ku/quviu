@@ -51,3 +51,16 @@ export function getFileExtension(filePath) {
 		return 'unknown ext';
 	}
 }
+
+export function timestampToSeconds(timeString) {
+	const [hours, minutes, seconds] = timeString.split(':');
+	const [wholeSeconds, milliseconds] = seconds.split('.');
+
+	const totalSeconds =
+		parseInt(hours, 10) * 3600 +
+		parseInt(minutes, 10) * 60 +
+		parseInt(wholeSeconds, 10) +
+		parseInt(milliseconds, 10) / 100;
+
+	return totalSeconds;
+}

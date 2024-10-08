@@ -1,6 +1,5 @@
 import { contextBridge, ipcRenderer } from 'electron';
 import { electronAPI } from '@electron-toolkit/preload';
-import ffmpeg from 'fluent-ffmpeg';
 
 // Custom APIs for renderer
 const api = {
@@ -9,8 +8,7 @@ const api = {
 	close: () => ipcRenderer.invoke('close'),
 	openFile: () => ipcRenderer.invoke('dialog:openFile'),
 	openFolder: () => ipcRenderer.invoke('dialog:openFolder'),
-	generateOutputVideo: (input, output, trim, outputOptions) =>
-		ipcRenderer.invoke('generateOutputVideo', { input, output, trim, outputOptions }),
+	generateOutputVideo: (config) => ipcRenderer.invoke('generateOutputVideo', config),
 	onProgressUpdate: (callback) =>
 		ipcRenderer.on('encoding-progress', (_event, value) => callback(value)),
 	stopProcessingVideo: () => ipcRenderer.invoke('stopVideoProcessing'),

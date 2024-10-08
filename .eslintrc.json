@@ -62,7 +62,7 @@
 		"no-empty-function": "error",
 		"no-floating-decimal": "error",
 		"no-inline-comments": "error",
-		"no-lonely-if": "error",
+		"no-lonely-if": "off",
 		"no-multi-spaces": "error",
 		"no-multiple-empty-lines": [
 			"error",

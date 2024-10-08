@@ -6,6 +6,7 @@ import { File, FrameCorners, SpeakerHigh, Star } from '@phosphor-icons/react';
 import TitleBar from './components/TitleBar';
 import VideoPicker from './components/VideoPicker';
 import FileTab from './components/Tabs.jsx/FileTab';
+import Audio from './components/Tabs.jsx/Audio';
 import StatusBar from './components/StatusBar';
 // import electronLogo from './assets/electron.svg'
 
@@ -15,23 +16,31 @@ function App() {
 		key: 'output-path',
 		defaultValue: '',
 	});
-	const [outputName, setOutputName] = useState('test-video-001');
+	const [outputName, setOutputName] = useState('New video');
 	const [outputExtension, setOutputExtension] = useState('.mp4');
+	const [isOverwrite, setIsOverwrite] = useState(false);
+
 	const [progress, setProgress] = useState(0);
 	const [isProcessing, setIsProcessing] = useState(false);
 	const [error, setError] = useState(null);
+	const [success, setSuccess] = useState(null);
 	const [metadata, setMetadata] = useState(null);
 
+	// Settings
 	const [trim, setTrim] = useState({ isEnabled: false, start: 0, end: 0 });
 	const [outputOptions, setOutputOptions] = useState([
 		// '-vf scale=-2:720',
+		// dobre do vp9:
 		'-crf 40',
 		// '-deadline best',
 	]);
+	const [audio, setAudio] = useState({ isMuted: false, isMerge: false });
+	const [video, setVideo] = useState({ res: '720' });
 
 	const handleFilePicker = async () => {
 		setProgress(0);
 		setError(null);
+		setSuccess(null);
 		const filePath = await window.api.openFile();
 
 		if (filePath.error) {
@@ -50,29 +59,40 @@ function App() {
 		setMetadata(null);
 		setProgress(0);
 		setError(null);
+		setSuccess(null);
 	};
 
 	const handleProcess = async () => {
 		setError(null);
-		// tmp
-		// setOutputOptions((prevOptions) => [...prevOptions, '-vf', 'scale=-2:480']);
-
-		// setOutputOptions(['-vf', 'scale=-2:720', '-crf', '40']);
-
+		setSuccess(null);
 		setProgress(0);
-		const output = {
-			folder: outputPath,
-			name: outputName,
-			ext: outputExtension,
-			path: outputPath + outputName + outputExtension,
+
+		const config = {
+			input: file,
+			metadata,
+			output: {
+				folder: outputPath,
+				name: outputName,
+				ext: outputExtension,
+				path: outputPath + outputName + outputExtension,
+				isOverwrite,
+			},
+			outputOptions,
+			trim,
+			video,
+			audio,
 		};
+		console.log(config);
+
 		setIsProcessing(true);
-		const result = await window.api.generateOutputVideo(file, output, trim, outputOptions);
+		const result = await window.api.generateOutputVideo(config);
 		setIsProcessing(false);
 		if (result.error) {
 			setError(result.error);
+			setSuccess(null);
 			setProgress(0);
-		} else {
+		} else if (result.success) {
+			setSuccess(result.success);
 			setProgress(100);
 		}
 	};
@@ -147,49 +167,15 @@ function App() {
 							setOutputName={setOutputName}
 							outputExtension={outputExtension}
 							setOutputExtension={setOutputExtension}
+							isOverwrite={isOverwrite}
+							setIsOverwrite={setIsOverwrite}
 						/>
 					</Tabs.Panel>
 
 					<Tabs.Panel value='Video'></Tabs.Panel>
 
 					<Tabs.Panel value='Audio'>
-						<p>
-							Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quia quasi
-							impedit aut architecto, illo velit minima vitae ut nesciunt eveniet hic
-							qui deleniti fugiat soluta modi rerum labore tenetur beatae.
-						</p>
-						<p>
-							Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quia quasi
-							impedit aut architecto, illo velit minima vitae ut nesciunt eveniet hic
-							qui deleniti fugiat soluta modi rerum labore tenetur beatae.
-						</p>
-						<p>
-							Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quia quasi
-							impedit aut architecto, illo velit minima vitae ut nesciunt eveniet hic
-							qui deleniti fugiat soluta modi rerum labore tenetur beatae.
-						</p>
-						<p>
-							Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quia quasi
-							impedit aut architecto, illo velit minima vitae ut nesciunt eveniet hic
-							qui deleniti fugiat soluta modi rerum labore tenetur beatae.
-						</p>
-						<p>
-							Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quia quasi
-							impedit aut architecto, illo velit minima vitae ut nesciunt eveniet hic
-							qui deleniti fugiat soluta modi rerum labore tenetur beatae. Lorem ipsum
-							dolor sit, amet consectetur adipisicing elit. Quia quasi impedit aut
-							architecto, illo velit minima vitae ut nesciunt eveniet hic qui deleniti
-							fugiat soluta modi rerum labore tenetur beatae. Lorem ipsum dolor sit,
-							amet consectetur adipisicing elit. Quia quasi impedit aut architecto,
-							illo velit minima vitae ut nesciunt eveniet hic qui deleniti fugiat
-							soluta modi rerum labore tenetur beatae. Lorem ipsum dolor sit, amet
-							consectetur adipisicing elit. Quia quasi impedit aut architecto, illo
-							velit minima vitae ut nesciunt eveniet hic qui deleniti fugiat soluta
-							modi rerum labore tenetur beatae. Lorem ipsum dolor sit, amet
-							consectetur adipisicing elit. Quia quasi impedit aut architecto, illo
-							velit minima vitae ut nesciunt eveniet hic qui deleniti fugiat soluta
-							modi rerum labore tenetur beatae.
-						</p>
+						<Audio audio={audio} setAudio={setAudio} />
 					</Tabs.Panel>
 				</Tabs>
 
@@ -199,6 +185,7 @@ function App() {
 					handleProcess={handleProcess}
 					progress={progress}
 					error={error}
+					success={success}
 				/>
 			</div>
 		</div>
