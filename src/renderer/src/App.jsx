@@ -7,6 +7,7 @@ import TitleBar from './components/TitleBar';
 import VideoPicker from './components/VideoPicker';
 import FileTab from './components/Tabs.jsx/FileTab';
 import Audio from './components/Tabs.jsx/Audio';
+import Video from './components/Tabs.jsx/Video';
 import StatusBar from './components/StatusBar';
 // import electronLogo from './assets/electron.svg'
 
@@ -31,7 +32,7 @@ function App() {
 	const [outputOptions, setOutputOptions] = useState([
 		// '-vf scale=-2:720',
 		// dobre do vp9:
-		'-crf 40',
+		// '-crf 40',
 		// '-deadline best',
 	]);
 	const [audio, setAudio] = useState({
@@ -41,7 +42,13 @@ function App() {
 		codec: 'opus',
 		bitrate: '64k',
 	});
-	const [video, setVideo] = useState({ res: '720' });
+	const [video, setVideo] = useState({
+		isDisabled: false,
+		isCompress: false,
+		codec: 'libx264',
+		bitrate: '2048k',
+		res: '720',
+	});
 
 	const handleFilePicker = async () => {
 		setProgress(0);
@@ -178,7 +185,9 @@ function App() {
 						/>
 					</Tabs.Panel>
 
-					<Tabs.Panel value='Video'></Tabs.Panel>
+					<Tabs.Panel value='Video'>
+						<Video video={video} setVideo={setVideo} metadata={metadata} />
+					</Tabs.Panel>
 
 					<Tabs.Panel value='Audio'>
 						<Audio audio={audio} setAudio={setAudio} metadata={metadata} />

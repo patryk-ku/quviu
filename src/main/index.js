@@ -114,8 +114,24 @@ function createWindow() {
 				}
 
 				// Video options
-				if (config.video.res) {
-					ffmpegProcess.size(`?x${config.video.res}`);
+				if (config.video.isDisabled) {
+					ffmpegProcess.noVideo();
+				} else {
+					const videoStreamsCount = config.metadata.streams.filter(
+						(stream) => stream.codec_type === 'video'
+					).length;
+
+					if (videoStreamsCount > 0) {
+						// if (config.video.res) {
+						// 	ffmpegProcess.size(`?x${config.video.res}`);
+						// }
+
+						if (config.video.isCompress) {
+							ffmpegProcess
+								.videoCodec(config.video.codec)
+								.videoBitrate(config.video.bitrate);
+						}
+					}
 				}
 
 				// Audio options
