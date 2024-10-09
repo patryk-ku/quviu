@@ -122,26 +122,23 @@ function createWindow() {
 				if (config.audio.isMuted) {
 					ffmpegProcess.noAudio();
 				} else {
-					if (config.audio.isMerge) {
-						const audioStreamsCount = config.metadata.streams.filter(
-							(stream) => stream.codec_type === 'audio'
-						).length;
+					const audioStreamsCount = config.metadata.streams.filter(
+						(stream) => stream.codec_type === 'audio'
+					).length;
 
-						console.log('audio streams: ', audioStreamsCount);
-						if (audioStreamsCount > 1) {
-							ffmpegProcess.complexFilter(`amerge=inputs=${audioStreamsCount}`);
+					if (audioStreamsCount > 0) {
+						if (config.audio.isMerge) {
+							if (audioStreamsCount > 1) {
+								ffmpegProcess.complexFilter(`amerge=inputs=${audioStreamsCount}`);
+							}
+						}
+
+						if (config.audio.isCompress) {
+							ffmpegProcess
+								.audioCodec(config.audio.codec)
+								.audioBitrate(config.audio.bitrate);
 						}
 					}
-
-					// tmp
-					ffmpegProcess.audioCodec('opus').audioBitrate('64k');
-					// .audioChannels(2)
-					// .outputOptions([
-					// 	'-compression_level',
-					// 	'10',
-					// 	'-vbr',
-					// 	'on',
-					// ]);
 				}
 
 				console.log(config.outputOptions);

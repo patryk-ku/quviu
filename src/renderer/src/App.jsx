@@ -34,7 +34,13 @@ function App() {
 		'-crf 40',
 		// '-deadline best',
 	]);
-	const [audio, setAudio] = useState({ isMuted: false, isMerge: false });
+	const [audio, setAudio] = useState({
+		isMuted: false,
+		isMerge: false,
+		isCompress: false,
+		codec: 'opus',
+		bitrate: '64k',
+	});
 	const [video, setVideo] = useState({ res: '720' });
 
 	const handleFilePicker = async () => {
@@ -175,7 +181,7 @@ function App() {
 					<Tabs.Panel value='Video'></Tabs.Panel>
 
 					<Tabs.Panel value='Audio'>
-						<Audio audio={audio} setAudio={setAudio} />
+						<Audio audio={audio} setAudio={setAudio} metadata={metadata} />
 					</Tabs.Panel>
 				</Tabs>
 

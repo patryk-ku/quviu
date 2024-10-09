@@ -1,4 +1,4 @@
-import { contextBridge, ipcRenderer } from 'electron';
+import { contextBridge, ipcRenderer, shell } from 'electron';
 import { electronAPI } from '@electron-toolkit/preload';
 
 // Custom APIs for renderer
@@ -12,6 +12,9 @@ const api = {
 	onProgressUpdate: (callback) =>
 		ipcRenderer.on('encoding-progress', (_event, value) => callback(value)),
 	stopProcessingVideo: () => ipcRenderer.invoke('stopVideoProcessing'),
+	openVideo: (filePath) => {
+		shell.openPath(filePath);
+	},
 };
 
 // Use `contextBridge` APIs to expose Electron APIs to
