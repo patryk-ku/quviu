@@ -57,7 +57,7 @@ function FileTab({
 			/>
 			<div className='mt-4'>
 				<Text size='xs'>Final file path:</Text>
-				<Text c='blue'>
+				<Text c='accent'>
 					{outputPath}
 					{outputName}
 					{outputExtension}

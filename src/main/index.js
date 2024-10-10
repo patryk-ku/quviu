@@ -122,14 +122,18 @@ function createWindow() {
 					).length;
 
 					if (videoStreamsCount > 0) {
-						// if (config.video.res) {
-						// 	ffmpegProcess.size(`?x${config.video.res}`);
-						// }
-
 						if (config.video.isCompress) {
 							ffmpegProcess
 								.videoCodec(config.video.codec)
 								.videoBitrate(config.video.bitrate);
+						}
+
+						if (config.video.isResolution) {
+							ffmpegProcess.size(`?x${config.video.resolution}`);
+						}
+
+						if (config.video.isFps) {
+							ffmpegProcess.fps(config.video.fps);
 						}
 					}
 				}
@@ -202,6 +206,7 @@ function createWindow() {
 			}
 			console.log(error);
 			isError = true;
+			return { error: error.message };
 		}
 
 		if (isError) {

@@ -47,7 +47,10 @@ function App() {
 		isCompress: false,
 		codec: 'libx264',
 		bitrate: '2048k',
-		res: '720',
+		isResolution: false,
+		resolution: '720',
+		isFps: false,
+		fps: '30',
 	});
 
 	const handleFilePicker = async () => {

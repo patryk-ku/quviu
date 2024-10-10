@@ -39,7 +39,7 @@ export default function StatusBar({ file, isProcessing, handleProcess, progress,
 			)}
 			{success && (
 				<Anchor
-					c='blue'
+					c='accent'
 					size='sm'
 					lineClamp={1}
 					onClick={() => {

@@ -113,30 +113,32 @@ function VideoPicker({ file, handleFilePicker, isProcessing, clearFile, metadata
 					{metadata && (
 						<div className='flex gap-2'>
 							{metadata?.format?.duration && (
-								<Badge variant='light' size='lg' radius='sm'>
+								<Badge variant='light' color='accent' size='lg' radius='sm'>
 									{formatDuration(metadata?.format?.duration)}
 								</Badge>
 							)}
 							{metadata?.format?.size && (
-								<Badge variant='light' size='lg' radius='sm'>
+								<Badge variant='light' color='accent' size='lg' radius='sm'>
 									{formatFileSize(metadata?.format?.size)}
 								</Badge>
 							)}
 							{file && (
-								<Badge variant='light' size='lg' radius='sm'>
+								<Badge variant='light' color='accent' size='lg' radius='sm'>
 									{getFileExtension(file)}
 								</Badge>
 							)}
 							{metadata?.format?.bit_rate && (
-								<Badge variant='light' size='lg' radius='sm'>
+								<Badge variant='light' color='accent' size='lg' radius='sm'>
 									{formatBitrate(metadata?.format?.bit_rate)}
 								</Badge>
 							)}
 							{metadata?.streams && (
-								<Badge variant='light' size='lg' radius='sm'>
+								<Badge variant='light' color='accent' size='lg' radius='sm'>
 									{metadata?.streams.length} streams
 								</Badge>
 							)}
+							{/* TODO: print all codecs of streams here but only for audio and video, ignore subs etc */}
+							{/* TODO: also write about resolution and fps, or move it all to settings page for audio video etc */}
 						</div>
 					)}
 					<div className='grid grid-rows-[1fr,auto]'>

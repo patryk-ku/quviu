@@ -1,7 +1,7 @@
 import { Title, Text, ActionIcon } from '@mantine/core';
 import { Minus, Resize, X } from '@phosphor-icons/react';
 
-function TitleBar() {
+export default function TitleBar() {
 	const handleMinimize = () => {
 		window.api.minimize();
 	};
@@ -54,5 +54,3 @@ function TitleBar() {
 		</div>
 	);
 }
-
-export default TitleBar;

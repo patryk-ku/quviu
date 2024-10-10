@@ -15,6 +15,11 @@ const theme = createTheme({
 			dark: 'gray',
 			light: 'dark',
 		}),
+		accent: virtualColor({
+			name: 'accent',
+			dark: 'cyan',
+			light: 'cyan',
+		}),
 	},
 });
 
