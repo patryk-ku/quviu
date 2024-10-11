@@ -1,54 +1,137 @@
-import { Progress, Text, Button, Anchor } from '@mantine/core';
+import { useState, useEffect } from 'react';
+import { Progress, Text, Button, Anchor, Tooltip } from '@mantine/core';
+import { formatDuration } from '../utils';
 
-export default function StatusBar({ file, isProcessing, handleProcess, progress, error, success }) {
+function calculateFileSize(bitrate, duration) {
+	const fileSizeMB = (parseInt(bitrate) * Number(duration)) / (8 * 1024);
+	return fileSizeMB;
+}
+
+function estimateFileSize(config) {
+	if (
+		(config?.video?.isCompress || config?.video?.isDisabled) &&
+		(config?.audio?.isCompress || config?.audio?.isMuted)
+	) {
+		let audio = parseInt(config.audio.bitrate);
+		if (config?.audio?.isMuted) audio = 0;
+
+		let video = parseInt(config.video.bitrate);
+		if (config?.video?.isDisabled) video = 0;
+
+		const bitrate = video + audio;
+		let duration = config?.metadata?.format?.duration;
+
+		if (config?.trim?.isEnabled) {
+			duration = config.trim?.end - config.trim?.start;
+		}
+
+		const mb = `${calculateFileSize(bitrate, duration).toFixed(2)} MB`;
+
+		return mb;
+	} else {
+		return null;
+	}
+}
+
+export default function StatusBar({
+	file,
+	isProcessing,
+	handleProcess,
+	progress,
+	error,
+	success,
+	config,
+}) {
+	const [size, setSize] = useState(0);
+	const [seconds, setSeconds] = useState(null);
+
+	useEffect(() => {
+		const newSize = estimateFileSize(config);
+		setSize(newSize);
+	}, [config]);
+
+	useEffect(() => {
+		let timer;
+
+		if (isProcessing && !success) {
+			timer = setInterval(() => {
+				setSeconds((prevSeconds) => prevSeconds + 1);
+			}, 1000);
+		} else if (success) {
+			clearInterval(timer);
+		}
+
+		return () => clearInterval(timer);
+	}, [isProcessing, success]);
+
+	const handleClick = () => {
+		handleProcess();
+		setSeconds(0);
+	};
+
 	return (
-		<div className='grid grid-cols-[auto,1fr] items-center gap-3 bg-[--mantine-color-dark-9] p-2'>
-			<div className='flex items-center gap-3'>
-				{isProcessing ? (
-					<Button
-						variant='filled'
-						color='red'
-						size='compact-sm'
-						onClick={() => window.api.stopProcessingVideo()}
-					>
-						Cancel
-					</Button>
-				) : (
-					<Button
-						variant='filled'
-						onClick={handleProcess}
-						loading={isProcessing}
-						size='compact-sm'
-						disabled={!file}
-					>
-						Process Video
-					</Button>
-				)}
-				{isProcessing && <Text>{progress} %</Text>}
-				{progress == 100 && <Text>File ready:</Text>}
-			</div>
+		<div className='flex items-center gap-4 bg-[--mantine-color-dark-9] px-2 py-1.5'>
+			{isProcessing ? (
+				<Button
+					variant='filled'
+					color='red'
+					size='compact-sm'
+					onClick={() => window.api.stopProcessingVideo()}
+					className='shrink-0'
+				>
+					Cancel
+				</Button>
+			) : (
+				<Button
+					variant='filled'
+					onClick={handleClick}
+					loading={isProcessing}
+					size='compact-sm'
+					disabled={!file}
+					className='shrink-0'
+				>
+					Process Video
+				</Button>
+			)}
+			{isProcessing && <Text>{progress} %</Text>}
+
 			{error && <Text c='red.6'>Error: {error}</Text>}
 			{isProcessing && (
 				<Progress
 					value={progress}
 					animated={isProcessing}
-					size='md'
+					radius='xs'
+					size='lg'
 					striped
 					transitionDuration={300}
+					className='grow'
 				/>
 			)}
 			{success && (
-				<Anchor
-					c='accent'
-					size='sm'
-					lineClamp={1}
-					onClick={() => {
-						window.api.openVideo(success);
-					}}
-					className=''
-				>
-					{success}
-				</Anchor>
+				<>
+					<Text size='sm'>File ready:</Text>
+					<Anchor
+						c='accent'
+						size='sm'
+						lineClamp={1}
+						onClick={() => {
+							window.api.openVideo(success);
+						}}
+						className='grow'
+					>
+						{success}
+					</Anchor>
+				</>
+			)}
+			{!(isProcessing || success) && size && (
+				<div className='ml-auto'>
+					<Tooltip label='Estimated max file size' color='gray'>
+						<Text className='shrink-0'>{size}</Text>
+					</Tooltip>
+				</div>
+			)}
+			{(isProcessing || success) && (
+				<Text className='shrink-0'>{formatDuration(seconds)}</Text>
 			)}
 		</div>
 	);

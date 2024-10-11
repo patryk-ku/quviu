@@ -1,9 +1,10 @@
 import { Title, Text, Switch, Collapse, Select } from '@mantine/core';
+import StreamsInfo from '../StreamsInfo';
 import SettingsSwitch from '../SettingsSwitch';
 
 export default function Audio({ audio, setAudio, metadata }) {
-	const audioStreams = metadata?.streams.filter((stream) => stream.codec_type === 'audio').length;
-	const isAudio = audioStreams > 0 ? true : false;
+	const audioStreams = metadata?.streams.filter((stream) => stream.codec_type === 'audio');
+	const isAudio = audioStreams?.length > 0 ? true : false;
 
 	if (!isAudio) {
 		return (
@@ -19,6 +20,7 @@ export default function Audio({ audio, setAudio, metadata }) {
 	return (
 		<div className='grid grid-cols-1 gap-2'>
 			<Title order={4}>Audio Settings</Title>
+			<StreamsInfo streams={audioStreams} />
 			<Switch
 				label='Mute audio'
 				radius='sm'
@@ -81,8 +83,8 @@ export default function Audio({ audio, setAudio, metadata }) {
 									isMerge: event.currentTarget.checked,
 								}));
 							}}
-							description={metadata && `audio streams: ${audioStreams}`}
-							disabled={audioStreams > 1 ? false : true}
+							description={metadata && `audio streams: ${audioStreams?.length}`}
+							disabled={audioStreams?.length > 1 ? false : true}
 							className='m-[2px]'
 						/>
 					</div>

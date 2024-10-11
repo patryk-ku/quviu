@@ -1,11 +1,12 @@
 import { Title, Text, Switch, Collapse, Select } from '@mantine/core';
+import StreamsInfo from '../StreamsInfo';
 import SettingsSwitch from '../SettingsSwitch';
 
 export default function Video({ video, setVideo, metadata }) {
-	const videoStreams = metadata?.streams.filter((stream) => stream.codec_type === 'video').length;
-	const isAudio = videoStreams > 0 ? true : false;
+	const videoStreams = metadata?.streams.filter((stream) => stream.codec_type === 'video');
+	const isVideo = videoStreams?.length > 0 ? true : false;
 
-	if (!isAudio) {
+	if (!isVideo) {
 		return (
 			<div className='grid grid-cols-1 gap-3'>
 				<Title order={4}>Video Settings</Title>
@@ -19,6 +20,7 @@ export default function Video({ video, setVideo, metadata }) {
 	return (
 		<div className='grid grid-cols-1 gap-2'>
 			<Title order={4}>Video Settings</Title>
+			<StreamsInfo streams={videoStreams} />
 			<Switch
 				label='Disable Video'
 				radius='sm'

@@ -9,6 +9,7 @@ import App from './App';
 const theme = createTheme({
 	primaryColor: 'violet',
 	defaultRadius: 'sm',
+	cursorType: 'pointer',
 	colors: {
 		secondary: virtualColor({
 			name: 'secondary',
@@ -17,8 +18,8 @@ const theme = createTheme({
 		}),
 		accent: virtualColor({
 			name: 'accent',
-			dark: 'cyan',
-			light: 'cyan',
+			dark: 'grape',
+			light: 'grape',
 		}),
 	},
 });

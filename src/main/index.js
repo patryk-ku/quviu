@@ -41,9 +41,9 @@ function createWindow() {
 	// Create the browser window.
 	const mainWindow = new BrowserWindow({
 		width: 900,
-		height: 700,
+		height: 720,
 		minWidth: 900,
-		minHeight: 700,
+		minHeight: 610,
 		frame: false,
 		show: false,
 		autoHideMenuBar: true,
@@ -102,6 +102,10 @@ function createWindow() {
 			return { error: 'Trim start and end time cannot be the same.' };
 		}
 
+		if (config.video.isDisabled && config.audio.isMuted) {
+			return { error: 'You cannot turn off audio and video at the same time.' };
+		}
+
 		let isError = false;
 		try {
 			await new Promise((resolve, reject) => {
@@ -135,6 +139,14 @@ function createWindow() {
 						if (config.video.isFps) {
 							ffmpegProcess.fps(config.video.fps);
 						}
+
+						if (
+							!config.video.isFps &&
+							!config.video.isResolution &&
+							!config.video.isCompress
+						) {
+							ffmpegProcess.videoCodec('copy');
+						}
 					}
 				}
 
@@ -157,6 +169,10 @@ function createWindow() {
 							ffmpegProcess
 								.audioCodec(config.audio.codec)
 								.audioBitrate(config.audio.bitrate);
+						}
+
+						if (!config.audio.isMerge && !config.audio.isCompress) {
+							ffmpegProcess.audioCodec('copy');
 						}
 					}
 				}

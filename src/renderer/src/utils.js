@@ -19,6 +19,10 @@ export function formatBitrate(bitrate) {
 		return 'unknown bitrate';
 	}
 
+	if (isNaN(bitrate)) {
+		return 'unknown bitrate';
+	}
+
 	if (bitrate >= 1e6) {
 		return `${(bitrate / 1e6).toFixed(2)} Mbps`;
 	} else {

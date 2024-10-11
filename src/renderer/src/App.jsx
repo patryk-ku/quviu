@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Button, Tabs, TextInput } from '@mantine/core';
+import { Tabs } from '@mantine/core';
 import { useLocalStorage } from '@mantine/hooks';
 import { File, FrameCorners, SpeakerHigh, Star } from '@phosphor-icons/react';
 
@@ -9,9 +9,8 @@ import FileTab from './components/Tabs.jsx/FileTab';
 import Audio from './components/Tabs.jsx/Audio';
 import Video from './components/Tabs.jsx/Video';
 import StatusBar from './components/StatusBar';
-// import electronLogo from './assets/electron.svg'
 
-function App() {
+export default function App() {
 	const [file, setFile] = useState(null);
 	const [outputPath, setOutputPath] = useLocalStorage({
 		key: 'output-path',
@@ -29,12 +28,7 @@ function App() {
 
 	// Settings
 	const [trim, setTrim] = useState({ isEnabled: false, start: 0, end: 0 });
-	const [outputOptions, setOutputOptions] = useState([
-		// '-vf scale=-2:720',
-		// dobre do vp9:
-		// '-crf 40',
-		// '-deadline best',
-	]);
+	// const [outputOptions, setOutputOptions] = useState(['-crf 40']);
 	const [audio, setAudio] = useState({
 		isMuted: false,
 		isMerge: false,
@@ -45,13 +39,17 @@ function App() {
 	const [video, setVideo] = useState({
 		isDisabled: false,
 		isCompress: false,
-		codec: 'libx264',
+		codec: 'libx265',
 		bitrate: '2048k',
 		isResolution: false,
 		resolution: '720',
 		isFps: false,
 		fps: '30',
 	});
+
+	useEffect(() => {
+		setSuccess(false);
+	}, [audio, video, trim]);
 
 	const handleFilePicker = async () => {
 		setProgress(0);
@@ -93,7 +91,7 @@ function App() {
 				path: outputPath + outputName + outputExtension,
 				isOverwrite,
 			},
-			outputOptions,
+			// outputOptions,
 			trim,
 			video,
 			audio,
@@ -138,7 +136,7 @@ function App() {
 					orientation='vertical'
 					variant='pills'
 					radius='xs'
-					className='h-0 min-h-full border-t-2 border-[--tab-border-color]'
+					className='h-0 min-h-full select-none border-t-2 border-[--tab-border-color]'
 					styles={{
 						panel: { overflowY: 'auto', padding: '8px 16px', marginRight: '2px' },
 						tab: {
@@ -154,7 +152,7 @@ function App() {
 							value='Presets'
 							leftSection={<Star size={14} color='gold' weight='fill' />}
 						>
-							Fast Presets
+							Quick Presets
 						</Tabs.Tab>
 						<Tabs.Tab value='File' leftSection={<File size={14} weight='bold' />}>
 							File
@@ -173,7 +171,7 @@ function App() {
 						</Tabs.Tab>
 					</Tabs.List>
 
-					<Tabs.Panel value='Presets'>Presety</Tabs.Panel>
+					<Tabs.Panel value='Presets'>WIP</Tabs.Panel>
 
 					<Tabs.Panel value='File'>
 						<FileTab
@@ -204,10 +202,9 @@ function App() {
 					progress={progress}
 					error={error}
 					success={success}
+					config={{ metadata, video, audio, trim }}
 				/>
 			</div>
 		</div>
 	);
 }
-
-export default App;

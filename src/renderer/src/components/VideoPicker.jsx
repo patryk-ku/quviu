@@ -17,6 +17,8 @@ import {
 	SkipBack,
 	SpeakerHigh,
 	SpeakerSimpleX,
+	ArrowLineLeft,
+	ArrowLineRight,
 } from '@phosphor-icons/react';
 import { formatDuration, formatBitrate, formatFileSize, getFileExtension } from '../utils';
 
@@ -66,8 +68,6 @@ function VideoPicker({ file, handleFilePicker, isProcessing, clearFile, metadata
 	};
 
 	const handleTrimChange = (range) => {
-		console.log(range, prevTrimValues.current);
-
 		if (range[0] !== prevTrimValues.current.start) {
 			videoRef.current.currentTime = prevTrimValues.current.start;
 		} else if (range[1] !== prevTrimValues.current.end) {
@@ -187,6 +187,9 @@ function VideoPicker({ file, handleFilePicker, isProcessing, clearFile, metadata
 											<Button
 												variant='default'
 												size='compact-sm'
+												leftSection={
+													<ArrowLineLeft size={18} weight='bold' />
+												}
 												onClick={handleTrimStart}
 											>
 												Set Start
@@ -197,6 +200,9 @@ function VideoPicker({ file, handleFilePicker, isProcessing, clearFile, metadata
 												variant='default'
 												size='compact-sm'
 												onClick={handleTrimEnd}
+												rightSection={
+													<ArrowLineRight size={18} weight='bold' />
+												}
 											>
 												Set End
 											</Button>
