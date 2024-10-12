@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { Tabs } from '@mantine/core';
+import { useState, useEffect, useMemo } from 'react';
+import { createTheme, MantineProvider, virtualColor, Tabs } from '@mantine/core';
 import { useLocalStorage } from '@mantine/hooks';
 import { File, FrameCorners, SpeakerHigh, Star } from '@phosphor-icons/react';
 
@@ -11,6 +11,22 @@ import Video from './components/Tabs.jsx/Video';
 import StatusBar from './components/StatusBar';
 
 export default function App() {
+	const [colors, setColors] = useState(['violet', 'grape']);
+	const theme = useMemo(
+		() =>
+			createTheme({
+				primaryColor: colors[0],
+				colors: {
+					accent: virtualColor({
+						name: 'accent',
+						dark: colors[1],
+						light: colors[1],
+					}),
+				},
+			}),
+		[colors]
+	);
+
 	const [file, setFile] = useState(null);
 	const [outputPath, setOutputPath] = useLocalStorage({
 		key: 'output-path',
@@ -118,93 +134,95 @@ export default function App() {
 	}, []);
 
 	return (
-		<div className='grid h-full grid-rows-[auto,1fr]'>
-			<TitleBar />
-			<div className='grid h-full grid-rows-[auto,1fr,auto]'>
-				<VideoPicker
-					file={file}
-					handleFilePicker={handleFilePicker}
-					isProcessing={isProcessing}
-					clearFile={clearFile}
-					metadata={metadata}
-					trim={trim}
-					setTrim={setTrim}
-				/>
+		<MantineProvider theme={theme}>
+			<div className='grid h-full grid-rows-[auto,1fr]'>
+				<TitleBar colors={colors} setColors={setColors} />
+				<div className='grid h-full grid-rows-[auto,1fr,auto]'>
+					<VideoPicker
+						file={file}
+						handleFilePicker={handleFilePicker}
+						isProcessing={isProcessing}
+						clearFile={clearFile}
+						metadata={metadata}
+						trim={trim}
+						setTrim={setTrim}
+					/>
 
-				<Tabs
-					defaultValue='File'
-					orientation='vertical'
-					variant='pills'
-					radius='xs'
-					className='h-0 min-h-full select-none border-t-2 border-[--tab-border-color]'
-					styles={{
-						panel: { overflowY: 'auto', padding: '8px 16px', marginRight: '2px' },
-						tab: {
-							paddingLeft: '20px',
-							paddingRight: '24px',
-							paddingTop: '12px',
-							paddingBottom: '12px',
-						},
-					}}
-				>
-					<Tabs.List className='border-r-2 border-[--tab-border-color]'>
-						<Tabs.Tab
-							value='Presets'
-							leftSection={<Star size={14} color='gold' weight='fill' />}
-						>
-							Quick Presets
-						</Tabs.Tab>
-						<Tabs.Tab value='File' leftSection={<File size={14} weight='bold' />}>
-							File
-						</Tabs.Tab>
-						<Tabs.Tab
-							value='Video'
-							leftSection={<FrameCorners size={14} weight='bold' />}
-						>
-							Video
-						</Tabs.Tab>
-						<Tabs.Tab
-							value='Audio'
-							leftSection={<SpeakerHigh size={14} weight='bold' />}
-						>
-							Audio
-						</Tabs.Tab>
-					</Tabs.List>
+					<Tabs
+						defaultValue='File'
+						orientation='vertical'
+						variant='pills'
+						radius='xs'
+						className='h-0 min-h-full select-none border-t-2 border-[--tab-border-color]'
+						styles={{
+							panel: { overflowY: 'auto', padding: '8px 16px', marginRight: '2px' },
+							tab: {
+								paddingLeft: '20px',
+								paddingRight: '24px',
+								paddingTop: '12px',
+								paddingBottom: '12px',
+							},
+						}}
+					>
+						<Tabs.List className='border-r-2 border-[--tab-border-color]'>
+							<Tabs.Tab
+								value='Presets'
+								leftSection={<Star size={14} color='gold' weight='fill' />}
+							>
+								Quick Presets
+							</Tabs.Tab>
+							<Tabs.Tab value='File' leftSection={<File size={14} weight='bold' />}>
+								File
+							</Tabs.Tab>
+							<Tabs.Tab
+								value='Video'
+								leftSection={<FrameCorners size={14} weight='bold' />}
+							>
+								Video
+							</Tabs.Tab>
+							<Tabs.Tab
+								value='Audio'
+								leftSection={<SpeakerHigh size={14} weight='bold' />}
+							>
+								Audio
+							</Tabs.Tab>
+						</Tabs.List>
 
-					<Tabs.Panel value='Presets'>WIP</Tabs.Panel>
+						<Tabs.Panel value='Presets'>WIP</Tabs.Panel>
 
-					<Tabs.Panel value='File'>
-						<FileTab
-							outputPath={outputPath}
-							setOutputPath={setOutputPath}
-							outputName={outputName}
-							setOutputName={setOutputName}
-							outputExtension={outputExtension}
-							setOutputExtension={setOutputExtension}
-							isOverwrite={isOverwrite}
-							setIsOverwrite={setIsOverwrite}
-						/>
-					</Tabs.Panel>
+						<Tabs.Panel value='File'>
+							<FileTab
+								outputPath={outputPath}
+								setOutputPath={setOutputPath}
+								outputName={outputName}
+								setOutputName={setOutputName}
+								outputExtension={outputExtension}
+								setOutputExtension={setOutputExtension}
+								isOverwrite={isOverwrite}
+								setIsOverwrite={setIsOverwrite}
+							/>
+						</Tabs.Panel>
 
-					<Tabs.Panel value='Video'>
-						<Video video={video} setVideo={setVideo} metadata={metadata} />
-					</Tabs.Panel>
+						<Tabs.Panel value='Video'>
+							<Video video={video} setVideo={setVideo} metadata={metadata} />
+						</Tabs.Panel>
 
-					<Tabs.Panel value='Audio'>
-						<Audio audio={audio} setAudio={setAudio} metadata={metadata} />
-					</Tabs.Panel>
-				</Tabs>
+						<Tabs.Panel value='Audio'>
+							<Audio audio={audio} setAudio={setAudio} metadata={metadata} />
+						</Tabs.Panel>
+					</Tabs>
 
-				<StatusBar
-					file={file}
-					isProcessing={isProcessing}
-					handleProcess={handleProcess}
-					progress={progress}
-					error={error}
-					success={success}
-					config={{ metadata, video, audio, trim }}
-				/>
+					<StatusBar
+						file={file}
+						isProcessing={isProcessing}
+						handleProcess={handleProcess}
+						progress={progress}
+						error={error}
+						success={success}
+						config={{ metadata, video, audio, trim }}
+					/>
+				</div>
 			</div>
-		</div>
+		</MantineProvider>
 	);
 }

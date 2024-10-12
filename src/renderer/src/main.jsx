@@ -7,7 +7,7 @@ import { createTheme, MantineProvider, virtualColor } from '@mantine/core';
 import App from './App';
 
 const theme = createTheme({
-	primaryColor: 'violet',
+	// primaryColor: 'violet',
 	defaultRadius: 'sm',
 	cursorType: 'pointer',
 	colors: {
@@ -16,11 +16,11 @@ const theme = createTheme({
 			dark: 'gray',
 			light: 'dark',
 		}),
-		accent: virtualColor({
-			name: 'accent',
-			dark: 'grape',
-			light: 'grape',
-		}),
+		// accent: virtualColor({
+		// 	name: 'accent',
+		// 	dark: 'grape',
+		// 	light: 'grape',
+		// }),
 	},
 });
 

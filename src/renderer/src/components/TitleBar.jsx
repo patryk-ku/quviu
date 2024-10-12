@@ -1,7 +1,29 @@
-import { Title, Text, ActionIcon } from '@mantine/core';
-import { Minus, Resize, X } from '@phosphor-icons/react';
+import { useState, useEffect } from 'react';
+import { Title, Text, ActionIcon, ColorInput } from '@mantine/core';
+import { GithubLogo, Minus, Resize, X } from '@phosphor-icons/react';
 
-export default function TitleBar() {
+export default function TitleBar({ setColors }) {
+	const [color, setColor] = useState('#7950f2');
+
+	useEffect(() => {
+		const colorMap = {
+			'#fa5252': ['red', 'pink'],
+			'#e64980': ['pink', 'grape'],
+			'#be4bdb': ['grape', 'grape'],
+			'#7950f2': ['violet', 'grape'],
+			'#4c6ef5': ['indigo', 'cyan'],
+			'#228be6': ['blue', 'cyan'],
+			'#15aabf': ['cyan', 'green'],
+			'#12b886': ['teal', 'cyan'],
+			'#40c057': ['green', 'lime'],
+			'#82c91e': ['lime', 'teal'],
+			'#fab005': ['yellow', 'orange'],
+			'#fd7e14': ['orange', 'red'],
+		};
+
+		setColors(colorMap[color]);
+	}, [color]);
+
 	const handleMinimize = () => {
 		window.api.minimize();
 	};
@@ -17,38 +39,83 @@ export default function TitleBar() {
 	return (
 		<div
 			id='title-bar'
-			className='flex select-none items-center justify-between gap-1 bg-[--mantine-color-dark-9] p-2'
+			className='grid select-none grid-cols-[auto,1fr,auto] items-center justify-between gap-1 bg-[--mantine-color-dark-9]'
 		>
-			<div className='flex items-baseline gap-1'>
-				<Title order={2}>QuViU</Title>
+			<div className='flex items-baseline gap-1 p-1'>
+				{/* <Title order={2}>QuViU</Title> */}
+				<Title order={2}>Quviu</Title>
 				<Text size='sm' c='dimmed'>
 					v0.1.0
 				</Text>
 			</div>
-			<div className='flex gap-2'>
+			<div className='flex items-center gap-4'>
 				<ActionIcon
-					variant='filled'
-					color='yellow.5'
+					variant='subtle'
+					color='gray'
+					onClick={handleMinimize}
+					className='title-bar-button ml-4'
+					size='lg'
+				>
+					<GithubLogo size={24} weight='fill' />
+				</ActionIcon>
+				<ColorInput
+					size='xs'
+					placeholder='theme'
+					className='title-bar-button w-[100px]'
+					withEyeDropper={false}
+					disallowInput
+					withPicker={false}
+					format='hex'
+					swatches={[
+						'#fa5252',
+						'#e64980',
+						'#be4bdb',
+						'#7950f2',
+						'#4c6ef5',
+						'#228be6',
+						'#15aabf',
+						'#12b886',
+						'#40c057',
+						'#82c91e',
+						'#fab005',
+						'#fd7e14',
+					]}
+					value={color}
+					onChange={setColor}
+					swatchesPerRow={6}
+					// closeOnColorSwatchClick
+				/>
+			</div>
+			<div className='flex gap-1 px-1'>
+				<ActionIcon
+					variant='light'
+					color='yellow'
 					onClick={handleMinimize}
 					className='title-bar-button'
+					size='lg'
+					radius='xs'
 				>
 					<Minus size={34} weight='bold' />
 				</ActionIcon>
 				<ActionIcon
-					variant='filled'
+					variant='light'
 					color='green'
 					onClick={handleMaximize}
 					className='title-bar-button'
+					size='lg'
+					radius='xs'
 				>
 					<Resize size={34} weight='bold' />
 				</ActionIcon>
 				<ActionIcon
-					variant='filled'
+					variant='light'
 					color='red'
 					onClick={handleClose}
 					className='title-bar-button'
+					size='lg'
+					radius='xs'
 				>
-					<X size={34} weight='bold' />
+					<X size={24} weight='bold' />
 				</ActionIcon>
 			</div>
 		</div>
