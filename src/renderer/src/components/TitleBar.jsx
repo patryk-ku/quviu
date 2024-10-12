@@ -1,9 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { Title, Text, ActionIcon, ColorInput } from '@mantine/core';
-import { GithubLogo, Minus, Resize, X } from '@phosphor-icons/react';
+import { useLocalStorage } from '@mantine/hooks';
+import { GithubLogo, Minus, Square, X } from '@phosphor-icons/react';
 
 export default function TitleBar({ setColors }) {
-	const [color, setColor] = useState('#7950f2');
+	const [color, setColor] = useLocalStorage({
+		key: 'color',
+		defaultValue: '#7950f2',
+	});
 
 	useEffect(() => {
 		const colorMap = {
@@ -41,7 +45,7 @@ export default function TitleBar({ setColors }) {
 			id='title-bar'
 			className='grid select-none grid-cols-[auto,1fr,auto] items-center justify-between gap-1 bg-[--mantine-color-dark-9]'
 		>
-			<div className='flex items-baseline gap-1 p-1'>
+			<div className='flex items-baseline gap-1 px-2 py-1'>
 				{/* <Title order={2}>QuViU</Title> */}
 				<Title order={2}>Quviu</Title>
 				<Text size='sm' c='dimmed'>
@@ -52,11 +56,10 @@ export default function TitleBar({ setColors }) {
 				<ActionIcon
 					variant='subtle'
 					color='gray'
-					onClick={handleMinimize}
 					className='title-bar-button ml-4'
 					size='lg'
 				>
-					<GithubLogo size={24} weight='fill' />
+					<GithubLogo size={22} weight='fill' />
 				</ActionIcon>
 				<ColorInput
 					size='xs'
@@ -83,37 +86,34 @@ export default function TitleBar({ setColors }) {
 					value={color}
 					onChange={setColor}
 					swatchesPerRow={6}
-					// closeOnColorSwatchClick
+					closeOnColorSwatchClick
 				/>
 			</div>
 			<div className='flex gap-1 px-1'>
 				<ActionIcon
-					variant='light'
+					variant='subtle'
 					color='yellow'
 					onClick={handleMinimize}
 					className='title-bar-button'
 					size='lg'
-					radius='xs'
 				>
-					<Minus size={34} weight='bold' />
+					<Minus size={24} weight='bold' />
 				</ActionIcon>
 				<ActionIcon
-					variant='light'
+					variant='subtle'
 					color='green'
 					onClick={handleMaximize}
 					className='title-bar-button'
 					size='lg'
-					radius='xs'
 				>
-					<Resize size={34} weight='bold' />
+					<Square size={20} weight='bold' />
 				</ActionIcon>
 				<ActionIcon
-					variant='light'
+					variant='subtle'
 					color='red'
 					onClick={handleClose}
 					className='title-bar-button'
 					size='lg'
-					radius='xs'
 				>
 					<X size={24} weight='bold' />
 				</ActionIcon>

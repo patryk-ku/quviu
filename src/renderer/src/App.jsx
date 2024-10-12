@@ -73,13 +73,13 @@ export default function App() {
 		setSuccess(null);
 		const filePath = await window.api.openFile();
 
-		if (filePath.error) {
+		if (filePath?.error) {
 			setError(filePath.error);
 			return;
 		}
 
-		setFile(filePath.path);
-		setMetadata(filePath.metadata);
+		setFile(filePath?.path);
+		setMetadata(filePath?.metadata);
 		console.log('Selected video: ', filePath);
 	};
 

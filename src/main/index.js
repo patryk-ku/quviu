@@ -74,6 +74,10 @@ function createWindow() {
 		mainWindow.loadFile(join(__dirname, '../renderer/index.html'));
 	}
 
+	if (process.env.NODE_ENV === 'development') {
+		mainWindow.webContents.openDevTools();
+	}
+
 	ipcMain.handle('minimize', () => mainWindow.minimize());
 	ipcMain.handle('maximize', () => {
 		if (mainWindow.isMaximized()) {
