@@ -302,7 +302,7 @@ function VideoPicker({ file, handleFilePicker, isProcessing, clearFile, metadata
 						onTimeUpdate={handleTimeUpdate}
 						onPlay={() => setIsPaused(false)}
 						onPause={() => setIsPaused(true)}
-						className='w-ful aspect-video h-[200px] cursor-pointer rounded bg-[--mantine-color-dark-9]'
+						className='w-ful aspect-video h-[23vw] cursor-pointer rounded bg-[--mantine-color-dark-9]'
 						src={`file://${file}`}
 						// controls
 						muted={isMuted}
@@ -310,7 +310,7 @@ function VideoPicker({ file, handleFilePicker, isProcessing, clearFile, metadata
 						onClick={handlePlayPause}
 					/>
 				) : (
-					<div className='w-ful aspect-video h-[200px] rounded bg-[--mantine-color-dark-9]'></div>
+					<div className='w-ful aspect-video h-[23vw] rounded bg-[--mantine-color-dark-9]'></div>
 				)}
 			</div>
 		</div>

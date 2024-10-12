@@ -30,9 +30,19 @@ export default function StreamsInfo({ streams }) {
 									{stream.codec_name}
 								</Badge>
 							)}
+							{stream?.channel_layout && (
+								<Badge variant='light' color='accent' radius='sm'>
+									{stream.channel_layout}
+								</Badge>
+							)}
 							{stream?.bit_rate && (
 								<Badge variant='light' color='accent' radius='sm'>
 									{formatBitrate(stream.bit_rate)}
+								</Badge>
+							)}
+							{stream?.sample_rate && (
+								<Badge variant='light' color='accent' radius='sm'>
+									{stream.sample_rate / 1000} kHz
 								</Badge>
 							)}
 							{stream?.avg_frame_rate && stream?.avg_frame_rate !== '0/0' && (

@@ -42,7 +42,7 @@ function FileTab({
 				/>
 				<Select
 					label='File Extension'
-					data={['.mp4', '.webm', '.mkv']}
+					data={['.mp4', '.webm', '.mkv', '.mp3', '.opus']}
 					value={outputExtension}
 					onChange={setOutputExtension}
 					allowDeselect={false}
