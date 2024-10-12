@@ -135,7 +135,7 @@ export default function App() {
 
 	return (
 		<MantineProvider theme={theme}>
-			<div className='grid h-full grid-rows-[auto,1fr]'>
+			<div className='grid h-full grid-rows-[auto,1fr] border border-[--mantine-color-default-border]'>
 				<TitleBar colors={colors} setColors={setColors} />
 				<div className='grid h-full grid-rows-[auto,1fr,auto]'>
 					<VideoPicker

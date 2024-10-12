@@ -1,5 +1,5 @@
-appId: com.electron.app
-productName: quviu
+appId: com.electron.quviu
+productName: Quviu
 directories:
     buildResources: build
 files:
@@ -8,8 +8,11 @@ files:
     - '!electron.vite.config.{js,ts,mjs,cjs}'
     - '!{.eslintignore,.eslintrc.cjs,.prettierignore,.prettierrc.yaml,dev-app-update.yml,CHANGELOG.md,README.md}'
     - '!{.env,.env.*,.npmrc,pnpm-lock.yaml}'
+icon: 'build/icon.png'
 asarUnpack:
     - resources/**
+    - node_modules/fluent-ffmpeg
+    - out/main/chunks/*.node
 win:
     executableName: quviu
 nsis:
@@ -32,7 +35,7 @@ linux:
         - AppImage
         # - snap
         # - deb
-    maintainer: electronjs.org
+    # maintainer: Patryk Kurdziel
     category: Utility
 appImage:
     artifactName: ${name}-${version}.${ext}

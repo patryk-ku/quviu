@@ -46,10 +46,9 @@ export default function TitleBar({ setColors }) {
 			className='grid select-none grid-cols-[auto,1fr,auto] items-center justify-between gap-1 bg-[--mantine-color-dark-9]'
 		>
 			<div className='flex items-baseline gap-1 px-2 py-1'>
-				{/* <Title order={2}>QuViU</Title> */}
 				<Title order={2}>Quviu</Title>
 				<Text size='sm' c='dimmed'>
-					v0.1.0
+					v1.0.0
 				</Text>
 			</div>
 			<div className='flex items-center gap-4'>

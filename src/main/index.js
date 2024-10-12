@@ -40,6 +40,7 @@ async function handleFolderOpen() {
 function createWindow() {
 	// Create the browser window.
 	const mainWindow = new BrowserWindow({
+		title: 'Quviu',
 		width: 900,
 		height: 720,
 		minWidth: 900,
@@ -53,7 +54,7 @@ function createWindow() {
 			sandbox: false,
 
 			// TODO: TMP for development only:
-			webSecurity: false,
+			webSecurity: process.env.NODE_ENV === 'development' ? false : true,
 		},
 	});
 
