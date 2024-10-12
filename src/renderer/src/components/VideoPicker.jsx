@@ -289,7 +289,13 @@ function VideoPicker({ file, handleFilePicker, isProcessing, clearFile, metadata
 					</div>
 				</div>
 			</div>
-			<div>
+			<div className='relative'>
+				{metadata?.streams?.at(0)?.codec_name === 'hevc' && (
+					<div className='absolute flex h-full w-full items-center justify-center'>
+						<div>HEVC video preview is not supported</div>
+						<div></div>
+					</div>
+				)}
 				{file ? (
 					<video
 						ref={videoRef}
