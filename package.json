@@ -3,7 +3,7 @@
 	"version": "1.0.0",
 	"description": "Quick video utiliies.",
 	"main": "./out/main/index.js",
-	"author": "Patryk Kurdziel",
+	"author": "Patryk Kurdziel <patryk.kurdziel@protonmail.com> (https://patryk-ku.ct8.pl/)",
 	"homepage": "https://patryk-ku.ct8.pl/",
 	"scripts": {
 		"format": "prettier --write .",

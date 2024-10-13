@@ -33,8 +33,9 @@ dmg:
 linux:
     target:
         - AppImage
+        - deb
+        - pacman
         # - snap
-        # - deb
     # maintainer: Patryk Kurdziel
     category: Utility
 appImage:
