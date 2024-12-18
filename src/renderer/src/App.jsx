@@ -1,13 +1,13 @@
 import { useState, useEffect, useMemo } from 'react';
 import { createTheme, MantineProvider, virtualColor, Tabs } from '@mantine/core';
 import { useLocalStorage } from '@mantine/hooks';
-import { File, FrameCorners, SpeakerHigh, Star } from '@phosphor-icons/react';
 
 import TitleBar from './components/TitleBar';
-import VideoPicker from './components/VideoPicker';
-import FileTab from './components/Tabs.jsx/FileTab';
-import Audio from './components/Tabs.jsx/Audio';
-import Video from './components/Tabs.jsx/Video';
+import Output from './components/Tabs/Output';
+import Audio from './components/Tabs/Audio';
+import Video from './components/Tabs/Video';
+import Trim from './components/Tabs/Trim';
+import Settings from './components/Tabs/Settings';
 import StatusBar from './components/StatusBar';
 
 export default function App() {
@@ -27,6 +27,7 @@ export default function App() {
 		[colors]
 	);
 
+	const [activeTab, setActiveTab] = useState('File');
 	const [file, setFile] = useState(null);
 	const [outputPath, setOutputPath] = useLocalStorage({
 		key: 'output-path',
@@ -66,6 +67,12 @@ export default function App() {
 	useEffect(() => {
 		setSuccess(false);
 	}, [audio, video, trim]);
+
+	const resetState = () => {
+		setProgress(0);
+		setError(null);
+		setSuccess(null);
+	};
 
 	const handleFilePicker = async () => {
 		setProgress(0);
@@ -136,62 +143,30 @@ export default function App() {
 	return (
 		<MantineProvider theme={theme}>
 			<div className='grid h-full grid-rows-[auto,1fr] border border-[--mantine-color-default-border]'>
-				<TitleBar colors={colors} setColors={setColors} />
-				<div className='grid h-full grid-rows-[auto,1fr,auto]'>
-					<VideoPicker
-						file={file}
-						handleFilePicker={handleFilePicker}
-						isProcessing={isProcessing}
-						clearFile={clearFile}
-						metadata={metadata}
-						trim={trim}
-						setTrim={setTrim}
-					/>
+				<TitleBar
+					activeTab={activeTab}
+					setActiveTab={setActiveTab}
+					handleFilePicker={handleFilePicker}
+					isProcessing={isProcessing}
+				/>
+				<div className='grid h-full grid-rows-[1fr,auto]'>
+					{/* <VideoPicker file={file} metadata={metadata} trim={trim} setTrim={setTrim} /> */}
 
 					<Tabs
-						defaultValue='File'
-						orientation='vertical'
-						variant='pills'
-						radius='xs'
-						className='h-0 min-h-full select-none border-t-2 border-[--tab-border-color]'
+						value={activeTab}
+						onChange={setActiveTab}
+						// className='h-0 min-h-full select-none'
 						styles={{
 							panel: { overflowY: 'auto', padding: '8px 16px', marginRight: '2px' },
-							tab: {
-								paddingLeft: '20px',
-								paddingRight: '24px',
-								paddingTop: '12px',
-								paddingBottom: '12px',
-							},
+						}}
+						classNames={{
+							panel: 'h-0 min-h-full',
 						}}
 					>
-						<Tabs.List className='border-r-2 border-[--tab-border-color]'>
-							<Tabs.Tab
-								value='Presets'
-								leftSection={<Star size={14} color='gold' weight='fill' />}
-							>
-								Quick Presets
-							</Tabs.Tab>
-							<Tabs.Tab value='File' leftSection={<File size={14} weight='bold' />}>
-								File
-							</Tabs.Tab>
-							<Tabs.Tab
-								value='Video'
-								leftSection={<FrameCorners size={14} weight='bold' />}
-							>
-								Video
-							</Tabs.Tab>
-							<Tabs.Tab
-								value='Audio'
-								leftSection={<SpeakerHigh size={14} weight='bold' />}
-							>
-								Audio
-							</Tabs.Tab>
-						</Tabs.List>
-
 						<Tabs.Panel value='Presets'>WIP</Tabs.Panel>
 
 						<Tabs.Panel value='File'>
-							<FileTab
+							<Output
 								outputPath={outputPath}
 								setOutputPath={setOutputPath}
 								outputName={outputName}
@@ -209,6 +184,14 @@ export default function App() {
 
 						<Tabs.Panel value='Audio'>
 							<Audio audio={audio} setAudio={setAudio} metadata={metadata} />
+						</Tabs.Panel>
+
+						<Tabs.Panel value='Trim'>
+							<Trim file={file} metadata={metadata} trim={trim} setTrim={setTrim} />
+						</Tabs.Panel>
+
+						<Tabs.Panel value='Settings'>
+							<Settings setColors={setColors} />
 						</Tabs.Panel>
 					</Tabs>
 

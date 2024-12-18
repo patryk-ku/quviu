@@ -1,7 +1,7 @@
 import { Title, TextInput, Text, Select, Switch } from '@mantine/core';
 import { FolderSimple, File } from '@phosphor-icons/react';
 
-function FileTab({
+export default function Output({
 	outputPath,
 	setOutputPath,
 	outputName,
@@ -18,6 +18,8 @@ function FileTab({
 			console.log('Selected output folder path: ', folderPath);
 		}
 	};
+
+	// TODO: When output path is emty file is saved to app dir, fix it
 
 	return (
 		<div className='grid grid-cols-1 gap-2'>
@@ -66,5 +68,3 @@ function FileTab({
 		</div>
 	);
 }
-
-export default FileTab;
