@@ -75,9 +75,9 @@ export default function App() {
 	};
 
 	const handleFilePicker = async () => {
-		setProgress(0);
-		setError(null);
-		setSuccess(null);
+		resetState();
+		setTrim({ isEnabled: false, start: 0, end: 0 });
+
 		const filePath = await window.api.openFile();
 
 		if (filePath?.error) {
@@ -85,24 +85,15 @@ export default function App() {
 			return;
 		}
 
-		setFile(filePath?.path);
-		setMetadata(filePath?.metadata);
-		console.log('Selected video: ', filePath);
-	};
-
-	const clearFile = async () => {
-		console.log('Cleared video path: ', file);
-		setFile(null);
-		setMetadata(null);
-		setProgress(0);
-		setError(null);
-		setSuccess(null);
+		if (filePath?.path) {
+			setFile(filePath?.path);
+			setMetadata(filePath?.metadata);
+			console.log('Selected video: ', filePath);
+		}
 	};
 
 	const handleProcess = async () => {
-		setError(null);
-		setSuccess(null);
-		setProgress(0);
+		resetState();
 
 		const config = {
 			input: file,
@@ -143,12 +134,7 @@ export default function App() {
 	return (
 		<MantineProvider theme={theme}>
 			<div className='grid h-full grid-rows-[auto,1fr] border border-[--mantine-color-default-border]'>
-				<TitleBar
-					activeTab={activeTab}
-					setActiveTab={setActiveTab}
-					handleFilePicker={handleFilePicker}
-					isProcessing={isProcessing}
-				/>
+				<TitleBar activeTab={activeTab} setActiveTab={setActiveTab} />
 				<div className='grid h-full grid-rows-[1fr,auto]'>
 					{/* <VideoPicker file={file} metadata={metadata} trim={trim} setTrim={setTrim} /> */}
 
@@ -203,6 +189,7 @@ export default function App() {
 						error={error}
 						success={success}
 						config={{ metadata, video, audio, trim }}
+						handleFilePicker={handleFilePicker}
 					/>
 				</div>
 			</div>

@@ -1,4 +1,4 @@
-import { Title, Text, ActionIcon, Tabs, Button } from '@mantine/core';
+import { Title, Text, ActionIcon, Tabs } from '@mantine/core';
 import {
 	Minus,
 	Square,
@@ -11,7 +11,7 @@ import {
 	ArrowsInLineHorizontal,
 } from '@phosphor-icons/react';
 
-export default function TitleBar({ activeTab, setActiveTab, handleFilePicker, isProcessing }) {
+export default function TitleBar({ activeTab, setActiveTab }) {
 	const handleMinimize = () => {
 		window.api.minimize();
 	};
@@ -27,7 +27,7 @@ export default function TitleBar({ activeTab, setActiveTab, handleFilePicker, is
 	return (
 		<div
 			id='title-bar'
-			className='grid select-none grid-cols-[auto,auto,1fr,auto] items-center justify-between gap-4 bg-[--mantine-color-dark-9]'
+			className='grid select-none grid-cols-[auto,1fr,auto] items-center justify-between gap-2 bg-[--mantine-color-dark-9] p-0.5'
 		>
 			<div className='flex items-baseline gap-1 px-2 py-1'>
 				<Title order={2}>
@@ -41,17 +41,13 @@ export default function TitleBar({ activeTab, setActiveTab, handleFilePicker, is
 				</Text>
 			</div>
 
-			<Button
-				variant='filled'
-				onClick={handleFilePicker}
-				disabled={isProcessing}
-				size='compact-sm'
-				className='title-bar-button'
+			<Tabs
+				value={activeTab}
+				onChange={setActiveTab}
+				variant='pills'
+				color='accent'
+				classNames={{ list: 'pb-[1px]' }}
 			>
-				Open file
-			</Button>
-
-			<Tabs value={activeTab} onChange={setActiveTab} variant='pills' color='accent'>
 				<Tabs.List justify='center'>
 					{/* <Tabs.Tab
 						value='Presets'
@@ -90,7 +86,7 @@ export default function TitleBar({ activeTab, setActiveTab, handleFilePicker, is
 					</Tabs.Tab>
 					<Tabs.Tab
 						value='Settings'
-						leftSection={<GearSix size={18} weight='bold' />}
+						leftSection={<GearSix size={14} weight='bold' />}
 						className='title-bar-button'
 					></Tabs.Tab>
 				</Tabs.List>
