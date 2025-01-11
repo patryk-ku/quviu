@@ -44,12 +44,22 @@ export default function Output({
 				/>
 				<Select
 					label='File Extension'
-					data={['.mp4', '.webm', '.mkv', '.mp3', '.opus']}
+					data={[
+						{ group: '', items: ['.mp4', '.webm', '.mkv'] },
+						{
+							group: 'Audio only',
+							items: ['.mp3', '.aac', '.m4a', '.ogg', '.opus', '.flac'],
+						},
+					]}
 					value={outputExtension}
 					onChange={setOutputExtension}
 					allowDeselect={false}
 				/>
 			</div>
+			<Text size='sm' c='dimmed'>
+				Note: Not every file format is compatible with all video and audio codecs. Please
+				ensure your selected format and codec are supported.
+			</Text>
 			<Switch
 				label='Overwrite file if exists'
 				mt={8}

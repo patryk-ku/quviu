@@ -33,7 +33,7 @@ export default function App() {
 		key: 'output-path',
 		defaultValue: '',
 	});
-	const [outputName, setOutputName] = useState('New video');
+	const [outputName, setOutputName] = useState('New_video');
 	const [outputExtension, setOutputExtension] = useState('.mp4');
 	const [isOverwrite, setIsOverwrite] = useState(false);
 
