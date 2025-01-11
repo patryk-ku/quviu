@@ -102,7 +102,7 @@ export default function App() {
 				folder: outputPath,
 				name: outputName,
 				ext: outputExtension,
-				path: outputPath + outputName + outputExtension,
+				path: outputPath + outputName.trim() + outputExtension,
 				isOverwrite,
 			},
 			// outputOptions,
@@ -133,7 +133,7 @@ export default function App() {
 
 	return (
 		<MantineProvider theme={theme}>
-			<div className='grid h-full grid-rows-[auto,1fr] border border-[--mantine-color-default-border]'>
+			<div className='grid h-full select-none grid-rows-[auto,1fr] border border-[--mantine-color-default-border]'>
 				<TitleBar activeTab={activeTab} setActiveTab={setActiveTab} />
 				<div className='grid h-full grid-rows-[1fr,auto]'>
 					{/* <VideoPicker file={file} metadata={metadata} trim={trim} setTrim={setTrim} /> */}

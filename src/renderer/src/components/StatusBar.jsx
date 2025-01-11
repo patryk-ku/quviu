@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Progress, Text, Button, Anchor, Tooltip } from '@mantine/core';
 import { Plus, Play, Pause } from '@phosphor-icons/react';
 import { formatDuration } from '../utils';
+import CopyText from './CopyText';
 
 function calculateFileSize(bitrate, duration) {
 	const fileSizeMB = (parseInt(bitrate) * Number(duration)) / (8 * 1024);
@@ -80,6 +81,7 @@ export default function StatusBar({
 				disabled={isProcessing}
 				size='compact-sm'
 				leftSection={<Plus size={16} weight='bold' />}
+				className='shrink-0'
 			>
 				Open file
 			</Button>
@@ -117,6 +119,7 @@ export default function StatusBar({
 					>
 						{success}
 					</Anchor>
+					<CopyText value={success} />
 				</>
 			)}
 			{!(isProcessing || success) && size && (

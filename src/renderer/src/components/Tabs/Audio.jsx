@@ -22,19 +22,21 @@ export default function Audio({ audio, setAudio, metadata }) {
 		<div className='grid grid-cols-1 gap-2'>
 			<Title order={4}>Audio Settings</Title>
 			<StreamsInfo streams={audioStreams} />
-			<Switch
-				label='Mute audio'
-				radius='sm'
-				checked={audio.isMuted}
-				onChange={(event) => {
-					setAudio((prevAudio) => ({
-						...prevAudio,
-						isMuted: event.currentTarget.checked,
-					}));
-				}}
-				className='m-[1px] pt-1'
-				classNames={{ label: 'font-bold' }}
-			/>
+			<div className='flex'>
+				<Switch
+					label='Mute audio'
+					radius='sm'
+					checked={audio.isMuted}
+					onChange={(event) => {
+						setAudio((prevAudio) => ({
+							...prevAudio,
+							isMuted: event.currentTarget.checked,
+						}));
+					}}
+					className='m-[1px] pt-1'
+					classNames={{ label: 'font-bold' }}
+				/>
+			</div>
 			<Collapse in={!audio.isMuted}>
 				<div className='grid grid-cols-1 *:-ml-2 *:p-2'>
 					<SettingsSwitch

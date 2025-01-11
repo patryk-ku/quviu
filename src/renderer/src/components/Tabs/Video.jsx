@@ -22,19 +22,21 @@ export default function Video({ video, setVideo, metadata }) {
 		<div className='grid grid-cols-1 gap-2'>
 			<Title order={4}>Video Settings</Title>
 			<StreamsInfo streams={videoStreams} />
-			<Switch
-				label='Disable Video'
-				radius='sm'
-				checked={video.isDisabled}
-				onChange={(event) => {
-					setVideo((prev) => ({
-						...prev,
-						isDisabled: event.currentTarget.checked,
-					}));
-				}}
-				className='m-[1px] pt-1'
-				classNames={{ label: 'font-bold' }}
-			/>
+			<div className='flex'>
+				<Switch
+					label='Disable Video'
+					radius='sm'
+					checked={video.isDisabled}
+					onChange={(event) => {
+						setVideo((prev) => ({
+							...prev,
+							isDisabled: event.currentTarget.checked,
+						}));
+					}}
+					className='m-[1px] pt-1'
+					classNames={{ label: 'font-bold' }}
+				/>
+			</div>
 			<Collapse in={!video.isDisabled}>
 				<div className='grid grid-cols-1 *:-ml-2 *:p-2'>
 					<SettingsSwitch

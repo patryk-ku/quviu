@@ -1,5 +1,6 @@
 import { Title, TextInput, Text, Select, Switch } from '@mantine/core';
 import { FolderSimple, File } from '@phosphor-icons/react';
+import CopyText from '../CopyText';
 
 export default function Output({
 	outputPath,
@@ -22,7 +23,7 @@ export default function Output({
 	// TODO: When output path is emty file is saved to app dir, fix it
 
 	return (
-		<div className='grid grid-cols-1 gap-2'>
+		<div className='grid select-none grid-cols-1 gap-2'>
 			<Title order={4}>Output file settings</Title>
 			<TextInput
 				label='Output Folder'
@@ -60,20 +61,23 @@ export default function Output({
 				Note: Not every file format is compatible with all video and audio codecs. Please
 				ensure your selected format and codec are supported.
 			</Text>
-			<Switch
-				label='Overwrite file if exists'
-				mt={8}
-				radius='sm'
-				checked={isOverwrite}
-				onChange={(event) => setIsOverwrite(event.currentTarget.checked)}
-			/>
+			<div className='flex'>
+				<Switch
+					label='Overwrite file if exists'
+					mt={8}
+					radius='sm'
+					checked={isOverwrite}
+					onChange={(event) => setIsOverwrite(event.currentTarget.checked)}
+				/>
+			</div>
 			<div className='mt-4'>
 				<Text size='xs'>Final file path:</Text>
-				<Text c='accent'>
-					{outputPath}
-					{outputName}
-					{outputExtension}
-				</Text>
+				<div className='flex flex-wrap items-center gap-1'>
+					<Text span c='accent' className='select-text'>
+						{outputPath + outputName.trim() + outputExtension}
+					</Text>
+					<CopyText value={outputPath + outputName.trim() + outputExtension} />
+				</div>
 			</div>
 		</div>
 	);
