@@ -41,10 +41,10 @@ function createWindow() {
 	// Create the browser window.
 	const mainWindow = new BrowserWindow({
 		title: 'Quviu',
-		width: 900,
-		height: 720,
-		minWidth: 900,
-		minHeight: 610,
+		width: 850,
+		height: 662,
+		minWidth: 850,
+		minHeight: 500,
 		frame: false,
 		show: false,
 		autoHideMenuBar: true,
@@ -270,7 +270,7 @@ app.whenReady().then(() => {
 	// ipcMain.on('pickFile', async (e, message) => {
 	// 	const file = dialog.showOpenDialogSync({ properties: ['openFile', 'multiSelections'] });
 	// 	console.log(file);
-	// 	return 'test xd';
+	// 	return file;
 	// });
 
 	ipcMain.handle('dialog:openFile', handleFileOpen);
@@ -278,7 +278,7 @@ app.whenReady().then(() => {
 
 	createWindow();
 
-	app.on('activate', function () {
+	app.on('activate', () => {
 		// On macOS it's common to re-create a window in the app when the
 		// dock icon is clicked and there are no other windows open.
 		if (BrowserWindow.getAllWindows().length === 0) createWindow();

@@ -1,6 +1,6 @@
 {
 	"name": "quviu",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "Quick video utiliies.",
 	"main": "./out/main/index.js",
 	"author": "Patryk Kurdziel <patryk.kurdziel@protonmail.com> (https://patryk-ku.ct8.pl/)",

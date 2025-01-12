@@ -1,7 +1,8 @@
 import { Title, TextInput, Text, Select, Switch } from '@mantine/core';
 import { FolderSimple, File } from '@phosphor-icons/react';
+import CopyText from '../CopyText';
 
-function FileTab({
+export default function Output({
 	outputPath,
 	setOutputPath,
 	outputName,
@@ -19,8 +20,10 @@ function FileTab({
 		}
 	};
 
+	// TODO: When output path is emty file is saved to app dir, fix it
+
 	return (
-		<div className='grid grid-cols-1 gap-2'>
+		<div className='grid select-none grid-cols-1 gap-2'>
 			<Title order={4}>Output file settings</Title>
 			<TextInput
 				label='Output Folder'
@@ -42,29 +45,40 @@ function FileTab({
 				/>
 				<Select
 					label='File Extension'
-					data={['.mp4', '.webm', '.mkv', '.mp3', '.opus']}
+					data={[
+						{ group: '', items: ['.mp4', '.webm', '.mkv'] },
+						{
+							group: 'Audio only',
+							items: ['.mp3', '.aac', '.m4a', '.ogg', '.opus', '.flac'],
+						},
+					]}
 					value={outputExtension}
 					onChange={setOutputExtension}
 					allowDeselect={false}
 				/>
 			</div>
-			<Switch
-				label='Overwrite file if exists'
-				mt={8}
-				radius='sm'
-				checked={isOverwrite}
-				onChange={(event) => setIsOverwrite(event.currentTarget.checked)}
-			/>
+			<Text size='sm' c='dimmed'>
+				Note: Not every file format is compatible with all video and audio codecs. Please
+				ensure your selected format and codec are supported.
+			</Text>
+			<div className='flex'>
+				<Switch
+					label='Overwrite file if exists'
+					mt={8}
+					radius='sm'
+					checked={isOverwrite}
+					onChange={(event) => setIsOverwrite(event.currentTarget.checked)}
+				/>
+			</div>
 			<div className='mt-4'>
 				<Text size='xs'>Final file path:</Text>
-				<Text c='accent'>
-					{outputPath}
-					{outputName}
-					{outputExtension}
-				</Text>
+				<div className='flex flex-wrap items-center gap-1'>
+					<Text span c='accent' className='select-text'>
+						{outputPath + outputName.trim() + outputExtension}
+					</Text>
+					<CopyText value={outputPath + outputName.trim() + outputExtension} />
+				</div>
 			</div>
 		</div>
 	);
 }
-
-export default FileTab;
