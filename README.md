@@ -1,12 +1,8 @@
-# quviu
+# Quviu
 
-An Electron application with React
+Quviu (**Qu**ick **vi**deo **u**tilities) is an easy-to-use GUI for FFmpeg that allows you to quickly re-encode and trim video files.
 
-## Recommended IDE Setup
-
--   [VSCode](https://code.visualstudio.com/) + [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) + [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
-
-## Project Setup
+## Build from source
 
 ### Install
 
