@@ -1,6 +1,6 @@
 {
 	"name": "quviu",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"description": "Quick video utiliies.",
 	"main": "./out/main/index.js",
 	"author": "Patryk Kurdziel <patryk.kurdziel@protonmail.com> (https://patryk-ku.ct8.pl/)",
@@ -20,31 +20,37 @@
 	"dependencies": {
 		"@electron-toolkit/preload": "^3.0.1",
 		"@electron-toolkit/utils": "^3.0.0",
-		"@mantine/core": "^7.13.2",
-		"@mantine/hooks": "^7.13.2",
+		"@mantine/core": "^7.15.3",
+		"@mantine/hooks": "^7.15.3",
 		"@phosphor-icons/react": "^2.1.7",
-		"electron-updater": "^6.1.7",
+		"electron-updater": "^6.3.9",
 		"fluent-ffmpeg": "^2.1.3"
 	},
 	"devDependencies": {
 		"@electron-toolkit/eslint-config": "^1.0.2",
 		"@electron-toolkit/eslint-config-prettier": "^2.0.0",
-		"@vitejs/plugin-react": "^4.3.1",
+		"@vitejs/plugin-react": "^4.3.4",
 		"autoprefixer": "^10.4.20",
-		"electron": "^31.0.2",
-		"electron-builder": "^24.13.3",
+		"electron": "^33.3.1",
+		"electron-builder": "^25.1.8",
 		"electron-vite": "^2.3.0",
-		"eslint": "^8.57.0",
+		"eslint": "^9.18.0",
 		"eslint-config-prettier": "^9.1.0",
-		"eslint-plugin-react": "^7.34.3",
-		"postcss": "^8.4.47",
+		"eslint-plugin-react": "^7.37.3",
+		"postcss": "^8.4.49",
 		"postcss-preset-mantine": "^1.17.0",
 		"postcss-simple-vars": "^7.0.1",
-		"prettier": "^3.3.2",
-		"prettier-plugin-tailwindcss": "^0.6.8",
-		"react": "^18.3.1",
-		"react-dom": "^18.3.1",
-		"tailwindcss": "^3.4.13",
-		"vite": "^5.3.1"
+		"prettier": "^3.4.2",
+		"prettier-plugin-tailwindcss": "^0.6.9",
+		"react": "^19.0.0",
+		"react-dom": "^19.0.0",
+		"tailwindcss": "^3.4.17",
+		"vite": "^6.0.7"
+	},
+	"pnpm": {
+		"onlyBuiltDependencies": [
+			"electron",
+			"esbuild"
+		]
 	}
 }
