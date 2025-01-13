@@ -81,17 +81,20 @@ export default function Settings({ setColors, ffmpegPaths }) {
 
 				<div className='grid gap-1'>
 					<Title order={5}>Custom ffmpeg paths</Title>
+					<Text size='sm' c='dimmed'>
+						May require restart.
+					</Text>
 					<TextInput
 						variant='filled'
 						label='ffmpeg'
 						value={ffmpegPath}
-						onChange={(event) => setFfmpegPath(event.currentTarget.value)}
+						onChange={(event) => setFfmpegPath(event.target.value)}
 					/>
 					<TextInput
 						variant='filled'
 						label='ffprobe'
 						value={ffprobePath}
-						onChange={(event) => setFfprobePath(event.currentTarget.value)}
+						onChange={(event) => setFfprobePath(event.target.value)}
 					/>
 				</div>
 

@@ -30,7 +30,7 @@ export default function Audio({ audio, setAudio, metadata }) {
 					onChange={(event) => {
 						setAudio((prevAudio) => ({
 							...prevAudio,
-							isMuted: event.currentTarget.checked,
+							isMuted: event.target.checked,
 						}));
 					}}
 					className='m-[1px] pt-1'
@@ -96,7 +96,7 @@ export default function Audio({ audio, setAudio, metadata }) {
 							onChange={(event) => {
 								setAudio((prevAudio) => ({
 									...prevAudio,
-									isMerge: event.currentTarget.checked,
+									isMerge: event.target.checked,
 								}));
 							}}
 							description={metadata && `audio streams: ${audioStreams?.length}`}

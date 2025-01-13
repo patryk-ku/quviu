@@ -30,7 +30,7 @@ export default function Video({ video, setVideo, metadata }) {
 					onChange={(event) => {
 						setVideo((prev) => ({
 							...prev,
-							isDisabled: event.currentTarget.checked,
+							isDisabled: event.target.checked,
 						}));
 					}}
 					className='m-[1px] pt-1'

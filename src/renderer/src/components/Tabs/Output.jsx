@@ -39,7 +39,7 @@ export default function Output({
 				<TextInput
 					label='File Name'
 					value={outputName}
-					onChange={(event) => setOutputName(event.currentTarget.value)}
+					onChange={(event) => setOutputName(event.target.value)}
 					leftSection={<File size={18} weight='bold' />}
 					error={outputName.length === 0 ? 'Set output name' : false}
 				/>

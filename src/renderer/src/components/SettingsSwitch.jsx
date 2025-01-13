@@ -12,7 +12,7 @@ export default function SettingsSwitch({ children, condition, option, setOption,
 				onChange={(event) => {
 					setOption((prev) => ({
 						...prev,
-						[condition]: event.currentTarget.checked,
+						[condition]: event.target.checked,
 					}));
 				}}
 				classNames={{ label: 'font-bold' }}
