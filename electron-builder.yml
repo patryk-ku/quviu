@@ -9,6 +9,21 @@ files:
     - '!{.eslintignore,.eslintrc.cjs,.prettierignore,.prettierrc.yaml,dev-app-update.yml,CHANGELOG.md,README.md}'
     - '!{.env,.env.*,.npmrc,pnpm-lock.yaml}'
 icon: 'build/icon.png'
+fileAssociations:
+    - ext:
+          - mp3
+          - wav
+          - flac
+          - m4a
+      name: Audio Files
+      role: Editor
+    - ext:
+          - mp4
+          - mkv
+          - avi
+          - mov
+      name: Video Files
+      role: Editor
 asarUnpack:
     - resources/**
     - node_modules/fluent-ffmpeg
@@ -32,11 +47,10 @@ dmg:
     artifactName: ${name}-${version}.${ext}
 linux:
     target:
-        - AppImage
-        - deb
+        # - AppImage
+        # - deb
         - pacman
         # - snap
-    # maintainer: Patryk Kurdziel
     category: Utility
 appImage:
     artifactName: ${name}-${version}.${ext}

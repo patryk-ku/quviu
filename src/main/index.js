@@ -1,5 +1,5 @@
 import { app, shell, BrowserWindow, ipcMain, dialog } from 'electron';
-import { join, sep } from 'path';
+import { join, sep, isAbsolute, resolve } from 'path';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import icon from '../../resources/icon.png?asset';
 
@@ -7,24 +7,44 @@ import ffmpeg from 'fluent-ffmpeg';
 import { getMetadata, generateUniqueFileName } from './utils';
 import { timestampToSeconds } from '../renderer/src/utils';
 
+async function handleFile(filePath) {
+	try {
+		const metadata = await getMetadata(filePath);
+		// console.log(metadata);
+
+		return { path: filePath, metadata: metadata };
+	} catch (error) {
+		console.error('Error:', error);
+
+		return { error: 'Unable to open the selected file' };
+	}
+}
+
 async function handleFileOpen() {
 	// TODO: error handling when canceled
 	const { canceled, filePaths } = await dialog.showOpenDialog({
 		properties: ['openFile'],
-		filters: [{ name: 'Movies', extensions: ['mkv', 'avi', 'mp4', 'webm'] }],
+		filters: [
+			{
+				name: 'Multimedia',
+				extensions: [
+					'mkv',
+					'avi',
+					'mp4',
+					'webm',
+					'mov',
+					'mp3',
+					'm4a',
+					'opus',
+					'flac',
+					'wav',
+				],
+			},
+		],
 	});
 
 	if (!canceled) {
-		try {
-			const metadata = await getMetadata(filePaths[0]);
-			// console.log(metadata);
-
-			return { path: filePaths[0], metadata: metadata };
-		} catch (error) {
-			console.error('Error:', error);
-
-			return { error: 'Unable to open the selected file' };
-		}
+		return await handleFile(filePaths[0]);
 	}
 }
 
@@ -78,6 +98,19 @@ function createWindow() {
 	if (process.env.NODE_ENV === 'development') {
 		mainWindow.webContents.openDevTools();
 	}
+
+	// Handle file args
+	const args = process.argv.slice(1);
+	mainWindow.webContents.on('did-finish-load', async () => {
+		if (args.length > 0) {
+			let openedFile = args[0];
+			if (!isAbsolute(openedFile)) {
+				openedFile = resolve(openedFile);
+			}
+			console.log('file: ', openedFile);
+			mainWindow.webContents.send('file-opened', await handleFile(openedFile));
+		}
+	});
 
 	ipcMain.handle('minimize', () => mainWindow.minimize());
 	ipcMain.handle('maximize', () => {

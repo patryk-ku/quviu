@@ -136,6 +136,19 @@ export default function App() {
 	};
 
 	useEffect(() => {
+		window.api.onFileOpened((filePath) => {
+			if (filePath?.error) {
+				setError(filePath.error);
+			}
+
+			if (filePath?.path) {
+				setFile(filePath?.path);
+				setMetadata(filePath?.metadata);
+			}
+		});
+	}, []);
+
+	useEffect(() => {
 		window.api.onProgressUpdate((value) => {
 			setProgress(value);
 		});

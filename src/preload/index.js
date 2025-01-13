@@ -15,6 +15,7 @@ const api = {
 	openVideo: (filePath) => {
 		shell.openPath(filePath);
 	},
+	onFileOpened: (callback) => ipcRenderer.on('file-opened', (_event, value) => callback(value)),
 };
 
 // Use `contextBridge` APIs to expose Electron APIs to
