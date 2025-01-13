@@ -26,6 +26,14 @@ export default function App() {
 			}),
 		[colors]
 	);
+	const [ffmpegPath, setFfmpegPath] = useLocalStorage({
+		key: 'ffmpeg-path',
+		defaultValue: '',
+	});
+	const [ffprobePath, setFfprobePath] = useLocalStorage({
+		key: 'ffprobe-path',
+		defaultValue: '',
+	});
 
 	const [activeTab, setActiveTab] = useState('File');
 	const [file, setFile] = useState(null);
@@ -96,6 +104,8 @@ export default function App() {
 		resetState();
 
 		const config = {
+			ffmpegPath,
+			ffprobePath,
 			input: file,
 			metadata,
 			output: {
@@ -177,7 +187,15 @@ export default function App() {
 						</Tabs.Panel>
 
 						<Tabs.Panel value='Settings'>
-							<Settings setColors={setColors} />
+							<Settings
+								setColors={setColors}
+								ffmpegPaths={{
+									ffmpegPath,
+									setFfmpegPath,
+									ffprobePath,
+									setFfprobePath,
+								}}
+							/>
 						</Tabs.Panel>
 					</Tabs>
 

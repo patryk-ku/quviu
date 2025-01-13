@@ -1,14 +1,16 @@
 import { useEffect } from 'react';
-import { Title, ColorPicker, Text, ColorSwatch } from '@mantine/core';
+import { Title, ColorPicker, Text, ColorSwatch, TextInput } from '@mantine/core';
 import { useLocalStorage } from '@mantine/hooks';
 import { GithubLogo, Globe } from '@phosphor-icons/react';
 import CopyText from '../CopyText';
 
-export default function Settings({ setColors }) {
+export default function Settings({ setColors, ffmpegPaths }) {
 	const [color, setColor] = useLocalStorage({
 		key: 'color',
 		defaultValue: '#7950f2',
 	});
+
+	const { ffmpegPath, setFfmpegPath, ffprobePath, setFfprobePath } = ffmpegPaths;
 
 	const colorMap = {
 		'#fa5252': ['red', 'pink'],
@@ -76,6 +78,23 @@ export default function Settings({ setColors }) {
 						</div>
 					</div>
 				</div>
+
+				<div className='grid gap-1'>
+					<Title order={5}>Custom ffmpeg paths</Title>
+					<TextInput
+						variant='filled'
+						label='ffmpeg'
+						value={ffmpegPath}
+						onChange={(event) => setFfmpegPath(event.currentTarget.value)}
+					/>
+					<TextInput
+						variant='filled'
+						label='ffprobe'
+						value={ffprobePath}
+						onChange={(event) => setFfprobePath(event.currentTarget.value)}
+					/>
+				</div>
+
 				<div className='grid gap-1'>
 					<Title order={5}>About</Title>
 					<div className='flex select-text items-center gap-2'>

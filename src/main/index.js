@@ -115,7 +115,14 @@ function createWindow() {
 		try {
 			await new Promise((resolve, reject) => {
 				ffmpegProcess = ffmpeg().input(config.input);
-				// .outputOptions('-vf', 'scale=-2:720')
+
+				// Custom ffmpeg paths
+				if (config.ffmpegPath != '') {
+					ffmpegProcess.setFfmpegPath(config.ffmpegPath);
+				}
+				if (config.ffprobePath != '') {
+					ffmpegProcess.setFfprobePath(config.ffprobePath);
+				}
 
 				if (config.trim.isEnabled) {
 					ffmpegProcess.seekInput(config.trim.start);
