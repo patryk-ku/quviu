@@ -9,6 +9,7 @@ import Video from './components/Tabs/Video';
 import Trim from './components/Tabs/Trim';
 import Settings from './components/Tabs/Settings';
 import StatusBar from './components/StatusBar';
+import NoFileOpened from './components/NoFileOpened';
 
 export default function App() {
 	const [colors, setColors] = useState(['violet', 'grape']);
@@ -53,7 +54,6 @@ export default function App() {
 
 	// Settings
 	const [trim, setTrim] = useState({ isEnabled: false, start: 0, end: 0 });
-	// const [outputOptions, setOutputOptions] = useState(['-crf 40']);
 	const [audio, setAudio] = useState({
 		isMuted: false,
 		isMerge: false,
@@ -115,7 +115,6 @@ export default function App() {
 				path: outputPath + outputName.trim() + outputExtension,
 				isOverwrite,
 			},
-			// outputOptions,
 			trim,
 			video,
 			audio,
@@ -159,12 +158,9 @@ export default function App() {
 			<div className='grid h-full select-none grid-rows-[auto,1fr] border border-[--mantine-color-default-border]'>
 				<TitleBar activeTab={activeTab} setActiveTab={setActiveTab} />
 				<div className='grid h-full grid-rows-[1fr,auto]'>
-					{/* <VideoPicker file={file} metadata={metadata} trim={trim} setTrim={setTrim} /> */}
-
 					<Tabs
 						value={activeTab}
 						onChange={setActiveTab}
-						// className='h-0 min-h-full select-none'
 						styles={{
 							panel: { overflowY: 'auto', padding: '8px 16px', marginRight: '2px' },
 						}}
@@ -175,28 +171,49 @@ export default function App() {
 						<Tabs.Panel value='Presets'>WIP</Tabs.Panel>
 
 						<Tabs.Panel value='File'>
-							<Output
-								outputPath={outputPath}
-								setOutputPath={setOutputPath}
-								outputName={outputName}
-								setOutputName={setOutputName}
-								outputExtension={outputExtension}
-								setOutputExtension={setOutputExtension}
-								isOverwrite={isOverwrite}
-								setIsOverwrite={setIsOverwrite}
-							/>
+							{file ? (
+								<Output
+									outputPath={outputPath}
+									setOutputPath={setOutputPath}
+									outputName={outputName}
+									setOutputName={setOutputName}
+									outputExtension={outputExtension}
+									setOutputExtension={setOutputExtension}
+									isOverwrite={isOverwrite}
+									setIsOverwrite={setIsOverwrite}
+								/>
+							) : (
+								<NoFileOpened handleFilePicker={handleFilePicker} />
+							)}
 						</Tabs.Panel>
 
 						<Tabs.Panel value='Video'>
-							<Video video={video} setVideo={setVideo} metadata={metadata} />
+							{file ? (
+								<Video video={video} setVideo={setVideo} metadata={metadata} />
+							) : (
+								<NoFileOpened handleFilePicker={handleFilePicker} />
+							)}
 						</Tabs.Panel>
 
 						<Tabs.Panel value='Audio'>
-							<Audio audio={audio} setAudio={setAudio} metadata={metadata} />
+							{file ? (
+								<Audio audio={audio} setAudio={setAudio} metadata={metadata} />
+							) : (
+								<NoFileOpened handleFilePicker={handleFilePicker} />
+							)}
 						</Tabs.Panel>
 
 						<Tabs.Panel value='Trim'>
-							<Trim file={file} metadata={metadata} trim={trim} setTrim={setTrim} />
+							{file ? (
+								<Trim
+									file={file}
+									metadata={metadata}
+									trim={trim}
+									setTrim={setTrim}
+								/>
+							) : (
+								<NoFileOpened handleFilePicker={handleFilePicker} />
+							)}
 						</Tabs.Panel>
 
 						<Tabs.Panel value='Settings'>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Progress, Text, Button, Anchor, Tooltip } from '@mantine/core';
-import { Plus, Play, Pause } from '@phosphor-icons/react';
+import { File, Play, Pause } from '@phosphor-icons/react';
 import { formatDuration } from '../utils';
 import CopyText from './CopyText';
 
@@ -80,7 +80,7 @@ export default function StatusBar({
 				onClick={handleFilePicker}
 				disabled={isProcessing}
 				size='compact-sm'
-				leftSection={<Plus size={16} weight='bold' />}
+				leftSection={<File size={16} weight='bold' />}
 				className='shrink-0'
 			>
 				Open file

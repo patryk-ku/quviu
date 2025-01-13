@@ -102,7 +102,7 @@ function createWindow() {
 	// Handle file args
 	const args = process.argv.slice(1);
 	mainWindow.webContents.on('did-finish-load', async () => {
-		if (args.length > 0) {
+		if (args.length > 0 && !is.dev) {
 			let openedFile = args[0];
 			if (!isAbsolute(openedFile)) {
 				openedFile = resolve(openedFile);
