@@ -31,7 +31,7 @@ export default function TitleBar({ activeTab, setActiveTab }) {
 		>
 			<div className='flex items-baseline gap-1 px-2 py-1'>
 				<Title order={2}>
-					<Text c='accent' span inherit>
+					<Text variant='gradient' span inherit>
 						Q
 					</Text>
 					uviu

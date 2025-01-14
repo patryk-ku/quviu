@@ -26,6 +26,7 @@ export default function Output({
 		<div className='grid select-none grid-cols-1 gap-2'>
 			<Title order={4}>Output file settings</Title>
 			<TextInput
+				variant='filled'
 				label='Output Folder'
 				value={outputPath}
 				// onChange={(event) => setOutputPath(event.currentTarget.value)}
@@ -37,6 +38,7 @@ export default function Output({
 			/>
 			<div className='grid grid-cols-[1fr,auto] gap-2'>
 				<TextInput
+					variant='filled'
 					label='File Name'
 					value={outputName}
 					onChange={(event) => setOutputName(event.target.value)}
@@ -44,6 +46,7 @@ export default function Output({
 					error={outputName.length === 0 ? 'Set output name' : false}
 				/>
 				<Select
+					variant='filled'
 					label='File Extension'
 					data={[
 						{ group: '', items: ['.mp4', '.webm', '.mkv'] },
@@ -65,7 +68,7 @@ export default function Output({
 				<Switch
 					label='Overwrite file if exists'
 					mt={8}
-					radius='sm'
+					radius='md'
 					checked={isOverwrite}
 					onChange={(event) => setIsOverwrite(event.currentTarget.checked)}
 				/>

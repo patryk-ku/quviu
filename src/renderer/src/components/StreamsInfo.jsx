@@ -15,43 +15,43 @@ export default function StreamsInfo({ streams }) {
 				{streams.map((stream, index) => (
 					<Fragment key={index}>
 						<div className='flex gap-2'>
-							<Badge variant='default' color='accent' radius='sm'>
+							<Badge variant='default' color='accent' radius='md'>
 								Stream #{index + 1}
 							</Badge>
 							{stream?.tags?.title && (
-								<Badge variant='outline' color='accent' radius='sm'>
+								<Badge variant='outline' color='accent' radius='md'>
 									{stream.tags.title}
 								</Badge>
 							)}
 						</div>
 						<div className='flex gap-2'>
 							{stream?.codec_name && (
-								<Badge variant='light' color='accent' radius='sm'>
+								<Badge variant='light' radius='md'>
 									{stream.codec_name}
 								</Badge>
 							)}
 							{stream?.channel_layout && (
-								<Badge variant='light' color='accent' radius='sm'>
+								<Badge variant='light' radius='md'>
 									{stream.channel_layout}
 								</Badge>
 							)}
 							{stream?.bit_rate && (
-								<Badge variant='light' color='accent' radius='sm'>
+								<Badge variant='light' radius='md'>
 									{formatBitrate(stream.bit_rate)}
 								</Badge>
 							)}
 							{stream?.sample_rate && (
-								<Badge variant='light' color='accent' radius='sm'>
+								<Badge variant='light' radius='md'>
 									{stream.sample_rate / 1000} kHz
 								</Badge>
 							)}
 							{stream?.avg_frame_rate && stream?.avg_frame_rate !== '0/0' && (
-								<Badge variant='light' color='accent' radius='sm'>
+								<Badge variant='light' radius='md'>
 									{formatFps(stream.avg_frame_rate)}
 								</Badge>
 							)}
 							{stream?.coded_height && stream?.coded_width && (
-								<Badge variant='light' color='accent' radius='sm'>
+								<Badge variant='light' radius='md'>
 									{stream.coded_height} x {stream.coded_width}
 								</Badge>
 							)}

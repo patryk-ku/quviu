@@ -7,7 +7,7 @@ export default function NoFileOpened({ handleFilePicker }) {
 			<Text size='lg'>It's a bit empty here!</Text>
 			<Text size='lg'>Open a file to get started.</Text>
 			<Button
-				variant='filled'
+				variant='gradient'
 				color='accent'
 				onClick={handleFilePicker}
 				size='md'

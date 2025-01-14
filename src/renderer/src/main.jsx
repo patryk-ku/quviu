@@ -7,8 +7,7 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 
 const theme = createTheme({
-	// primaryColor: 'violet',
-	defaultRadius: 'sm',
+	defaultRadius: 'md',
 	cursorType: 'pointer',
 	colors: {
 		secondary: virtualColor({
@@ -16,11 +15,6 @@ const theme = createTheme({
 			dark: 'gray',
 			light: 'dark',
 		}),
-		// accent: virtualColor({
-		// 	name: 'accent',
-		// 	dark: 'grape',
-		// 	light: 'grape',
-		// }),
 	},
 });
 

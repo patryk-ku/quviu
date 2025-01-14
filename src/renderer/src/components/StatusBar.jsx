@@ -78,7 +78,7 @@ export default function StatusBar({
 			<div className='flex gap-1'>
 				{file ? (
 					<Button
-						variant='filled'
+						variant='gradient'
 						onClick={handleClick}
 						loading={isProcessing}
 						size='compact-sm'
@@ -90,7 +90,7 @@ export default function StatusBar({
 					</Button>
 				) : (
 					<Button
-						variant='filled'
+						variant='gradient'
 						color='accent'
 						onClick={handleFilePicker}
 						disabled={isProcessing}

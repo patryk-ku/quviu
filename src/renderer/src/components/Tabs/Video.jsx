@@ -25,7 +25,7 @@ export default function Video({ video, setVideo, metadata }) {
 			<div className='flex'>
 				<Switch
 					label='Disable Video'
-					radius='sm'
+					radius='md'
 					checked={video.isDisabled}
 					onChange={(event) => {
 						setVideo((prev) => ({

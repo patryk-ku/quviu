@@ -3,11 +3,11 @@ import { Collapse, Switch } from '@mantine/core';
 export default function SettingsSwitch({ children, condition, option, setOption, label }) {
 	return (
 		<div
-			className={`max-w-fit rounded border transition-all ${option[condition] ? 'my-1 border-[--tab-border-color] bg-[--mantine-color-dark-6]' : 'border-[--mantine-color-dark-7]'}`}
+			className={`max-w-fit rounded-lg border transition-all ${option[condition] ? 'my-1 border-[--tab-border-color] bg-[--mantine-color-dark-6]' : 'border-[--mantine-color-dark-7]'}`}
 		>
 			<Switch
 				label={label}
-				radius='sm'
+				radius='md'
 				checked={option[condition]}
 				onChange={(event) => {
 					setOption((prev) => ({

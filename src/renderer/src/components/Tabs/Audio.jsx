@@ -25,7 +25,7 @@ export default function Audio({ audio, setAudio, metadata }) {
 			<div className='flex'>
 				<Switch
 					label='Mute audio'
-					radius='sm'
+					radius='md'
 					checked={audio.isMuted}
 					onChange={(event) => {
 						setAudio((prevAudio) => ({
@@ -91,7 +91,7 @@ export default function Audio({ audio, setAudio, metadata }) {
 					<div className='max-w-fit'>
 						<Switch
 							label='Merge all audio streams'
-							radius='sm'
+							radius='md'
 							checked={audio.isMerge}
 							onChange={(event) => {
 								setAudio((prevAudio) => ({

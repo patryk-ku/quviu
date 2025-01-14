@@ -113,38 +113,37 @@ export default function Trim({ file, metadata, trim, setTrim }) {
 				{metadata && (
 					<div className='flex gap-2'>
 						{metadata?.format?.duration && (
-							<Badge variant='light' color='accent' size='lg' radius='sm'>
+							<Badge variant='light' size='lg' radius='md'>
 								{formatDuration(metadata?.format?.duration)}
 							</Badge>
 						)}
 						{metadata?.format?.size && (
-							<Badge variant='light' color='accent' size='lg' radius='sm'>
+							<Badge variant='light' size='lg' radius='md'>
 								{formatFileSize(metadata?.format?.size)}
 							</Badge>
 						)}
 						{file && (
-							<Badge variant='light' color='accent' size='lg' radius='sm'>
+							<Badge variant='light' size='lg' radius='md'>
 								{getFileExtension(file)}
 							</Badge>
 						)}
 						{metadata?.format?.bit_rate && (
-							<Badge variant='light' color='accent' size='lg' radius='sm'>
+							<Badge variant='light' size='lg' radius='md'>
 								{formatBitrate(metadata?.format?.bit_rate)}
 							</Badge>
 						)}
 						{metadata?.streams && (
-							<Badge variant='light' color='accent' size='lg' radius='sm'>
+							<Badge variant='light' size='lg' radius='md'>
 								{metadata?.streams.length} streams
 							</Badge>
 						)}
-						{/* TODO: print all codecs of streams here but only for audio and video, ignore subs etc */}
-						{/* TODO: also write about resolution and fps, or move it all to settings page for audio video etc */}
 					</div>
 				)}
 			</div>
 
-			<div className='relative flex h-0 min-h-full w-full place-content-center rounded bg-[--mantine-color-dark-9]'>
-				{metadata?.streams?.at(0)?.codec_name === 'hevc' && (
+			<div className='relative flex h-0 min-h-full w-full place-content-center overflow-clip rounded-lg border border-[--tab-border-color] bg-[--mantine-color-dark-9]'>
+				{metadata?.streams.filter((stream) => stream.codec_type === 'video').at(0)
+					?.codec_name === 'hevc' && (
 					<div className='absolute flex h-full w-full items-center justify-center'>
 						<div>HEVC video preview is not supported</div>
 						<div></div>
@@ -155,7 +154,7 @@ export default function Trim({ file, metadata, trim, setTrim }) {
 					onTimeUpdate={handleTimeUpdate}
 					onPlay={() => setIsPaused(false)}
 					onPause={() => setIsPaused(true)}
-					className='aspect-video h-full cursor-pointer rounded'
+					className='aspect-video h-full cursor-pointer'
 					src={`file://${file}`}
 					// controls
 					muted={isMuted}
@@ -164,7 +163,7 @@ export default function Trim({ file, metadata, trim, setTrim }) {
 				/>
 			</div>
 
-			<div className='mb-2 grid gap-3 overflow-x-clip'>
+			<div className='mt-1 mb-2 grid gap-3 overflow-x-clip'>
 				{metadata?.format?.duration && (
 					<div className='flex items-center gap-2'>
 						<ActionIcon.Group>
@@ -214,7 +213,7 @@ export default function Trim({ file, metadata, trim, setTrim }) {
 							)}
 							<Switch
 								label='Trim video'
-								radius='sm'
+								radius='md'
 								labelPosition='left'
 								checked={trim.isEnabled}
 								onChange={(event) =>

@@ -24,6 +24,11 @@ export default function App() {
 						light: colors[1],
 					}),
 				},
+				defaultGradient: {
+					from: colors[0],
+					to: colors[1],
+					deg: 31,
+				},
 			}),
 		[colors]
 	);
