@@ -1,5 +1,5 @@
-import { Anchor, Button, Progress, Text, Tooltip } from '@mantine/core';
-import { File, Pause, Play } from '@phosphor-icons/react';
+import { ActionIcon, Anchor, Button, Progress, Text, Tooltip } from '@mantine/core';
+import { File, Pause, Play, X } from '@phosphor-icons/react';
 import { useEffect, useState } from 'react';
 import { formatDuration } from '../utils';
 import CopyText from './CopyText';
@@ -44,6 +44,7 @@ export default function StatusBar({
 	success,
 	config,
 	handleFilePicker,
+	handleClear,
 }) {
 	const [size, setSize] = useState(0);
 	const [seconds, setSeconds] = useState(null);
@@ -74,22 +75,65 @@ export default function StatusBar({
 
 	return (
 		<div className='flex items-center justify-between gap-2 bg-[--mantine-color-dark-9] px-2 py-1.5'>
-			<Button
-				variant='filled'
-				color='accent'
-				onClick={handleFilePicker}
-				disabled={isProcessing}
-				size='compact-sm'
-				leftSection={<File size={16} weight='bold' />}
-				className='shrink-0'
-			>
-				Open file
-			</Button>
-			{isProcessing && <Text>{progress} %</Text>}
+			<div className='flex gap-1'>
+				{file ? (
+					<Button
+						variant='filled'
+						onClick={handleClick}
+						loading={isProcessing}
+						size='compact-sm'
+						disabled={!file}
+						className='shrink-0'
+						leftSection={<Play size={16} weight='fill' />}
+					>
+						Process Video
+					</Button>
+				) : (
+					<Button
+						variant='filled'
+						color='accent'
+						onClick={handleFilePicker}
+						disabled={isProcessing}
+						size='compact-sm'
+						leftSection={<File size={16} weight='bold' />}
+						className='shrink-0'
+					>
+						Open file
+					</Button>
+				)}
 
+				{file &&
+					(isProcessing ? (
+						<Button
+							variant='filled'
+							color='red'
+							size='compact-sm'
+							onClick={() => window.api.stopProcessingVideo()}
+							className='shrink-0'
+						>
+							<Pause size={16} weight='fill' />
+						</Button>
+					) : (
+						<Button
+							variant='default'
+							onClick={handleClear}
+							disabled={isProcessing}
+							size='compact-sm'
+							className='shrink-0'
+						>
+							<X size={18} weight='bold' />
+						</Button>
+					))}
+			</div>
+
+			{isProcessing && <Text>{progress} %</Text>}
 			{error && (
 				<div className='mr-auto'>
-					<Text c='red.6'>Error: {error}</Text>
+					<Tooltip label={error} w={500} multiline color='red' withArrow>
+						<Text c='red.6' lineClamp={1}>
+							Error: {error}
+						</Text>
+					</Tooltip>
 				</div>
 			)}
 			{isProcessing && (
@@ -131,31 +175,6 @@ export default function StatusBar({
 			)}
 			{(isProcessing || success) && (
 				<Text className='shrink-0'>{formatDuration(seconds)}</Text>
-			)}
-
-			{isProcessing ? (
-				<Button
-					variant='filled'
-					color='red'
-					size='compact-sm'
-					onClick={() => window.api.stopProcessingVideo()}
-					className='shrink-0'
-					leftSection={<Pause size={16} weight='fill' />}
-				>
-					Cancel
-				</Button>
-			) : (
-				<Button
-					variant='filled'
-					onClick={handleClick}
-					loading={isProcessing}
-					size='compact-sm'
-					disabled={!file}
-					className='shrink-0'
-					leftSection={<Play size={16} weight='fill' />}
-				>
-					Process Video
-				</Button>
 			)}
 		</div>
 	);

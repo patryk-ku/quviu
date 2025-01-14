@@ -100,6 +100,12 @@ export default function App() {
 		}
 	};
 
+	const handleClear = () => {
+		resetState();
+		setFile(null);
+		setMetadata(null);
+	};
+
 	const handleProcess = async () => {
 		resetState();
 
@@ -238,6 +244,7 @@ export default function App() {
 						success={success}
 						config={{ metadata, video, audio, trim }}
 						handleFilePicker={handleFilePicker}
+						handleClear={handleClear}
 					/>
 				</div>
 			</div>
