@@ -1,14 +1,14 @@
-import { Title, Text, ActionIcon, Tabs } from '@mantine/core';
+import { ActionIcon, Tabs, Text, Title } from '@mantine/core';
 import {
-	Minus,
-	Square,
-	X,
+	ArrowsInLineHorizontal,
 	File,
 	FrameCorners,
-	SpeakerHigh,
 	// Star,
 	GearSix,
-	ArrowsInLineHorizontal,
+	Minus,
+	SpeakerHigh,
+	Square,
+	X,
 } from '@phosphor-icons/react';
 
 export default function TitleBar({ activeTab, setActiveTab }) {

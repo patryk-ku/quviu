@@ -1,5 +1,5 @@
-import { Fragment } from 'react';
 import { Badge } from '@mantine/core';
+import { Fragment } from 'react';
 import { formatBitrate } from '../utils';
 
 function formatFps(value) {

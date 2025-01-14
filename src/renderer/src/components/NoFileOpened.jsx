@@ -1,4 +1,4 @@
-import { Text, Button } from '@mantine/core';
+import { Button, Text } from '@mantine/core';
 import { File } from '@phosphor-icons/react';
 
 export default function NoFileOpened({ handleFilePicker }) {

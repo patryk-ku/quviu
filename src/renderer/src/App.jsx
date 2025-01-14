@@ -1,15 +1,15 @@
-import { useState, useEffect, useMemo } from 'react';
-import { createTheme, MantineProvider, virtualColor, Tabs } from '@mantine/core';
+import { MantineProvider, Tabs, createTheme, virtualColor } from '@mantine/core';
 import { useLocalStorage } from '@mantine/hooks';
+import { useEffect, useMemo, useState } from 'react';
 
-import TitleBar from './components/TitleBar';
-import Output from './components/Tabs/Output';
-import Audio from './components/Tabs/Audio';
-import Video from './components/Tabs/Video';
-import Trim from './components/Tabs/Trim';
-import Settings from './components/Tabs/Settings';
-import StatusBar from './components/StatusBar';
 import NoFileOpened from './components/NoFileOpened';
+import StatusBar from './components/StatusBar';
+import Audio from './components/Tabs/Audio';
+import Output from './components/Tabs/Output';
+import Settings from './components/Tabs/Settings';
+import Trim from './components/Tabs/Trim';
+import Video from './components/Tabs/Video';
+import TitleBar from './components/TitleBar';
 
 export default function App() {
 	const [colors, setColors] = useState(['violet', 'grape']);

@@ -1,9 +1,9 @@
 import './assets/main.css';
 import '@mantine/core/styles.css';
 
+import { MantineProvider, createTheme, virtualColor } from '@mantine/core';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { createTheme, MantineProvider, virtualColor } from '@mantine/core';
 import App from './App';
 
 const theme = createTheme({

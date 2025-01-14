@@ -1,11 +1,11 @@
-import { app, shell, BrowserWindow, ipcMain, dialog } from 'electron';
-import { join, sep, isAbsolute, resolve } from 'path';
-import { electronApp, optimizer, is } from '@electron-toolkit/utils';
+import { isAbsolute, join, resolve, sep } from 'path';
+import { electronApp, is, optimizer } from '@electron-toolkit/utils';
+import { BrowserWindow, app, dialog, ipcMain, shell } from 'electron';
 import icon from '../../resources/icon.png?asset';
 
 import ffmpeg from 'fluent-ffmpeg';
-import { getMetadata, generateUniqueFileName } from './utils';
 import { timestampToSeconds } from '../renderer/src/utils';
+import { generateUniqueFileName, getMetadata } from './utils';
 
 async function handleFile(filePath) {
 	try {
@@ -124,7 +124,7 @@ function createWindow() {
 
 	let ffmpegProcess = null;
 
-	ipcMain.handle('generateOutputVideo', async (event, config) => {
+	ipcMain.handle('generateOutputVideo', async (_event, config) => {
 		console.log(' === New video processing: ', config);
 
 		if (!config.output.isOverwrite) {

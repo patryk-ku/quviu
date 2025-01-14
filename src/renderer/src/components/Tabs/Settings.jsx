@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
-import { Title, ColorPicker, Text, ColorSwatch, TextInput } from '@mantine/core';
+import { ColorPicker, ColorSwatch, Text, TextInput, Title } from '@mantine/core';
 import { useLocalStorage } from '@mantine/hooks';
 import { GithubLogo, Globe } from '@phosphor-icons/react';
+import { useEffect } from 'react';
 import CopyText from '../CopyText';
 
 export default function Settings({ setColors, ffmpegPaths }) {

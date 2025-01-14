@@ -1,6 +1,6 @@
-import { Title, Text, Switch, Collapse } from '@mantine/core';
-import StreamsInfo from '../StreamsInfo';
+import { Collapse, Switch, Text, Title } from '@mantine/core';
 import SettingsSwitch from '../SettingsSwitch';
+import StreamsInfo from '../StreamsInfo';
 import TitledSegmentedControl from '../TitledSegmentedControl';
 
 export default function Video({ video, setVideo, metadata }) {

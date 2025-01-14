@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import { Progress, Text, Button, Anchor, Tooltip } from '@mantine/core';
-import { File, Play, Pause } from '@phosphor-icons/react';
+import { Anchor, Button, Progress, Text, Tooltip } from '@mantine/core';
+import { File, Pause, Play } from '@phosphor-icons/react';
+import { useEffect, useState } from 'react';
 import { formatDuration } from '../utils';
 import CopyText from './CopyText';
 

@@ -1,4 +1,4 @@
-import { Switch, Collapse } from '@mantine/core';
+import { Collapse, Switch } from '@mantine/core';
 
 export default function SettingsSwitch({ children, condition, option, setOption, label }) {
 	return (

@@ -1,5 +1,5 @@
-import { Title, TextInput, Text, Select, Switch } from '@mantine/core';
-import { FolderSimple, File } from '@phosphor-icons/react';
+import { Select, Switch, Text, TextInput, Title } from '@mantine/core';
+import { File, FolderSimple } from '@phosphor-icons/react';
 import CopyText from '../CopyText';
 
 export default function Output({

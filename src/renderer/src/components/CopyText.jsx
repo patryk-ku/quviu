@@ -1,5 +1,5 @@
-import { CopyButton, ActionIcon, Tooltip } from '@mantine/core';
-import { Copy, Check } from '@phosphor-icons/react';
+import { ActionIcon, CopyButton, Tooltip } from '@mantine/core';
+import { Check, Copy } from '@phosphor-icons/react';
 
 export default function CopyText({ value }) {
 	return (

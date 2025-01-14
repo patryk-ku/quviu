@@ -1,26 +1,26 @@
-import { useState, useRef, useEffect } from 'react';
 import {
-	Title,
-	Text,
-	Button,
-	Badge,
-	Slider,
-	RangeSlider,
 	ActionIcon,
-	Switch,
+	Badge,
+	Button,
 	Collapse,
+	RangeSlider,
+	Slider,
+	Switch,
+	Text,
+	Title,
 } from '@mantine/core';
 import {
-	Play,
-	Pause,
-	SkipForward,
-	SkipBack,
-	SpeakerHigh,
-	SpeakerSimpleX,
 	ArrowLineLeft,
 	ArrowLineRight,
+	Pause,
+	Play,
+	SkipBack,
+	SkipForward,
+	SpeakerHigh,
+	SpeakerSimpleX,
 } from '@phosphor-icons/react';
-import { formatDuration, formatBitrate, formatFileSize, getFileExtension } from '../../utils';
+import { useEffect, useRef, useState } from 'react';
+import { formatBitrate, formatDuration, formatFileSize, getFileExtension } from '../../utils';
 
 export default function Trim({ file, metadata, trim, setTrim }) {
 	const videoRef = useRef(null);
