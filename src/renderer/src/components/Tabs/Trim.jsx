@@ -244,7 +244,7 @@ export default function Trim({ file, metadata, trim, setTrim }) {
 									{ value: metadata?.format?.duration },
 								]}
 								label={(value) => formatDuration(value)}
-								className='mb-2 mt-1'
+								className='mt-1 mb-2'
 								styles={{
 									thumb: {
 										backgroundColor: 'white',

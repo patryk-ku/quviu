@@ -38,7 +38,7 @@ export default function Video({ video, setVideo, metadata }) {
 				/>
 			</div>
 			<Collapse in={!video.isDisabled}>
-				<div className='grid grid-cols-1 *:-ml-2 *:p-2'>
+				<div className='*:-ml-2 grid grid-cols-1 *:p-2'>
 					<SettingsSwitch
 						option={video}
 						setOption={setVideo}

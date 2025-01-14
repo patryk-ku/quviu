@@ -18,7 +18,7 @@ export default function SettingsSwitch({ children, condition, option, setOption,
 				classNames={{ label: 'font-bold' }}
 			/>
 			<Collapse in={option[condition]}>
-				<div className='ml-12 mt-2 grid gap-1.5'>{children}</div>
+				<div className='mt-2 ml-12 grid gap-1.5'>{children}</div>
 			</Collapse>
 		</div>
 	);

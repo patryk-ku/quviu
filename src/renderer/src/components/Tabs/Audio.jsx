@@ -38,7 +38,7 @@ export default function Audio({ audio, setAudio, metadata }) {
 				/>
 			</div>
 			<Collapse in={!audio.isMuted}>
-				<div className='grid grid-cols-1 *:-ml-2 *:p-2'>
+				<div className='*:-ml-2 grid grid-cols-1 *:p-2'>
 					<SettingsSwitch
 						option={audio}
 						setOption={setAudio}

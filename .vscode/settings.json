@@ -1,4 +1,9 @@
 {
+	"editor.formatOnSave": true,
+	"editor.codeActionsOnSave": {
+		"source.fixAll": "always"
+	},
+	"editor.defaultFormatter": "biomejs.biome",
 	"[typescript]": {
 		"editor.defaultFormatter": "biomejs.biome"
 	},
@@ -6,6 +11,12 @@
 		"editor.defaultFormatter": "biomejs.biome"
 	},
 	"[json]": {
+		"editor.defaultFormatter": "biomejs.biome"
+	},
+	"[css]": {
+		"editor.defaultFormatter": "biomejs.biome"
+	},
+	"[html]": {
 		"editor.defaultFormatter": "biomejs.biome"
 	}
 }
