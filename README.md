@@ -1,4 +1,4 @@
-# Quviu
+# <img src="resources/icon.png" width="32" height="32" /> Quviu
 
 Quviu (**Qu**ick **vi**deo **u**tilities) is an easy-to-use GUI for FFmpeg that allows you to quickly re-encode and trim video files.
 
