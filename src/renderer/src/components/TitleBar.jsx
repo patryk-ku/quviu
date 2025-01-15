@@ -27,11 +27,11 @@ export default function TitleBar({ activeTab, setActiveTab }) {
 	return (
 		<div
 			id='title-bar'
-			className='grid select-none grid-cols-[auto,1fr,auto] items-center justify-between gap-2 bg-[--mantine-color-dark-9] p-0.5'
+			className='app-background-dark grid select-none grid-cols-[auto,1fr,auto] items-center justify-between gap-2 border-[--mantine-color-default-border] border-b p-0.5'
 		>
 			<div className='flex items-baseline gap-1 px-2 py-1'>
 				<Title order={2}>
-					<Text variant='gradient' span inherit>
+					<Text variant='gradient' gradient={{ deg: 317 }} span inherit>
 						Q
 					</Text>
 					uviu
@@ -46,7 +46,7 @@ export default function TitleBar({ activeTab, setActiveTab }) {
 				onChange={setActiveTab}
 				variant='pills'
 				color='accent'
-				classNames={{ list: 'pb-[1px]' }}
+				classNames={{ list: 'pb-[1px]', tab: 'app-tab' }}
 			>
 				<Tabs.List justify='center'>
 					{/* <Tabs.Tab

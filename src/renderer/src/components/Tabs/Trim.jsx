@@ -141,7 +141,7 @@ export default function Trim({ file, metadata, trim, setTrim }) {
 				)}
 			</div>
 
-			<div className='relative flex h-0 min-h-full w-full place-content-center overflow-clip rounded-lg border border-[--tab-border-color] bg-[--mantine-color-dark-9]'>
+			<div className='app-background-dark relative flex h-0 min-h-full w-full place-content-center overflow-clip rounded-lg border border-[--tab-border-color] '>
 				{metadata?.streams.filter((stream) => stream.codec_type === 'video').at(0)
 					?.codec_name === 'hevc' && (
 					<div className='absolute flex h-full w-full items-center justify-center'>
@@ -243,6 +243,7 @@ export default function Trim({ file, metadata, trim, setTrim }) {
 									{ value: metadata?.format?.duration },
 								]}
 								label={(value) => formatDuration(value)}
+								color='accent'
 								className='mt-1 mb-2'
 								styles={{
 									thumb: {

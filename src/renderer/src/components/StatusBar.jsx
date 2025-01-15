@@ -74,7 +74,7 @@ export default function StatusBar({
 	};
 
 	return (
-		<div className='flex items-center justify-between gap-2 bg-[--mantine-color-dark-9] px-2 py-1.5'>
+		<div className='app-background-dark flex items-center justify-between gap-2 border-[--mantine-color-default-border] border-t px-2 py-1.5'>
 			<div className='flex gap-1'>
 				{file ? (
 					<Button
@@ -168,7 +168,7 @@ export default function StatusBar({
 			)}
 			{!(isProcessing || success) && size && (
 				<div className='ml-auto'>
-					<Tooltip label='Estimated max file size' color='gray'>
+					<Tooltip label='Estimated max file size' withArrow>
 						<Text className='shrink-0'>{size}</Text>
 					</Tooltip>
 				</div>

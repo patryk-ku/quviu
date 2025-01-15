@@ -1,4 +1,13 @@
-import { Badge, ColorPicker, Text, TextInput, Title } from '@mantine/core';
+import {
+	Badge,
+	ColorPicker,
+	Switch,
+	Text,
+	TextInput,
+	Title,
+	useComputedColorScheme,
+	useMantineColorScheme,
+} from '@mantine/core';
 import { useLocalStorage } from '@mantine/hooks';
 import { GithubLogo, Globe } from '@phosphor-icons/react';
 import { useEffect } from 'react';
@@ -11,6 +20,11 @@ export default function Settings({ setColors, ffmpegPaths }) {
 	});
 
 	const { ffmpegPath, setFfmpegPath, ffprobePath, setFfprobePath } = ffmpegPaths;
+	const { setColorScheme } = useMantineColorScheme({ keepTransitions: true });
+	const computedColorScheme = useComputedColorScheme('dark');
+	const toggleColorScheme = (checked) => {
+		setColorScheme(checked ? 'light' : 'dark');
+	};
 
 	const colorMap = {
 		'#fa5252': ['red', 'violet'],
@@ -53,8 +67,8 @@ export default function Settings({ setColors, ffmpegPaths }) {
 							Primary | Secondary
 						</Badge> */}
 					</div>
-					<div className='flex'>
-						<div className='rounded-lg border border-[--tab-border-color] bg-[--mantine-color-dark-6] px-1.5 pb-1'>
+					<div className='mb-2 flex'>
+						<div className='app-background-alt rounded-lg border border-[--tab-border-color] px-1.5 pb-1'>
 							<ColorPicker
 								size='xs'
 								placeholder='theme'
@@ -80,6 +94,14 @@ export default function Settings({ setColors, ffmpegPaths }) {
 								swatchesPerRow={6}
 							/>
 						</div>
+					</div>
+					<div className='flex'>
+						<Switch
+							label='Light theme'
+							radius='md'
+							checked={computedColorScheme === 'light'}
+							onChange={(event) => toggleColorScheme(event.target.checked)}
+						/>
 					</div>
 				</div>
 

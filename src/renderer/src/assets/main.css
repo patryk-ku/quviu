@@ -12,6 +12,26 @@
 	-webkit-app-region: no-drag;
 }
 
+.app-background-dark {
+	background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-8));
+}
+
+.app-tab:not([aria-selected="true"]):not([data-active="true"]):hover {
+	background-color: light-dark(var(--mantine-color-gray-3), var(--tab-hover-color));
+}
+
+.app-tab[aria-selected="true"][data-active="true"] {
+	background: linear-gradient(
+		31deg,
+		var(--mantine-primary-color-6),
+		var(--mantine-color-accent-6)
+	);
+}
+
+.app-background-alt {
+	background-color: light-dark(var(--mantine-color-body), var(--mantine-color-dark-6));
+}
+
 *::-webkit-scrollbar {
 	width: 8px;
 }
