@@ -20,8 +20,6 @@ export default function Output({
 		}
 	};
 
-	// TODO: When output path is emty file is saved to app dir, fix it
-
 	return (
 		<div className='grid select-none grid-cols-1 gap-2'>
 			<Title order={4}>Output file settings</Title>

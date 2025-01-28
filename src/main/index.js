@@ -127,6 +127,10 @@ function createWindow() {
 	ipcMain.handle('generateOutputVideo', async (_event, config) => {
 		console.log(' === New video processing: ', config);
 
+		if (!config.output.folder) {
+			return { error: 'Set output folder.' };
+		}
+
 		if (!config.output.isOverwrite) {
 			config.output.path = generateUniqueFileName(config.output.path);
 		}
