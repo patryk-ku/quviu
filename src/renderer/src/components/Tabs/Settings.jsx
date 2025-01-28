@@ -56,16 +56,12 @@ export default function Settings({ setColors, ffmpegPaths }) {
 						<Badge size='sm' radius='md' color={colorMap[color][0]}>
 							Primary
 						</Badge>
+						<Badge variant='gradient' size='sm' radius='md'>
+							Gradient
+						</Badge>
 						<Badge size='sm' radius='md' color={colorMap[color][1]}>
 							Secondary
 						</Badge>
-						{/* <Badge
-							size='sm'
-							variant='gradient'
-							gradient={{ from: colorMap[color][0], to: colorMap[color][1], deg: 90 }}
-						>
-							Primary | Secondary
-						</Badge> */}
 					</div>
 					<div className='mb-2 flex'>
 						<div className='app-background-alt rounded-lg border border-[--tab-border-color] px-1.5 pb-1'>

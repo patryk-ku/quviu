@@ -25,8 +25,8 @@ export default function App() {
 					}),
 				},
 				defaultGradient: {
-					from: colors[0],
-					to: colors[1],
+					from: `${colors[0]}.6`,
+					to: `${colors[1]}.6`,
 					deg: 31,
 				},
 			}),

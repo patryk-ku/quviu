@@ -29,9 +29,7 @@ export default function Output({
 				variant='filled'
 				label='Output Folder'
 				value={outputPath}
-				// onChange={(event) => setOutputPath(event.currentTarget.value)}
 				onClick={handleFolderPicker}
-				// disabled
 				error={outputPath.length === 0 ? 'Set output path' : false}
 				leftSection={<FolderSimple size={18} weight='bold' />}
 				onChange={() => null}
