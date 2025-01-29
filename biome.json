@@ -62,7 +62,8 @@
 				"useIsNan": "error",
 				"useJsxKeyInIterable": "error",
 				"useValidForDirection": "error",
-				"useYield": "error"
+				"useYield": "error",
+				"noUnusedImports": "error"
 			},
 			"security": { "noDangerouslySetInnerHtmlWithChildren": "error" },
 			"style": {
