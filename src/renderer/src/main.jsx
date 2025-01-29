@@ -2,7 +2,6 @@ import './assets/main.css';
 import '@mantine/core/styles.css';
 
 import { MantineProvider, createTheme, virtualColor } from '@mantine/core';
-import { useLocalStorage } from '@mantine/hooks';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';

@@ -1,4 +1,4 @@
-import { Collapse, Select, Switch, Text, Title } from '@mantine/core';
+import { Collapse, Switch, Text, Title } from '@mantine/core';
 import SettingsSwitch from '../SettingsSwitch';
 import StreamsInfo from '../StreamsInfo';
 import TitledSegmentedControl from '../TitledSegmentedControl';

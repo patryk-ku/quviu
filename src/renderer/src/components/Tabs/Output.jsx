@@ -1,5 +1,6 @@
-import { Select, Switch, Text, TextInput, Title } from '@mantine/core';
+import { Badge, Select, Switch, Text, TextInput, Title } from '@mantine/core';
 import { File, FolderSimple } from '@phosphor-icons/react';
+import { formatBitrate, formatDuration, formatFileSize, getFileExtension } from '../../utils';
 import CopyText from '../CopyText';
 
 export default function Output({
@@ -11,6 +12,9 @@ export default function Output({
 	setOutputExtension,
 	isOverwrite,
 	setIsOverwrite,
+	file,
+	metadata,
+	thumbnail,
 }) {
 	const handleFolderPicker = async () => {
 		const folderPath = await window.api.openFolder();
@@ -22,6 +26,48 @@ export default function Output({
 
 	return (
 		<div className='grid select-none grid-cols-1 gap-2'>
+			<Title order={4}>Input file</Title>
+			<div className='flex'>
+				<div className='app-background-alt my-1 grid grid-cols-[auto,1fr] gap-3 overflow-clip rounded-lg border border-[--tab-border-color]'>
+					<div>
+						<img src={thumbnail} />
+					</div>
+					<div className='flex flex-col justify-center gap-1 pr-3'>
+						{metadata && (
+							<div className='flex gap-2'>
+								{metadata?.format?.duration && (
+									<Badge variant='light' size='md' radius='md'>
+										{formatDuration(metadata?.format?.duration)}
+									</Badge>
+								)}
+								{metadata?.format?.size && (
+									<Badge variant='light' size='md' radius='md'>
+										{formatFileSize(metadata?.format?.size)}
+									</Badge>
+								)}
+								{file && (
+									<Badge variant='light' size='md' radius='md'>
+										{getFileExtension(file)}
+									</Badge>
+								)}
+								{metadata?.format?.bit_rate && (
+									<Badge variant='light' size='md' radius='md'>
+										{formatBitrate(metadata?.format?.bit_rate)}
+									</Badge>
+								)}
+								{metadata?.streams && (
+									<Badge variant='light' size='md' radius='md'>
+										{metadata?.streams.length} streams
+									</Badge>
+								)}
+							</div>
+						)}
+						<Text size='sm' lineClamp={1}>
+							{file}
+						</Text>
+					</div>
+				</div>
+			</div>
 			<Title order={4}>Output file settings</Title>
 			<TextInput
 				variant='filled'

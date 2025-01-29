@@ -1,3 +1,4 @@
+import fs from 'fs';
 import { isAbsolute, join, resolve, sep } from 'path';
 import { electronApp, is, optimizer } from '@electron-toolkit/utils';
 import { BrowserWindow, app, dialog, ipcMain, shell } from 'electron';
@@ -10,12 +11,10 @@ import { generateUniqueFileName, getMetadata } from './utils';
 async function handleFile(filePath) {
 	try {
 		const metadata = await getMetadata(filePath);
-		// console.log(metadata);
-
-		return { path: filePath, metadata: metadata };
+		const thumbnail = await getVideoThumbnailBase64(filePath);
+		return { path: filePath, metadata: metadata, thumbnail: thumbnail };
 	} catch (error) {
 		console.error('Error:', error);
-
 		return { error: 'Unable to open the selected file' };
 	}
 }
@@ -57,6 +56,34 @@ async function handleFolderOpen() {
 	}
 }
 
+function getVideoThumbnailBase64(videoPath) {
+	return new Promise((resolve, reject) => {
+		const tempDir = app.getPath('temp');
+		const tempFileName = 'quviu_thumbnail.jpg';
+		const tempFilePath = join(tempDir, tempFileName);
+
+		ffmpeg(videoPath)
+			.screenshots({
+				timestamps: [1],
+				filename: tempFileName,
+				folder: tempDir,
+				size: '?x60',
+			})
+			.on('end', () => {
+				fs.readFile(tempFilePath, (err, data) => {
+					if (err) {
+						return reject(err);
+					}
+					const base64Image = data.toString('base64');
+					resolve(`data:image/jpeg;base64,${base64Image}`);
+				});
+			})
+			.on('error', (err) => {
+				reject(err);
+			});
+	});
+}
+
 function createWindow() {
 	// Create the browser window.
 	const mainWindow = new BrowserWindow({
@@ -64,7 +91,7 @@ function createWindow() {
 		width: 850,
 		height: 662,
 		minWidth: 850,
-		minHeight: 500,
+		minHeight: 560,
 		frame: false,
 		show: false,
 		autoHideMenuBar: true,

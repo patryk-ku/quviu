@@ -56,6 +56,7 @@ export default function App() {
 	const [error, setError] = useState(null);
 	const [success, setSuccess] = useState(null);
 	const [metadata, setMetadata] = useState(null);
+	const [thumbnail, setThumbnail] = useState(null);
 
 	// Settings
 	const [trim, setTrim] = useState({ isEnabled: false, start: 0, end: 0 });
@@ -101,6 +102,7 @@ export default function App() {
 		if (filePath?.path) {
 			setFile(filePath?.path);
 			setMetadata(filePath?.metadata);
+			setThumbnail(filePath?.thumbnail);
 			console.log('Selected video: ', filePath);
 		}
 	};
@@ -109,6 +111,7 @@ export default function App() {
 		resetState();
 		setFile(null);
 		setMetadata(null);
+		setThumbnail(null);
 	};
 
 	const handleProcess = async () => {
@@ -154,6 +157,7 @@ export default function App() {
 			if (filePath?.path) {
 				setFile(filePath?.path);
 				setMetadata(filePath?.metadata);
+				setThumbnail(filePath?.thumbnail);
 			}
 		});
 	}, []);
@@ -173,10 +177,10 @@ export default function App() {
 						value={activeTab}
 						onChange={setActiveTab}
 						styles={{
-							panel: { overflowY: 'auto', padding: '8px 16px', marginRight: '2px' },
+							panel: { overflowY: 'auto', marginRight: '2px' },
 						}}
 						classNames={{
-							panel: 'h-0 min-h-full',
+							panel: 'h-0 min-h-full px-4 py-3',
 						}}
 					>
 						<Tabs.Panel value='Presets'>WIP</Tabs.Panel>
@@ -192,6 +196,9 @@ export default function App() {
 									setOutputExtension={setOutputExtension}
 									isOverwrite={isOverwrite}
 									setIsOverwrite={setIsOverwrite}
+									file={file}
+									metadata={metadata}
+									thumbnail={thumbnail}
 								/>
 							) : (
 								<NoFileOpened handleFilePicker={handleFilePicker} />

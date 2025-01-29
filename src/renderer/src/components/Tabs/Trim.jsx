@@ -1,6 +1,5 @@
 import {
 	ActionIcon,
-	Badge,
 	Button,
 	Collapse,
 	RangeSlider,
@@ -20,7 +19,7 @@ import {
 	SpeakerSimpleX,
 } from '@phosphor-icons/react';
 import { useEffect, useRef, useState } from 'react';
-import { formatBitrate, formatDuration, formatFileSize, getFileExtension } from '../../utils';
+import { formatDuration } from '../../utils';
 
 export default function Trim({ file, metadata, trim, setTrim }) {
 	const videoRef = useRef(null);
@@ -108,39 +107,7 @@ export default function Trim({ file, metadata, trim, setTrim }) {
 
 	return (
 		<div className='grid h-0 min-h-full grid-cols-1 grid-rows-[auto,1fr,auto] gap-2'>
-			<div className='flex gap-4'>
-				<Title order={4}>Trim Video</Title>
-				{metadata && (
-					<div className='flex gap-2'>
-						{metadata?.format?.duration && (
-							<Badge variant='light' size='lg' radius='md'>
-								{formatDuration(metadata?.format?.duration)}
-							</Badge>
-						)}
-						{metadata?.format?.size && (
-							<Badge variant='light' size='lg' radius='md'>
-								{formatFileSize(metadata?.format?.size)}
-							</Badge>
-						)}
-						{file && (
-							<Badge variant='light' size='lg' radius='md'>
-								{getFileExtension(file)}
-							</Badge>
-						)}
-						{metadata?.format?.bit_rate && (
-							<Badge variant='light' size='lg' radius='md'>
-								{formatBitrate(metadata?.format?.bit_rate)}
-							</Badge>
-						)}
-						{metadata?.streams && (
-							<Badge variant='light' size='lg' radius='md'>
-								{metadata?.streams.length} streams
-							</Badge>
-						)}
-					</div>
-				)}
-			</div>
-
+			<Title order={4}>Trim Video</Title>
 			<div className='app-background-dark relative flex h-0 min-h-full w-full place-content-center overflow-clip rounded-lg border border-[--tab-border-color] '>
 				{metadata?.streams.filter((stream) => stream.codec_type === 'video').at(0)
 					?.codec_name === 'hevc' && (
