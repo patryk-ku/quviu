@@ -1,5 +1,5 @@
-import { Badge, Select, Switch, Text, TextInput, Title } from '@mantine/core';
-import { File, FolderSimple } from '@phosphor-icons/react';
+import { ActionIcon, Badge, Select, Switch, Text, TextInput, Title, Tooltip } from '@mantine/core';
+import { File, FileAudio, FolderSimple, PencilSimple } from '@phosphor-icons/react';
 import { formatBitrate, formatDuration, formatFileSize, getFileExtension } from '../../utils';
 import CopyText from '../CopyText';
 
@@ -16,6 +16,11 @@ export default function Output({
 	metadata,
 	thumbnail,
 }) {
+	const videoStreams = metadata?.streams.filter(
+		(stream) => stream.codec_type === 'video' && stream.codec_name !== 'mjpeg'
+	);
+	const isVideo = videoStreams?.length > 0 ? true : false;
+
 	const handleFolderPicker = async () => {
 		const folderPath = await window.api.openFolder();
 		if (folderPath) {
@@ -28,9 +33,15 @@ export default function Output({
 		<div className='grid select-none grid-cols-1 gap-2'>
 			<Title order={4}>Input file</Title>
 			<div className='flex'>
-				<div className='app-background-alt my-1 grid grid-cols-[auto,1fr] gap-3 overflow-clip rounded-lg border border-[--tab-border-color]'>
+				<div className='app-background-alt my-1 grid min-h-[60px] grid-cols-[auto,1fr] gap-3 overflow-clip rounded-lg border border-[--tab-border-color]'>
 					<div>
-						<img src={thumbnail} />
+						{isVideo ? (
+							<img src={thumbnail} />
+						) : (
+							<div className='flex h-full items-center pl-3'>
+								<FileAudio size={38} weight='bold' />
+							</div>
+						)}
 					</div>
 					<div className='flex flex-col justify-center gap-1 pr-3'>
 						{metadata && (
@@ -85,6 +96,17 @@ export default function Output({
 					value={outputName}
 					onChange={(event) => setOutputName(event.target.value)}
 					leftSection={<File size={18} weight='bold' />}
+					rightSection={
+						<Tooltip label='insert original title' withArrow>
+							<ActionIcon
+								variant='subtle'
+								color='accent'
+								onClick={() => setOutputName(metadata.name)}
+							>
+								<PencilSimple size={18} weight='bold' />
+							</ActionIcon>
+						</Tooltip>
+					}
 					error={outputName.length === 0 ? 'Set output name' : false}
 				/>
 				<Select

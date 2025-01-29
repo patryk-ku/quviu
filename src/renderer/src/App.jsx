@@ -100,6 +100,7 @@ export default function App() {
 		}
 
 		if (filePath?.path) {
+			setOutputName('New_video');
 			setFile(filePath?.path);
 			setMetadata(filePath?.metadata);
 			setThumbnail(filePath?.thumbnail);
@@ -112,6 +113,7 @@ export default function App() {
 		setFile(null);
 		setMetadata(null);
 		setThumbnail(null);
+		setOutputName('New_video');
 	};
 
 	const handleProcess = async () => {
@@ -155,6 +157,7 @@ export default function App() {
 			}
 
 			if (filePath?.path) {
+				setOutputName('New_video');
 				setFile(filePath?.path);
 				setMetadata(filePath?.metadata);
 				setThumbnail(filePath?.thumbnail);

@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { isAbsolute, join, resolve, sep } from 'path';
+import path from 'path';
 import { electronApp, is, optimizer } from '@electron-toolkit/utils';
 import { BrowserWindow, app, dialog, ipcMain, shell } from 'electron';
 import icon from '../../resources/icon.png?asset';
@@ -12,7 +12,9 @@ async function handleFile(filePath) {
 	try {
 		const metadata = await getMetadata(filePath);
 		const thumbnail = await getVideoThumbnailBase64(filePath);
-		return { path: filePath, metadata: metadata, thumbnail: thumbnail };
+		const name = path.basename(filePath, path.extname(filePath));
+		metadata.name = name;
+		return { path: filePath, metadata, thumbnail };
 	} catch (error) {
 		console.error('Error:', error);
 		return { error: 'Unable to open the selected file' };
@@ -52,7 +54,7 @@ async function handleFolderOpen() {
 		properties: ['openDirectory'],
 	});
 	if (!canceled) {
-		return filePaths[0] + sep;
+		return filePaths[0] + path.sep;
 	}
 }
 
@@ -60,7 +62,7 @@ function getVideoThumbnailBase64(videoPath) {
 	return new Promise((resolve, reject) => {
 		const tempDir = app.getPath('temp');
 		const tempFileName = 'quviu_thumbnail.jpg';
-		const tempFilePath = join(tempDir, tempFileName);
+		const tempFilePath = path.join(tempDir, tempFileName);
 
 		ffmpeg(videoPath)
 			.screenshots({
@@ -97,7 +99,7 @@ function createWindow() {
 		autoHideMenuBar: true,
 		...(process.platform === 'linux' ? { icon } : {}),
 		webPreferences: {
-			preload: join(__dirname, '../preload/index.js'),
+			preload: path.join(__dirname, '../preload/index.js'),
 			sandbox: false,
 
 			// TODO: TMP for development only:
@@ -119,7 +121,7 @@ function createWindow() {
 	if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
 		mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL']);
 	} else {
-		mainWindow.loadFile(join(__dirname, '../renderer/index.html'));
+		mainWindow.loadFile(path.join(__dirname, '../renderer/index.html'));
 	}
 
 	if (process.env.NODE_ENV === 'development') {
@@ -131,8 +133,8 @@ function createWindow() {
 	mainWindow.webContents.on('did-finish-load', async () => {
 		if (args.length > 0 && !is.dev) {
 			let openedFile = args[0];
-			if (!isAbsolute(openedFile)) {
-				openedFile = resolve(openedFile);
+			if (!path.isAbsolute(openedFile)) {
+				openedFile = path.resolve(openedFile);
 			}
 			console.log('file: ', openedFile);
 			mainWindow.webContents.send('file-opened', await handleFile(openedFile));
