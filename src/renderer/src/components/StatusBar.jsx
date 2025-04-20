@@ -74,7 +74,7 @@ export default function StatusBar({
 	};
 
 	return (
-		<div className='app-background-dark flex items-center justify-between gap-2 border-[--mantine-color-default-border] border-t px-2 py-1.5'>
+		<div className='app-background-dark flex items-center justify-between gap-2 border-(--mantine-color-default-border) border-t px-2 py-1.5'>
 			<div className='flex gap-1'>
 				{file ? (
 					<Button

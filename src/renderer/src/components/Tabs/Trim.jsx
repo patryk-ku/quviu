@@ -96,7 +96,7 @@ export default function Trim({ file, metadata, trim, setTrim }) {
 	}
 
 	return (
-		<div className='grid h-0 min-h-full grid-cols-1 grid-rows-[1fr,auto] gap-2'>
+		<div className='grid h-0 min-h-full grid-cols-1 grid-rows-[1fr_auto] gap-2'>
 			<div className='relative flex h-0 min-h-full w-full items-center justify-center overflow-clip'>
 				{metadata?.streams.filter((stream) => stream.codec_type === 'video').at(0)
 					?.codec_name === 'hevc' && (

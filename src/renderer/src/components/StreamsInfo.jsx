@@ -11,7 +11,7 @@ function formatFps(value) {
 export default function StreamsInfo({ streams }) {
 	if (streams?.length > 0) {
 		return (
-			<div className='mb-2 grid select-text grid-cols-[auto,1fr] items-center gap-x-4 gap-y-2'>
+			<div className='mb-2 grid select-text grid-cols-[auto_1fr] items-center gap-x-4 gap-y-2'>
 				{streams.map((stream, index) => (
 					<Fragment key={index}>
 						<div className='flex gap-2'>

@@ -27,7 +27,7 @@ export default function TitleBar({ activeTab, setActiveTab }) {
 	return (
 		<div
 			id='title-bar'
-			className='app-background-dark grid select-none grid-cols-[auto,1fr,auto] items-center justify-between gap-2 border-[--mantine-color-default-border] border-b p-0.5'
+			className='app-background-dark grid select-none grid-cols-[auto_1fr_auto] items-center justify-between gap-2 border-(--mantine-color-default-border) border-b p-0.5'
 		>
 			<div className='flex items-baseline gap-1 px-2 py-1'>
 				<Title order={2}>

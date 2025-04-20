@@ -1,8 +1,6 @@
 @layer tailwind {
-	@tailwind base;
+	@import "tailwindcss";
 }
-@tailwind components;
-@tailwind utilities;
 
 #title-bar {
 	-webkit-app-region: drag;

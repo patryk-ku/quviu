@@ -50,8 +50,8 @@ export default function Settings({ setColors, ffmpegPaths }) {
 			<div className='grid grid-cols-1 gap-6'>
 				<div className='grid gap-1'>
 					<Title order={5}>Theme</Title>
-					<div className='grid grid-cols-[auto,1fr] gap-4'>
-						<div className='app-background-alt rounded-lg border border-[--tab-border-color] px-1.5 pb-1'>
+					<div className='grid grid-cols-[auto_1fr] gap-4'>
+						<div className='app-background-alt rounded-lg border border-(--tab-border-color) px-1.5 pb-1'>
 							<ColorPicker
 								size='xs'
 								placeholder='theme'

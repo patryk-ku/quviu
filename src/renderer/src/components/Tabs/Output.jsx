@@ -33,7 +33,7 @@ export default function Output({
 		<div className='grid select-none grid-cols-1 gap-2'>
 			<Title order={4}>Input file</Title>
 			<div className='flex'>
-				<div className='app-background-alt my-1 grid min-h-[60px] grid-cols-[auto,1fr] gap-3 overflow-clip rounded-lg border border-[--tab-border-color]'>
+				<div className='app-background-alt my-1 grid min-h-[60px] grid-cols-[auto_1fr] gap-3 overflow-clip rounded-lg border border-(--tab-border-color)'>
 					<div>
 						{isVideo ? (
 							<img src={thumbnail} />
@@ -89,7 +89,7 @@ export default function Output({
 				leftSection={<FolderSimple size={18} weight='bold' />}
 				onChange={() => null}
 			/>
-			<div className='grid grid-cols-[1fr,auto] gap-2'>
+			<div className='grid grid-cols-[1fr_auto] gap-2'>
 				<TextInput
 					variant='filled'
 					label='File Name'

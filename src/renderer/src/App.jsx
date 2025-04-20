@@ -173,9 +173,9 @@ export default function App() {
 
 	return (
 		<MantineProvider theme={theme}>
-			<div className='grid h-full select-none grid-rows-[auto,1fr] border border-[--mantine-color-default-border]'>
+			<div className='grid h-full select-none grid-rows-[auto_1fr] border border-(--mantine-color-default-border)'>
 				<TitleBar activeTab={activeTab} setActiveTab={setActiveTab} />
-				<div className='grid h-full grid-rows-[1fr,auto]'>
+				<div className='grid h-full grid-rows-[1fr_auto]'>
 					<Tabs
 						value={activeTab}
 						onChange={setActiveTab}

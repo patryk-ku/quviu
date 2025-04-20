@@ -3,7 +3,7 @@ import { Collapse, Switch } from '@mantine/core';
 export default function SettingsSwitch({ children, condition, option, setOption, label }) {
 	return (
 		<div
-			className={`max-w-fit rounded-lg border transition-all ${option[condition] ? 'app-background-alt my-1 border-[--tab-border-color]' : 'border-[--mantine-color-body]'}`}
+			className={`max-w-fit rounded-lg border transition-all ${option[condition] ? 'app-background-alt my-1 border-(--tab-border-color)' : 'border-(--mantine-color-body)'}`}
 		>
 			<Switch
 				label={label}
