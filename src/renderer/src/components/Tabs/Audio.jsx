@@ -1,4 +1,4 @@
-import { Collapse, Switch, Text, Title } from '@mantine/core';
+import { Collapse, Switch, Text } from '@mantine/core';
 import SettingsSwitch from '../SettingsSwitch';
 import StreamsInfo from '../StreamsInfo';
 import TitledSegmentedControl from '../TitledSegmentedControl';
@@ -9,8 +9,7 @@ export default function Audio({ audio, setAudio, metadata }) {
 
 	if (!isAudio) {
 		return (
-			<div className='grid grid-cols-1 gap-3'>
-				<Title order={4}>Audio Settings</Title>
+			<div>
 				<Text size='sm' c='dimmed'>
 					No audio streams detected
 				</Text>
@@ -20,7 +19,6 @@ export default function Audio({ audio, setAudio, metadata }) {
 
 	return (
 		<div className='grid grid-cols-1 gap-2'>
-			<Title order={4}>Audio Settings</Title>
 			<StreamsInfo streams={audioStreams} />
 			<div className='flex'>
 				<Switch

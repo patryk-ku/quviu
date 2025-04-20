@@ -46,9 +46,8 @@ export default function Settings({ setColors, ffmpegPaths }) {
 	}, [color]);
 
 	return (
-		<div className='grid grid-cols-1 gap-2'>
-			<Title order={4}>Application Settings</Title>
-			<div className='mt-2 grid grid-cols-1 gap-6'>
+		<div className='grid grid-cols-1'>
+			<div className='grid grid-cols-1 gap-6'>
 				<div className='grid gap-1'>
 					<Title order={5}>Theme</Title>
 					<div className='grid grid-cols-[auto,1fr] gap-4'>
