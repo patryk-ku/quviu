@@ -1,4 +1,4 @@
-import { ActionIcon, Anchor, Button, Progress, Text, Tooltip } from '@mantine/core';
+import { Anchor, Button, Progress, Text, Tooltip } from '@mantine/core';
 import { File, Pause, Play, X } from '@phosphor-icons/react';
 import { useEffect, useState } from 'react';
 import { formatDuration } from '../utils';
@@ -163,7 +163,7 @@ export default function StatusBar({
 					>
 						{success}
 					</Anchor>
-					<CopyText value={success} />
+					<CopyText value={success} label='Copy path to clipboard' />
 				</>
 			)}
 			{!(isProcessing || success) && size && (
