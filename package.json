@@ -1,10 +1,10 @@
 {
 	"name": "quviu",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"description": "Quick video utiliies.",
 	"main": "./out/main/index.js",
 	"author": "Patryk Kurdziel <patryk.kurdziel@protonmail.com> (https://patryk-ku.ct8.pl/)",
-	"homepage": "https://patryk-ku.ct8.pl/",
+	"homepage": "https://github.com/patryk-ku/quviu",
 	"scripts": {
 		"format": "biome format",
 		"lint": "biome lint",
@@ -44,6 +44,6 @@
 		"vite": "^6.0.7"
 	},
 	"pnpm": {
-		"onlyBuiltDependencies": ["electron", "esbuild"]
+		"onlyBuiltDependencies": ["electron"]
 	}
 }
