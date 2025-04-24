@@ -65,13 +65,13 @@ export default function App() {
 		isMerge: false,
 		isCompress: false,
 		codec: 'opus',
-		bitrate: '64k',
+		bitrate: '64',
 	});
 	const [video, setVideo] = useState({
 		isDisabled: false,
 		isCompress: false,
 		codec: 'libx265',
-		bitrate: '2048k',
+		bitrate: '2048',
 		isResolution: false,
 		resolution: '720',
 		isFps: false,

@@ -44,7 +44,7 @@ export default function Video({ video, setVideo, metadata }) {
 						label='Re-encode Video'
 					>
 						<TitledSegmentedControl
-							label='Codec:'
+							label='Codec'
 							data={[
 								{ value: 'libx264', label: 'H.264' },
 								{ value: 'libx265', label: 'H.265 HEVC' },
@@ -60,8 +60,19 @@ export default function Video({ video, setVideo, metadata }) {
 							}}
 						/>
 						<TitledSegmentedControl
-							label='Bitrate:'
-							data={['256k', '512k', '1024k', '2048k', '4096k', '8192k']}
+							label='Bitrate'
+							data={[
+								'256',
+								'512',
+								'768',
+								'1024',
+								'1500',
+								'2048',
+								'3000',
+								'4096',
+								'6000',
+								'8192',
+							]}
 							value={video.bitrate}
 							onChange={(event) => {
 								setVideo((prev) => ({
@@ -69,6 +80,8 @@ export default function Video({ video, setVideo, metadata }) {
 									bitrate: event,
 								}));
 							}}
+							custom
+							suffix=' k'
 						/>
 					</SettingsSwitch>
 
@@ -79,17 +92,8 @@ export default function Video({ video, setVideo, metadata }) {
 						label='Change Resolution'
 					>
 						<TitledSegmentedControl
-							label='Height:'
-							data={[
-								{ value: '240', label: '240p' },
-								{ value: '360', label: '360p' },
-								{ value: '480', label: '480p' },
-								{ value: '720', label: '720p' },
-								{ value: '1080', label: '1080p' },
-								{ value: '1440', label: '1440p (2K)' },
-								{ value: '2160', label: '2160p (4K)' },
-								{ value: '4320', label: '4320p (8K)' },
-							]}
+							label='Height'
+							data={['240', '360', '480', '720', '1080', '1440', '2160', '4320']}
 							value={video.resolution}
 							onChange={(event) => {
 								setVideo((prev) => ({
@@ -97,6 +101,8 @@ export default function Video({ video, setVideo, metadata }) {
 									resolution: event,
 								}));
 							}}
+							custom
+							suffix=' px'
 						/>
 					</SettingsSwitch>
 
@@ -107,7 +113,7 @@ export default function Video({ video, setVideo, metadata }) {
 						label='Change Frame Rate'
 					>
 						<TitledSegmentedControl
-							label='FPS:'
+							label='FPS'
 							data={['24', '25', '29.97', '30', '50', '59.94', '60', '120']}
 							value={video.fps}
 							onChange={(event) => {
@@ -116,6 +122,8 @@ export default function Video({ video, setVideo, metadata }) {
 									fps: event,
 								}));
 							}}
+							custom
+							allowDecimal={true}
 						/>
 					</SettingsSwitch>
 				</div>

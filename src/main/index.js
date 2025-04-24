@@ -207,7 +207,7 @@ function createWindow() {
 						if (config.video.isCompress) {
 							ffmpegProcess
 								.videoCodec(config.video.codec)
-								.videoBitrate(config.video.bitrate);
+								.videoBitrate(config.video.bitrate + 'k');
 						}
 
 						if (config.video.isResolution) {
@@ -246,7 +246,7 @@ function createWindow() {
 						if (config.audio.isCompress) {
 							ffmpegProcess
 								.audioCodec(config.audio.codec)
-								.audioBitrate(config.audio.bitrate);
+								.audioBitrate(config.audio.bitrate + 'k');
 						}
 
 						if (!config.audio.isMerge && !config.audio.isCompress) {

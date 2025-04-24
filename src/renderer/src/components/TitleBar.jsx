@@ -37,7 +37,7 @@ export default function TitleBar({ activeTab, setActiveTab }) {
 					uviu
 				</Title>
 				<Text size='sm' c='dimmed'>
-					v1.0.2
+					v1.0.3
 				</Text>
 			</div>
 

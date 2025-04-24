@@ -44,7 +44,7 @@ export default function Audio({ audio, setAudio, metadata }) {
 						label='Re-encode Audio'
 					>
 						<TitledSegmentedControl
-							label='Codec:'
+							label='Codec'
 							data={[
 								{ value: 'opus', label: 'opus' },
 								{ value: 'aac', label: 'aac' },
@@ -64,18 +64,18 @@ export default function Audio({ audio, setAudio, metadata }) {
 							}}
 						/>
 						<TitledSegmentedControl
-							label='Bitrate:'
+							label='Bitrate'
 							data={[
-								'32k',
-								'64k',
-								'96k',
-								'128k',
-								'192k',
-								'256k',
-								'320k',
-								'500k',
-								'768k',
-								'1411k',
+								'32',
+								'64',
+								'96',
+								'128',
+								'192',
+								'256',
+								'320',
+								'500',
+								'768',
+								'1411',
 							]}
 							value={audio.bitrate}
 							onChange={(event) => {
@@ -84,6 +84,8 @@ export default function Audio({ audio, setAudio, metadata }) {
 									bitrate: event,
 								}));
 							}}
+							custom
+							suffix=' k'
 						/>
 					</SettingsSwitch>
 					<div className='max-w-fit'>
