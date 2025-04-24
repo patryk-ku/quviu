@@ -10,7 +10,7 @@ export default function TitledSegmentedControl({
 	suffix = '',
 }) {
 	return (
-		<div className='grid grid-cols-[min-content_min-content_min-content] items-center gap-2'>
+		<div className='grid grid-cols-[min-content_min-content_min-content] items-center gap-2.5'>
 			<Text size='sm' className='select-none'>
 				{label}:
 			</Text>

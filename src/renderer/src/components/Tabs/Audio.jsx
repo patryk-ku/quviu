@@ -1,6 +1,7 @@
 import { Collapse, Switch, Text } from '@mantine/core';
 import SettingsSwitch from '../SettingsSwitch';
 import StreamsInfo from '../StreamsInfo';
+import TitledChipGroup from '../TitledChipGroup';
 import TitledSegmentedControl from '../TitledSegmentedControl';
 
 export default function Audio({ audio, setAudio, metadata }) {
@@ -43,7 +44,7 @@ export default function Audio({ audio, setAudio, metadata }) {
 						condition='isCompress'
 						label='Re-encode Audio'
 					>
-						<TitledSegmentedControl
+						<TitledChipGroup
 							label='Codec'
 							data={[
 								{ value: 'opus', label: 'opus' },

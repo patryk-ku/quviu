@@ -70,7 +70,7 @@ export default function App() {
 	const [video, setVideo] = useState({
 		isDisabled: false,
 		isCompress: false,
-		codec: 'libx265',
+		codec: 'libx264',
 		bitrate: '2048',
 		isResolution: false,
 		resolution: '720',
