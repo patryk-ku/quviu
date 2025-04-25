@@ -1,6 +1,5 @@
-import { ActionIcon, Badge, Select, Switch, Text, TextInput, Title, Tooltip } from '@mantine/core';
-import { File, FileAudio, FolderSimple, PencilSimple } from '@phosphor-icons/react';
-import { formatBitrate, formatDuration, formatFileSize, getFileExtension } from '../../utils';
+import { ActionIcon, Select, Switch, Text, TextInput, Tooltip } from '@mantine/core';
+import { File, FolderSimple, PencilSimple } from '@phosphor-icons/react';
 import CopyText from '../CopyText';
 
 export default function Output({
@@ -12,15 +11,8 @@ export default function Output({
 	setOutputExtension,
 	isOverwrite,
 	setIsOverwrite,
-	file,
 	metadata,
-	thumbnail,
 }) {
-	const videoStreams = metadata?.streams.filter(
-		(stream) => stream.codec_type === 'video' && stream.codec_name !== 'mjpeg'
-	);
-	const isVideo = videoStreams?.length > 0 ? true : false;
-
 	const handleFolderPicker = async () => {
 		const folderPath = await window.api.openFolder();
 		if (folderPath) {
@@ -31,55 +23,6 @@ export default function Output({
 
 	return (
 		<div className='grid select-none grid-cols-1 gap-2'>
-			<Title order={4}>Input file</Title>
-			<div className='flex'>
-				<div className='app-background-alt my-1 grid min-h-[60px] grid-cols-[auto_1fr] gap-3 overflow-clip rounded-lg border border-(--tab-border-color)'>
-					<div>
-						{isVideo ? (
-							<img src={thumbnail} />
-						) : (
-							<div className='flex h-full items-center pl-3'>
-								<FileAudio size={38} weight='bold' />
-							</div>
-						)}
-					</div>
-					<div className='flex flex-col justify-center gap-1 pr-3'>
-						{metadata && (
-							<div className='flex gap-2'>
-								{metadata?.format?.duration && (
-									<Badge variant='light' size='md' radius='md'>
-										{formatDuration(metadata?.format?.duration)}
-									</Badge>
-								)}
-								{metadata?.format?.size && (
-									<Badge variant='light' size='md' radius='md'>
-										{formatFileSize(metadata?.format?.size)}
-									</Badge>
-								)}
-								{file && (
-									<Badge variant='light' size='md' radius='md'>
-										{getFileExtension(file)}
-									</Badge>
-								)}
-								{metadata?.format?.bit_rate && (
-									<Badge variant='light' size='md' radius='md'>
-										{formatBitrate(metadata?.format?.bit_rate)}
-									</Badge>
-								)}
-								{metadata?.streams && (
-									<Badge variant='light' size='md' radius='md'>
-										{metadata?.streams.length} streams
-									</Badge>
-								)}
-							</div>
-						)}
-						<Text size='sm' lineClamp={1}>
-							{file}
-						</Text>
-					</div>
-				</div>
-			</div>
-			<Title order={4}>Output file settings</Title>
 			<TextInput
 				variant='filled'
 				label='Output Folder'

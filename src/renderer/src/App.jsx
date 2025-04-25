@@ -1,9 +1,10 @@
 import { MantineProvider, Tabs, createTheme, virtualColor } from '@mantine/core';
-import { useLocalStorage } from '@mantine/hooks';
+import { useDisclosure, useLocalStorage } from '@mantine/hooks';
 import { useEffect, useMemo, useState } from 'react';
 
 import NoFileOpened from './components/NoFileOpened';
 import StatusBar from './components/StatusBar';
+import SummaryModal from './components/SummaryModal';
 import Audio from './components/Tabs/Audio';
 import Output from './components/Tabs/Output';
 import Settings from './components/Tabs/Settings';
@@ -77,6 +78,7 @@ export default function App() {
 		isFps: false,
 		fps: '30',
 	});
+	const [opened, { open, close }] = useDisclosure(false);
 
 	useEffect(() => {
 		setSuccess(false);
@@ -91,6 +93,10 @@ export default function App() {
 	const handleFilePicker = async () => {
 		resetState();
 		setTrim({ isEnabled: false, start: 0, end: 0 });
+		setAudio((prev) => ({
+			...prev,
+			isMerge: false,
+		}));
 
 		const filePath = await window.api.openFile();
 
@@ -173,6 +179,16 @@ export default function App() {
 
 	return (
 		<MantineProvider theme={theme}>
+			<SummaryModal
+				opened={opened}
+				close={close}
+				file={file}
+				metadata={metadata}
+				thumbnail={thumbnail}
+				video={video}
+				audio={audio}
+				trim={trim}
+			/>
 			<div className='grid h-full select-none grid-rows-[auto_1fr] border border-(--mantine-color-default-border)'>
 				<TitleBar activeTab={activeTab} setActiveTab={setActiveTab} />
 				<div className='grid h-full grid-rows-[1fr_auto]'>
@@ -260,6 +276,7 @@ export default function App() {
 						config={{ metadata, video, audio, trim }}
 						handleFilePicker={handleFilePicker}
 						handleClear={handleClear}
+						openInfoModal={open}
 					/>
 				</div>
 			</div>

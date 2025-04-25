@@ -20,7 +20,7 @@ export default function Video({ video, setVideo, metadata }) {
 
 	return (
 		<div className='grid grid-cols-1 gap-2'>
-			<StreamsInfo streams={videoStreams} />
+			<StreamsInfo streams={videoStreams} metadata={metadata} />
 			<div className='flex'>
 				<Switch
 					label='Disable Video'
