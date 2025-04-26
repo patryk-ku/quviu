@@ -1,4 +1,5 @@
 import { Collapse, Switch, Text } from '@mantine/core';
+import CodecInfo from '../CodecInfo';
 import SettingsSwitch from '../SettingsSwitch';
 import StreamsInfo from '../StreamsInfo';
 import TitledChipGroup from '../TitledChipGroup';
@@ -43,6 +44,7 @@ export default function Video({ video, setVideo, metadata }) {
 						setOption={setVideo}
 						condition='isCompress'
 						label='Re-encode Video'
+						help={<CodecInfo />}
 					>
 						<TitledChipGroup
 							label='Codec'
