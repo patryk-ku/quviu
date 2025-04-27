@@ -139,7 +139,7 @@ export default function StatusBar({
 			{!(isProcessing || success) && size && (
 				<div className='ml-auto'>
 					<Tooltip label='Estimated max file size' withArrow>
-						<Text className='shrink-0'>{size}</Text>
+						<Text className='shrink-0 whitespace-nowrap'>{size}</Text>
 					</Tooltip>
 				</div>
 			)}
