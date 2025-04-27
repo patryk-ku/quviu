@@ -1,6 +1,7 @@
-import { ActionIcon, Select, Switch, Text, TextInput, Tooltip } from '@mantine/core';
+import { ActionIcon, Select, Text, TextInput, Tooltip } from '@mantine/core';
 import { File, FolderSimple, PencilSimple } from '@phosphor-icons/react';
 import CopyText from '../CopyText';
+import SimpleSwitch from '../SimpleSwitch';
 
 export default function Output({
 	outputPath,
@@ -9,8 +10,8 @@ export default function Output({
 	setOutputName,
 	outputExtension,
 	setOutputExtension,
-	isOverwrite,
-	setIsOverwrite,
+	output,
+	setOutput,
 	metadata,
 }) {
 	const handleFolderPicker = async () => {
@@ -71,15 +72,27 @@ export default function Output({
 				Note: Not every file format is compatible with all video and audio codecs. Please
 				ensure your selected format and codec are supported.
 			</Text>
-			<div className='flex'>
-				<Switch
-					label='Overwrite file if exists'
-					mt={8}
-					radius='md'
-					checked={isOverwrite}
-					onChange={(event) => setIsOverwrite(event.currentTarget.checked)}
-				/>
-			</div>
+			<SimpleSwitch
+				label='Overwrite file if exists'
+				checked={output.isOverwrite}
+				onChange={(event) => {
+					setOutput((prev) => ({
+						...prev,
+						isOverwrite: event.target.checked,
+					}));
+				}}
+			/>
+			<SimpleSwitch
+				label='Map all streams'
+				description="Use this to preserve all original streams e.g. subtitles in multiple languages. Caution, this may cause the conversion to fail if the output format doesn't support all streams from the input format, e.g. mkv -> mp4."
+				checked={output.isMapStreams}
+				onChange={(event) => {
+					setOutput((prev) => ({
+						...prev,
+						isMapStreams: event.target.checked,
+					}));
+				}}
+			/>
 			<div className='mt-4'>
 				<Text size='xs'>Final file path:</Text>
 				<div className='flex flex-wrap items-center gap-1'>

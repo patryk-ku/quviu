@@ -264,9 +264,16 @@ function createWindow() {
 					}
 				}
 
-				console.log(config.outputOptions);
-				if (config.outputOptions?.length > 0) {
-					ffmpegProcess.outputOptions(...config.outputOptions);
+				// console.log(config.outputOptions);
+				// if (config.outputOptions?.length > 0) {
+				// 	ffmpegProcess.outputOptions(...config.outputOptions);
+				// }
+
+				if (config.output.isMapStreams) {
+					ffmpegProcess.outputOptions([
+						'-map 0', // map all streams from input
+						'-c:s copy', // copy subtitles without changes
+					]);
 				}
 
 				ffmpegProcess

@@ -50,7 +50,6 @@ export default function App() {
 	});
 	const [outputName, setOutputName] = useState('New_video');
 	const [outputExtension, setOutputExtension] = useState('.mp4');
-	const [isOverwrite, setIsOverwrite] = useState(false);
 
 	const [progress, setProgress] = useState(0);
 	const [isProcessing, setIsProcessing] = useState(false);
@@ -60,6 +59,10 @@ export default function App() {
 	const [thumbnail, setThumbnail] = useState(null);
 
 	// Settings
+	const [output, setOutput] = useState({
+		isOverwrite: false,
+		isMapStreams: false,
+	});
 	const [trim, setTrim] = useState({ isEnabled: false, start: 0, end: 0 });
 	const [audio, setAudio] = useState({
 		isMuted: false,
@@ -136,7 +139,7 @@ export default function App() {
 				name: outputName,
 				ext: outputExtension,
 				path: outputPath + outputName.trim() + outputExtension,
-				isOverwrite,
+				...output,
 			},
 			trim,
 			video,
@@ -214,8 +217,8 @@ export default function App() {
 									setOutputName={setOutputName}
 									outputExtension={outputExtension}
 									setOutputExtension={setOutputExtension}
-									isOverwrite={isOverwrite}
-									setIsOverwrite={setIsOverwrite}
+									output={output}
+									setOutput={setOutput}
 									file={file}
 									metadata={metadata}
 									thumbnail={thumbnail}
