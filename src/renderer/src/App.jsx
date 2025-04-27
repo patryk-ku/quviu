@@ -77,6 +77,7 @@ export default function App() {
 		resolution: '720',
 		isFps: false,
 		fps: '30',
+		isCropdetect: false,
 	});
 	const [opened, { open, close }] = useDisclosure(false);
 

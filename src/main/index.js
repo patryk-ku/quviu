@@ -6,7 +6,7 @@ import icon from '../../resources/icon.png?asset';
 
 import ffmpeg from 'fluent-ffmpeg';
 import { timestampToSeconds } from '../renderer/src/utils';
-import { generateUniqueFileName, getMetadata } from './utils';
+import { detectCrop, generateUniqueFileName, getMetadata } from './utils';
 
 async function handleFile(filePath) {
 	try {
@@ -177,6 +177,11 @@ function createWindow() {
 			return { error: 'You cannot turn off audio and video at the same time.' };
 		}
 
+		let cropArea = '';
+		if (config.video.isCropdetect && config.video.isCompress) {
+			cropArea = await detectCrop(config);
+		}
+
 		let isError = false;
 		try {
 			await new Promise((resolve, reject) => {
@@ -208,6 +213,10 @@ function createWindow() {
 							ffmpegProcess
 								.videoCodec(config.video.codec)
 								.videoBitrate(config.video.bitrate + 'k');
+
+							if (config.video.isCropdetect) {
+								ffmpegProcess.videoFilters(cropArea);
+							}
 						}
 
 						if (config.video.isResolution) {

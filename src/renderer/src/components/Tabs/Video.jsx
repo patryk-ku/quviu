@@ -129,6 +129,23 @@ export default function Video({ video, setVideo, metadata }) {
 							allowDecimal={true}
 						/>
 					</SettingsSwitch>
+
+					<div className='max-w-fit'>
+						<Switch
+							label='Crop black bars around video'
+							radius='md'
+							checked={video.isCropdetect}
+							onChange={(event) => {
+								setVideo((prev) => ({
+									...prev,
+									isCropdetect: event.target.checked,
+								}));
+							}}
+							disabled={!video.isCompress}
+							className='m-[2px]'
+							classNames={{ label: 'font-bold' }}
+						/>
+					</div>
 				</div>
 			</Collapse>
 		</div>
