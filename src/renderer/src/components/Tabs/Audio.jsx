@@ -1,5 +1,6 @@
 import { Collapse, Switch, Text } from '@mantine/core';
 import SettingsSwitch from '../SettingsSwitch';
+import SimpleSwitch from '../SimpleSwitch';
 import StreamsInfo from '../StreamsInfo';
 import TitledChipGroup from '../TitledChipGroup';
 import TitledSegmentedControl from '../TitledSegmentedControl';
@@ -89,23 +90,19 @@ export default function Audio({ audio, setAudio, metadata }) {
 							suffix=' k'
 						/>
 					</SettingsSwitch>
-					<div className='max-w-fit'>
-						<Switch
-							label='Merge all audio streams'
-							radius='md'
-							checked={audio.isMerge}
-							onChange={(event) => {
-								setAudio((prevAudio) => ({
-									...prevAudio,
-									isMerge: event.target.checked,
-								}));
-							}}
-							description={metadata && `audio streams: ${audioStreams?.length}`}
-							disabled={audioStreams?.length > 1 ? false : true}
-							className='m-[2px]'
-							classNames={{ label: 'font-bold' }}
-						/>
-					</div>
+
+					<SimpleSwitch
+						label='Merge all audio streams'
+						description={metadata && `audio streams: ${audioStreams?.length}`}
+						checked={audio.isMerge}
+						onChange={(event) => {
+							setAudio((prevAudio) => ({
+								...prevAudio,
+								isMerge: event.target.checked,
+							}));
+						}}
+						disabled={audioStreams?.length > 1 ? false : true}
+					/>
 				</div>
 			</Collapse>
 		</div>

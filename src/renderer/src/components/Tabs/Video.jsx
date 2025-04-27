@@ -1,6 +1,7 @@
 import { Collapse, Switch, Text } from '@mantine/core';
 import CodecInfo from '../CodecInfo';
 import SettingsSwitch from '../SettingsSwitch';
+import SimpleSwitch from '../SimpleSwitch';
 import StreamsInfo from '../StreamsInfo';
 import TitledChipGroup from '../TitledChipGroup';
 import TitledSegmentedControl from '../TitledSegmentedControl';
@@ -130,22 +131,17 @@ export default function Video({ video, setVideo, metadata }) {
 						/>
 					</SettingsSwitch>
 
-					<div className='max-w-fit'>
-						<Switch
-							label='Crop black bars around video'
-							radius='md'
-							checked={video.isCropdetect}
-							onChange={(event) => {
-								setVideo((prev) => ({
-									...prev,
-									isCropdetect: event.target.checked,
-								}));
-							}}
-							disabled={!video.isCompress}
-							className='m-[2px]'
-							classNames={{ label: 'font-bold' }}
-						/>
-					</div>
+					<SimpleSwitch
+						label='Crop black bars around video'
+						checked={video.isCropdetect}
+						onChange={(event) => {
+							setVideo((prev) => ({
+								...prev,
+								isCropdetect: event.target.checked,
+							}));
+						}}
+						disabled={!video.isCompress}
+					/>
 				</div>
 			</Collapse>
 		</div>
