@@ -80,13 +80,13 @@ export default function Settings({ setColors, ffmpegPaths }) {
 						<div className='grid gap-1'>
 							<div className='flex items-center gap-1'>
 								<Text>Current theme:</Text>
-								<Badge size='sm' radius='md' color={colorMap[color][0]}>
+								<Badge size='md' radius='md' color={colorMap[color][0]}>
 									Primary
 								</Badge>
-								<Badge variant='gradient' size='sm' radius='md'>
+								<Badge variant='gradient' size='md' radius='md'>
 									Gradient
 								</Badge>
-								<Badge size='sm' radius='md' color={colorMap[color][1]}>
+								<Badge size='md' radius='md' color={colorMap[color][1]}>
 									Secondary
 								</Badge>
 							</div>
