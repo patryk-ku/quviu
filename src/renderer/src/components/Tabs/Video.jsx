@@ -1,4 +1,4 @@
-import { Button, Collapse, Switch, Text, TextInput } from '@mantine/core';
+import { Collapse, Select, Switch, Text, TextInput } from '@mantine/core';
 import CodecInfo from '../CodecInfo';
 import SettingsSwitch from '../SettingsSwitch';
 import SimpleSwitch from '../SimpleSwitch';
@@ -9,6 +9,14 @@ import TitledSegmentedControl from '../TitledSegmentedControl';
 export default function Video({ video, setVideo, metadata }) {
 	const videoStreams = metadata?.streams.filter((stream) => stream.codec_type === 'video');
 	const isVideo = videoStreams?.length > 0 ? true : false;
+	const subtitleStreams = metadata?.streams.filter((stream) => stream.codec_type === 'subtitle');
+	const isSubtitle = subtitleStreams?.length > 0 ? true : false;
+	console.log(subtitleStreams);
+	const parsedSubtitleStreams = subtitleStreams?.map((stream, index) => ({
+		value: String(index),
+		label: `${index}: ${stream.tags?.language}` || `Stream ${index}`,
+	}));
+	console.log('parsedSubtitleStreams', parsedSubtitleStreams);
 
 	const handleSubtitleFilePicker = async () => {
 		const filePath = await window.api.openAnyFile();
@@ -148,22 +156,44 @@ export default function Video({ video, setVideo, metadata }) {
 						condition='isHardsub'
 						label='Add hardcoded subtitles'
 					>
-						<div className='grid grid-cols-[auto_1fr] gap-2'>
-							<Button
-								variant='filled'
-								color='accent'
-								onClick={handleSubtitleFilePicker}
-								size='sm'
-								className='shrink-0'
-							>
-								Select File
-							</Button>
-							<TextInput
-								variant='filled'
-								value={video.hardsubPath}
-								readOnly
-								className='min-w-[550px]'
+						<div className='grid grid-cols-[auto_1fr] items-center gap-4'>
+							<Switch
+								label='from current video'
+								radius='md'
+								checked={video.isHardsubFromInput}
+								onChange={(event) => {
+									setVideo((prev) => ({
+										...prev,
+										isHardsubFromInput: event.target.checked,
+									}));
+								}}
+								disabled={!isSubtitle}
 							/>
+							{video.isHardsubFromInput ? (
+								<Select
+									variant='filled'
+									allowDeselect={false}
+									value={video.hardsubStreamIndex}
+									onChange={(value) => {
+										setVideo((prev) => ({
+											...prev,
+											hardsubStreamIndex: value,
+										}));
+									}}
+									data={parsedSubtitleStreams}
+									className='w-[150px]'
+								/>
+							) : (
+								<TextInput
+									variant='filled'
+									value={video.hardsubPath}
+									onClick={handleSubtitleFilePicker}
+									readOnly
+									className='min-w-[550px]'
+									size='sm'
+									placeholder='Select subtitle file'
+								/>
+							)}
 						</div>
 					</SettingsSwitch>
 

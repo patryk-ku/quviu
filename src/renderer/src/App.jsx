@@ -82,7 +82,9 @@ export default function App() {
 		fps: '30',
 		isCropdetect: false,
 		isHardsub: false,
+		isHardsubFromInput: false,
 		hardsubPath: '',
+		hardsubStreamIndex: '0',
 	});
 	const [opened, { open, close }] = useDisclosure(false);
 
@@ -102,6 +104,10 @@ export default function App() {
 		setAudio((prev) => ({
 			...prev,
 			isMerge: false,
+		}));
+		setVideo((prev) => ({
+			...prev,
+			hardsubStreamIndex: '0',
 		}));
 
 		const filePath = await window.api.openFile();

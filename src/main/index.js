@@ -189,7 +189,11 @@ function createWindow() {
 			return { error: 'You cannot turn off audio and video at the same time.' };
 		}
 
-		if (config.video.isHardsub && config.video.hardsubPath?.length === 0) {
+		if (
+			config.video.isHardsub &&
+			!config.video.isHardsubFromInput &&
+			config.video.hardsubPath?.length === 0
+		) {
 			return { error: 'Hardsub path cannot be empty.' };
 		}
 
@@ -246,7 +250,13 @@ function createWindow() {
 						}
 
 						if (config.video.isHardsub) {
-							videoFilters.push(`subtitles='${config.video.hardsubPath}'`);
+							if (config.video.isHardsubFromInput) {
+								videoFilters.push(
+									`subtitles='${config.input}':stream_index=${config.video.hardsubStreamIndex}`
+								);
+							} else {
+								videoFilters.push(`subtitles='${config.video.hardsubPath}'`);
+							}
 						}
 
 						if (videoFilters.length > 0) {
