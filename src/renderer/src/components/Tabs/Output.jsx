@@ -66,6 +66,7 @@ export default function Output({
 					value={outputExtension}
 					onChange={setOutputExtension}
 					allowDeselect={false}
+					classNames={{ options: '*:min-h-[333px]' }}
 				/>
 			</div>
 			<Text size='sm' c='dimmed'>
