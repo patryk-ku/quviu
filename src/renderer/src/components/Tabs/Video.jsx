@@ -1,4 +1,4 @@
-import { Collapse, Switch, Text } from '@mantine/core';
+import { Button, Collapse, Switch, Text, TextInput } from '@mantine/core';
 import CodecInfo from '../CodecInfo';
 import SettingsSwitch from '../SettingsSwitch';
 import SimpleSwitch from '../SimpleSwitch';
@@ -9,6 +9,17 @@ import TitledSegmentedControl from '../TitledSegmentedControl';
 export default function Video({ video, setVideo, metadata }) {
 	const videoStreams = metadata?.streams.filter((stream) => stream.codec_type === 'video');
 	const isVideo = videoStreams?.length > 0 ? true : false;
+
+	const handleSubtitleFilePicker = async () => {
+		const filePath = await window.api.openAnyFile();
+
+		if (filePath && !filePath?.error) {
+			setVideo((prev) => ({
+				...prev,
+				hardsubPath: filePath,
+			}));
+		}
+	};
 
 	if (!isVideo) {
 		return (
@@ -129,6 +140,31 @@ export default function Video({ video, setVideo, metadata }) {
 							custom
 							allowDecimal={true}
 						/>
+					</SettingsSwitch>
+
+					<SettingsSwitch
+						option={video}
+						setOption={setVideo}
+						condition='isHardsub'
+						label='Add hardcoded subtitles'
+					>
+						<div className='grid grid-cols-[auto_1fr] gap-2'>
+							<Button
+								variant='filled'
+								color='accent'
+								onClick={handleSubtitleFilePicker}
+								size='sm'
+								className='shrink-0'
+							>
+								Select File
+							</Button>
+							<TextInput
+								variant='filled'
+								value={video.hardsubPath}
+								readOnly
+								className='min-w-[550px]'
+							/>
+						</div>
 					</SettingsSwitch>
 
 					<SimpleSwitch

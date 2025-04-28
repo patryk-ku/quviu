@@ -49,6 +49,18 @@ async function handleFileOpen() {
 	}
 }
 
+async function handleAnyFileOpen() {
+	const { canceled, filePaths } = await dialog.showOpenDialog({
+		properties: ['openFile'],
+	});
+
+	if (!canceled && filePaths?.length > 0) {
+		return filePaths[0];
+	} else {
+		return null;
+	}
+}
+
 async function handleFolderOpen() {
 	const { canceled, filePaths } = await dialog.showOpenDialog({
 		properties: ['openDirectory'],
@@ -177,6 +189,10 @@ function createWindow() {
 			return { error: 'You cannot turn off audio and video at the same time.' };
 		}
 
+		if (config.video.isHardsub && config.video.hardsubPath?.length === 0) {
+			return { error: 'Hardsub path cannot be empty.' };
+		}
+
 		let cropArea = '';
 		if (config.video.isCropdetect && config.video.isCompress) {
 			cropArea = await detectCrop(config);
@@ -209,13 +225,15 @@ function createWindow() {
 					).length;
 
 					if (videoStreamsCount > 0) {
+						const videoFilters = [];
+
 						if (config.video.isCompress) {
 							ffmpegProcess
 								.videoCodec(config.video.codec)
 								.videoBitrate(config.video.bitrate + 'k');
 
 							if (config.video.isCropdetect) {
-								ffmpegProcess.videoFilters(cropArea);
+								videoFilters.push(cropArea);
 							}
 						}
 
@@ -227,10 +245,20 @@ function createWindow() {
 							ffmpegProcess.fps(config.video.fps);
 						}
 
+						if (config.video.isHardsub) {
+							videoFilters.push(`subtitles='${config.video.hardsubPath}'`);
+						}
+
+						if (videoFilters.length > 0) {
+							console.log('Video filters:', videoFilters);
+							ffmpegProcess.videoFilters(videoFilters);
+						}
+
 						if (
 							!config.video.isFps &&
 							!config.video.isResolution &&
-							!config.video.isCompress
+							!config.video.isCompress &&
+							videoFilters.length === 0
 						) {
 							ffmpegProcess.videoCodec('copy');
 						}
@@ -363,6 +391,7 @@ app.whenReady().then(() => {
 	// });
 
 	ipcMain.handle('dialog:openFile', handleFileOpen);
+	ipcMain.handle('dialog:openAnyFile', handleAnyFileOpen);
 	ipcMain.handle('dialog:openFolder', handleFolderOpen);
 
 	createWindow();

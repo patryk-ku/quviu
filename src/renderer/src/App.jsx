@@ -81,6 +81,8 @@ export default function App() {
 		isFps: false,
 		fps: '30',
 		isCropdetect: false,
+		isHardsub: false,
+		hardsubPath: '',
 	});
 	const [opened, { open, close }] = useDisclosure(false);
 

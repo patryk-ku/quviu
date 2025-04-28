@@ -88,6 +88,19 @@ export default function SummaryModal({
 		});
 	}
 
+	// Video hardsub
+	if (video.isHardsub && !video.isDisabled) {
+		rows.push({
+			label: 'hardsub',
+			original: '',
+			new: (
+				<Text c='green'>
+					<Check size={21} weight='bold' />
+				</Text>
+			),
+		});
+	}
+
 	// Video disabled
 	if (video.isDisabled) {
 		rows.push({
