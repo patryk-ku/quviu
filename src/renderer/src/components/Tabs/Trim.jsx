@@ -148,24 +148,41 @@ export default function Trim({ file, metadata, trim, setTrim }) {
 
 						<div className='ml-auto flex items-center gap-2'>
 							{trim.isEnabled && (
-								<Button
-									variant='default'
-									size='compact-sm'
-									leftSection={<ArrowLineLeft size={18} weight='bold' />}
-									onClick={handleTrimStart}
-								>
-									Set Start
-								</Button>
-							)}
-							{trim.isEnabled && (
-								<Button
-									variant='default'
-									size='compact-sm'
-									onClick={handleTrimEnd}
-									rightSection={<ArrowLineRight size={18} weight='bold' />}
-								>
-									Set End
-								</Button>
+								<>
+									<Text size='sm'>
+										from{' '}
+										<Text span inherit fw={700} c='accent'>
+											{formatDuration(trim.start)}
+										</Text>{' '}
+										to{' '}
+										<Text span inherit fw={700} c='accent'>
+											{formatDuration(trim.end)}
+										</Text>
+									</Text>
+									<Text size='sm'>
+										[
+										<Text span inherit fw={700} c='accent'>
+											{formatDuration(trim.end - trim.start)}
+										</Text>
+										]
+									</Text>
+									<Button
+										variant='default'
+										size='compact-sm'
+										leftSection={<ArrowLineLeft size={18} weight='bold' />}
+										onClick={handleTrimStart}
+									>
+										Set Start
+									</Button>
+									<Button
+										variant='default'
+										size='compact-sm'
+										onClick={handleTrimEnd}
+										rightSection={<ArrowLineRight size={18} weight='bold' />}
+									>
+										Set End
+									</Button>
+								</>
 							)}
 							<Switch
 								label='Trim video'
