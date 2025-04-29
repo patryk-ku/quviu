@@ -6,7 +6,7 @@ import icon from '../../resources/icon.png?asset';
 
 import ffmpeg from 'fluent-ffmpeg';
 import { timestampToSeconds } from '../renderer/src/utils';
-import { generateUniqueFileName, getMetadata } from './utils';
+import { detectCrop, generateUniqueFileName, getMetadata } from './utils';
 
 async function handleFile(filePath) {
 	try {
@@ -46,6 +46,18 @@ async function handleFileOpen() {
 
 	if (!canceled) {
 		return await handleFile(filePaths[0]);
+	}
+}
+
+async function handleAnyFileOpen() {
+	const { canceled, filePaths } = await dialog.showOpenDialog({
+		properties: ['openFile'],
+	});
+
+	if (!canceled && filePaths?.length > 0) {
+		return filePaths[0];
+	} else {
+		return null;
 	}
 }
 
@@ -177,6 +189,19 @@ function createWindow() {
 			return { error: 'You cannot turn off audio and video at the same time.' };
 		}
 
+		if (
+			config.video.isHardsub &&
+			!config.video.isHardsubFromInput &&
+			config.video.hardsubPath?.length === 0
+		) {
+			return { error: 'Hardsub path cannot be empty.' };
+		}
+
+		let cropArea = '';
+		if (config.video.isCropdetect && config.video.isCompress) {
+			cropArea = await detectCrop(config);
+		}
+
 		let isError = false;
 		try {
 			await new Promise((resolve, reject) => {
@@ -204,10 +229,16 @@ function createWindow() {
 					).length;
 
 					if (videoStreamsCount > 0) {
+						const videoFilters = [];
+
 						if (config.video.isCompress) {
 							ffmpegProcess
 								.videoCodec(config.video.codec)
-								.videoBitrate(config.video.bitrate);
+								.videoBitrate(config.video.bitrate + 'k');
+
+							if (config.video.isCropdetect) {
+								videoFilters.push(cropArea);
+							}
 						}
 
 						if (config.video.isResolution) {
@@ -218,10 +249,26 @@ function createWindow() {
 							ffmpegProcess.fps(config.video.fps);
 						}
 
+						if (config.video.isHardsub) {
+							if (config.video.isHardsubFromInput) {
+								videoFilters.push(
+									`subtitles='${config.input}':stream_index=${config.video.hardsubStreamIndex}`
+								);
+							} else {
+								videoFilters.push(`subtitles='${config.video.hardsubPath}'`);
+							}
+						}
+
+						if (videoFilters.length > 0) {
+							console.log('Video filters:', videoFilters);
+							ffmpegProcess.videoFilters(videoFilters);
+						}
+
 						if (
 							!config.video.isFps &&
 							!config.video.isResolution &&
-							!config.video.isCompress
+							!config.video.isCompress &&
+							videoFilters.length === 0
 						) {
 							ffmpegProcess.videoCodec('copy');
 						}
@@ -246,7 +293,7 @@ function createWindow() {
 						if (config.audio.isCompress) {
 							ffmpegProcess
 								.audioCodec(config.audio.codec)
-								.audioBitrate(config.audio.bitrate);
+								.audioBitrate(config.audio.bitrate + 'k');
 						}
 
 						if (!config.audio.isMerge && !config.audio.isCompress) {
@@ -255,9 +302,16 @@ function createWindow() {
 					}
 				}
 
-				console.log(config.outputOptions);
-				if (config.outputOptions?.length > 0) {
-					ffmpegProcess.outputOptions(...config.outputOptions);
+				// console.log(config.outputOptions);
+				// if (config.outputOptions?.length > 0) {
+				// 	ffmpegProcess.outputOptions(...config.outputOptions);
+				// }
+
+				if (config.output.isMapStreams) {
+					ffmpegProcess.outputOptions([
+						'-map 0', // map all streams from input
+						'-c:s copy', // copy subtitles without changes
+					]);
 				}
 
 				ffmpegProcess
@@ -347,6 +401,7 @@ app.whenReady().then(() => {
 	// });
 
 	ipcMain.handle('dialog:openFile', handleFileOpen);
+	ipcMain.handle('dialog:openAnyFile', handleAnyFileOpen);
 	ipcMain.handle('dialog:openFolder', handleFolderOpen);
 
 	createWindow();

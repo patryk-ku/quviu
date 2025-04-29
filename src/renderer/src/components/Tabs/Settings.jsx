@@ -46,25 +46,12 @@ export default function Settings({ setColors, ffmpegPaths }) {
 	}, [color]);
 
 	return (
-		<div className='grid grid-cols-1 gap-2'>
-			<Title order={4}>Application Settings</Title>
-			<div className='mt-2 grid grid-cols-1 gap-6'>
+		<div className='grid grid-cols-1'>
+			<div className='grid grid-cols-1 gap-6'>
 				<div className='grid gap-1'>
 					<Title order={5}>Theme</Title>
-					<div className='mb-1 flex items-center gap-1'>
-						<Text>Current theme:</Text>
-						<Badge size='sm' radius='md' color={colorMap[color][0]}>
-							Primary
-						</Badge>
-						<Badge variant='gradient' size='sm' radius='md'>
-							Gradient
-						</Badge>
-						<Badge size='sm' radius='md' color={colorMap[color][1]}>
-							Secondary
-						</Badge>
-					</div>
-					<div className='mb-2 flex'>
-						<div className='app-background-alt rounded-lg border border-[--tab-border-color] px-1.5 pb-1'>
+					<div className='grid grid-cols-[auto_1fr] gap-4'>
+						<div className='app-background-alt rounded-lg border border-(--tab-border-color) px-1.5 pb-1'>
 							<ColorPicker
 								size='xs'
 								placeholder='theme'
@@ -90,14 +77,28 @@ export default function Settings({ setColors, ffmpegPaths }) {
 								swatchesPerRow={6}
 							/>
 						</div>
-					</div>
-					<div className='flex'>
-						<Switch
-							label='Light theme'
-							radius='md'
-							checked={computedColorScheme === 'light'}
-							onChange={(event) => toggleColorScheme(event.target.checked)}
-						/>
+						<div className='grid gap-1'>
+							<div className='flex items-center gap-1'>
+								<Text>Current theme:</Text>
+								<Badge size='md' radius='md' color={colorMap[color][0]}>
+									Primary
+								</Badge>
+								<Badge variant='gradient' size='md' radius='md'>
+									Gradient
+								</Badge>
+								<Badge size='md' radius='md' color={colorMap[color][1]}>
+									Secondary
+								</Badge>
+							</div>
+							<div className='flex'>
+								<Switch
+									label='Light theme'
+									radius='md'
+									checked={computedColorScheme === 'light'}
+									onChange={(event) => toggleColorScheme(event.target.checked)}
+								/>
+							</div>
+						</div>
 					</div>
 				</div>
 

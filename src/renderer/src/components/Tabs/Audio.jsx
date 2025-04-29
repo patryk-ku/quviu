@@ -1,6 +1,8 @@
-import { Collapse, Switch, Text, Title } from '@mantine/core';
+import { Collapse, Switch, Text } from '@mantine/core';
 import SettingsSwitch from '../SettingsSwitch';
+import SimpleSwitch from '../SimpleSwitch';
 import StreamsInfo from '../StreamsInfo';
+import TitledChipGroup from '../TitledChipGroup';
 import TitledSegmentedControl from '../TitledSegmentedControl';
 
 export default function Audio({ audio, setAudio, metadata }) {
@@ -9,8 +11,7 @@ export default function Audio({ audio, setAudio, metadata }) {
 
 	if (!isAudio) {
 		return (
-			<div className='grid grid-cols-1 gap-3'>
-				<Title order={4}>Audio Settings</Title>
+			<div>
 				<Text size='sm' c='dimmed'>
 					No audio streams detected
 				</Text>
@@ -20,7 +21,6 @@ export default function Audio({ audio, setAudio, metadata }) {
 
 	return (
 		<div className='grid grid-cols-1 gap-2'>
-			<Title order={4}>Audio Settings</Title>
 			<StreamsInfo streams={audioStreams} />
 			<div className='flex'>
 				<Switch
@@ -45,8 +45,8 @@ export default function Audio({ audio, setAudio, metadata }) {
 						condition='isCompress'
 						label='Re-encode Audio'
 					>
-						<TitledSegmentedControl
-							label='Codec:'
+						<TitledChipGroup
+							label='Codec'
 							data={[
 								{ value: 'opus', label: 'opus' },
 								{ value: 'aac', label: 'aac' },
@@ -66,18 +66,18 @@ export default function Audio({ audio, setAudio, metadata }) {
 							}}
 						/>
 						<TitledSegmentedControl
-							label='Bitrate:'
+							label='Bitrate'
 							data={[
-								'32k',
-								'64k',
-								'96k',
-								'128k',
-								'192k',
-								'256k',
-								'320k',
-								'500k',
-								'768k',
-								'1411k',
+								'32',
+								'64',
+								'96',
+								'128',
+								'192',
+								'256',
+								'320',
+								'500',
+								'768',
+								'1411',
 							]}
 							value={audio.bitrate}
 							onChange={(event) => {
@@ -86,25 +86,23 @@ export default function Audio({ audio, setAudio, metadata }) {
 									bitrate: event,
 								}));
 							}}
+							custom
+							suffix=' k'
 						/>
 					</SettingsSwitch>
-					<div className='max-w-fit'>
-						<Switch
-							label='Merge all audio streams'
-							radius='md'
-							checked={audio.isMerge}
-							onChange={(event) => {
-								setAudio((prevAudio) => ({
-									...prevAudio,
-									isMerge: event.target.checked,
-								}));
-							}}
-							description={metadata && `audio streams: ${audioStreams?.length}`}
-							disabled={audioStreams?.length > 1 ? false : true}
-							className='m-[2px]'
-							classNames={{ label: 'font-bold' }}
-						/>
-					</div>
+
+					<SimpleSwitch
+						label='Merge all audio streams'
+						description={metadata && `audio streams: ${audioStreams?.length}`}
+						checked={audio.isMerge}
+						onChange={(event) => {
+							setAudio((prevAudio) => ({
+								...prevAudio,
+								isMerge: event.target.checked,
+							}));
+						}}
+						disabled={audioStreams?.length > 1 ? false : true}
+					/>
 				</div>
 			</Collapse>
 		</div>

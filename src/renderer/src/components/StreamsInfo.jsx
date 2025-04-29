@@ -1,17 +1,19 @@
 import { Badge } from '@mantine/core';
 import { Fragment } from 'react';
-import { formatBitrate } from '../utils';
+import { calculateFrameRate, formatBitrate } from '../utils';
 
-function formatFps(value) {
-	const values = value.split('/');
-	const fps = Number(values[0]) / Number(values[1]);
-	return `${fps.toFixed(3)} FPS`;
-}
-
-export default function StreamsInfo({ streams }) {
+export default function StreamsInfo({ streams, metadata }) {
 	if (streams?.length > 0) {
+		let bitrate = formatBitrate(streams?.at(0)?.bit_rate);
+		if (metadata) {
+			bitrate =
+				bitrate == 'unknown bitrate'
+					? `~ ${formatBitrate(metadata?.format?.bit_rate)}`
+					: bitrate;
+		}
+
 		return (
-			<div className='mb-2 grid select-text grid-cols-[auto,1fr] items-center gap-x-4 gap-y-2'>
+			<div className='mb-2 grid select-text grid-cols-[auto_1fr] items-center gap-x-4 gap-y-2'>
 				{streams.map((stream, index) => (
 					<Fragment key={index}>
 						<div className='flex gap-2'>
@@ -37,7 +39,7 @@ export default function StreamsInfo({ streams }) {
 							)}
 							{stream?.bit_rate && (
 								<Badge variant='light' radius='md'>
-									{formatBitrate(stream.bit_rate)}
+									{bitrate}
 								</Badge>
 							)}
 							{stream?.sample_rate && (
@@ -47,7 +49,7 @@ export default function StreamsInfo({ streams }) {
 							)}
 							{stream?.avg_frame_rate && stream?.avg_frame_rate !== '0/0' && (
 								<Badge variant='light' radius='md'>
-									{formatFps(stream.avg_frame_rate)}
+									{calculateFrameRate(stream.avg_frame_rate)} FPS
 								</Badge>
 							)}
 							{stream?.coded_height && stream?.coded_width && (

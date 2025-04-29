@@ -7,6 +7,7 @@ const api = {
 	maximize: () => ipcRenderer.invoke('maximize'),
 	close: () => ipcRenderer.invoke('close'),
 	openFile: () => ipcRenderer.invoke('dialog:openFile'),
+	openAnyFile: () => ipcRenderer.invoke('dialog:openAnyFile'),
 	openFolder: () => ipcRenderer.invoke('dialog:openFolder'),
 	generateOutputVideo: (config) => ipcRenderer.invoke('generateOutputVideo', config),
 	onProgressUpdate: (callback) =>

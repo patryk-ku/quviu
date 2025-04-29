@@ -23,11 +23,11 @@ export function formatBitrate(bitrate) {
 		return 'unknown bitrate';
 	}
 
-	if (bitrate >= 1e6) {
-		return `${(bitrate / 1e6).toFixed(2)} Mbps`;
-	} else {
-		return `${(bitrate / 1e3).toFixed(2)} kbps`;
-	}
+	// if (bitrate >= 1e6) {
+	// return `${(bitrate / 1e6).toFixed(2)} Mbps`;
+	// } else {
+	return `${(bitrate / 1e3).toFixed(0)} kbps`;
+	// }
 }
 
 export function formatFileSize(bytes) {
@@ -40,6 +40,29 @@ export function formatFileSize(bytes) {
 
 	const i = Math.floor(Math.log(bytes) / Math.log(1024));
 	return `${(bytes / Math.pow(1024, i)).toFixed(2)} ${sizes[i]}`;
+}
+
+export function calculateFrameRate(frameRateStr) {
+	if (!frameRateStr) {
+		return 'unknown';
+	}
+
+	const parts = frameRateStr.split('/');
+	if (parts.length !== 2) {
+		return frameRateStr;
+	}
+
+	const numerator = parseFloat(parts[0]);
+	const denominator = parseFloat(parts[1]);
+
+	if (denominator === 0) {
+		return frameRateStr;
+	}
+
+	const result = numerator / denominator;
+
+	// Format to 2 decimal places but remove trailing zeros
+	return result % 1 === 0 ? result.toString() : result.toFixed(2).replace(/\.?0+$/, '');
 }
 
 export function getFileExtension(filePath) {
@@ -67,4 +90,35 @@ export function timestampToSeconds(timeString) {
 		parseInt(milliseconds, 10) / 100;
 
 	return totalSeconds;
+}
+
+function calculateFileSize(bitrate, duration) {
+	const fileSizeMB = (parseInt(bitrate) * Number(duration)) / (8 * 1024);
+	return fileSizeMB;
+}
+
+export function estimateFileSize(config) {
+	if (
+		(config?.video?.isCompress || config?.video?.isDisabled) &&
+		(config?.audio?.isCompress || config?.audio?.isMuted)
+	) {
+		let audio = parseInt(config.audio.bitrate);
+		if (config?.audio?.isMuted) audio = 0;
+
+		let video = parseInt(config.video.bitrate);
+		if (config?.video?.isDisabled) video = 0;
+
+		const bitrate = video + audio;
+		let duration = config?.metadata?.format?.duration;
+
+		if (config?.trim?.isEnabled) {
+			duration = config.trim?.end - config.trim?.start;
+		}
+
+		const mb = `${calculateFileSize(bitrate, duration).toFixed(2)} MB`;
+
+		return mb;
+	} else {
+		return null;
+	}
 }

@@ -1,9 +1,10 @@
 import { MantineProvider, Tabs, createTheme, virtualColor } from '@mantine/core';
-import { useLocalStorage } from '@mantine/hooks';
+import { useDisclosure, useLocalStorage } from '@mantine/hooks';
 import { useEffect, useMemo, useState } from 'react';
 
 import NoFileOpened from './components/NoFileOpened';
 import StatusBar from './components/StatusBar';
+import SummaryModal from './components/SummaryModal';
 import Audio from './components/Tabs/Audio';
 import Output from './components/Tabs/Output';
 import Settings from './components/Tabs/Settings';
@@ -49,7 +50,6 @@ export default function App() {
 	});
 	const [outputName, setOutputName] = useState('New_video');
 	const [outputExtension, setOutputExtension] = useState('.mp4');
-	const [isOverwrite, setIsOverwrite] = useState(false);
 
 	const [progress, setProgress] = useState(0);
 	const [isProcessing, setIsProcessing] = useState(false);
@@ -59,24 +59,34 @@ export default function App() {
 	const [thumbnail, setThumbnail] = useState(null);
 
 	// Settings
+	const [output, setOutput] = useState({
+		isOverwrite: false,
+		isMapStreams: false,
+	});
 	const [trim, setTrim] = useState({ isEnabled: false, start: 0, end: 0 });
 	const [audio, setAudio] = useState({
 		isMuted: false,
 		isMerge: false,
 		isCompress: false,
 		codec: 'opus',
-		bitrate: '64k',
+		bitrate: '64',
 	});
 	const [video, setVideo] = useState({
 		isDisabled: false,
 		isCompress: false,
-		codec: 'libx265',
-		bitrate: '2048k',
+		codec: 'libx264',
+		bitrate: '2048',
 		isResolution: false,
 		resolution: '720',
 		isFps: false,
 		fps: '30',
+		isCropdetect: false,
+		isHardsub: false,
+		isHardsubFromInput: false,
+		hardsubPath: '',
+		hardsubStreamIndex: '0',
 	});
+	const [opened, { open, close }] = useDisclosure(false);
 
 	useEffect(() => {
 		setSuccess(false);
@@ -91,6 +101,14 @@ export default function App() {
 	const handleFilePicker = async () => {
 		resetState();
 		setTrim({ isEnabled: false, start: 0, end: 0 });
+		setAudio((prev) => ({
+			...prev,
+			isMerge: false,
+		}));
+		setVideo((prev) => ({
+			...prev,
+			hardsubStreamIndex: '0',
+		}));
 
 		const filePath = await window.api.openFile();
 
@@ -129,7 +147,7 @@ export default function App() {
 				name: outputName,
 				ext: outputExtension,
 				path: outputPath + outputName.trim() + outputExtension,
-				isOverwrite,
+				...output,
 			},
 			trim,
 			video,
@@ -173,9 +191,19 @@ export default function App() {
 
 	return (
 		<MantineProvider theme={theme}>
-			<div className='grid h-full select-none grid-rows-[auto,1fr] border border-[--mantine-color-default-border]'>
+			<SummaryModal
+				opened={opened}
+				close={close}
+				file={file}
+				metadata={metadata}
+				thumbnail={thumbnail}
+				video={video}
+				audio={audio}
+				trim={trim}
+			/>
+			<div className='grid h-full select-none grid-rows-[auto_1fr] border border-(--mantine-color-default-border)'>
 				<TitleBar activeTab={activeTab} setActiveTab={setActiveTab} />
-				<div className='grid h-full grid-rows-[1fr,auto]'>
+				<div className='grid h-full grid-rows-[1fr_auto]'>
 					<Tabs
 						value={activeTab}
 						onChange={setActiveTab}
@@ -197,8 +225,8 @@ export default function App() {
 									setOutputName={setOutputName}
 									outputExtension={outputExtension}
 									setOutputExtension={setOutputExtension}
-									isOverwrite={isOverwrite}
-									setIsOverwrite={setIsOverwrite}
+									output={output}
+									setOutput={setOutput}
 									file={file}
 									metadata={metadata}
 									thumbnail={thumbnail}
@@ -260,6 +288,7 @@ export default function App() {
 						config={{ metadata, video, audio, trim }}
 						handleFilePicker={handleFilePicker}
 						handleClear={handleClear}
+						openInfoModal={open}
 					/>
 				</div>
 			</div>

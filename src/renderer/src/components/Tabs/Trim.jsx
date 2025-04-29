@@ -1,13 +1,4 @@
-import {
-	ActionIcon,
-	Button,
-	Collapse,
-	RangeSlider,
-	Slider,
-	Switch,
-	Text,
-	Title,
-} from '@mantine/core';
+import { ActionIcon, Button, Collapse, RangeSlider, Slider, Switch, Text } from '@mantine/core';
 import {
 	ArrowLineLeft,
 	ArrowLineRight,
@@ -96,8 +87,7 @@ export default function Trim({ file, metadata, trim, setTrim }) {
 
 	if (!file) {
 		return (
-			<div className='grid grid-cols-1 gap-3'>
-				<Title order={4}>Trim Video</Title>
+			<div>
 				<Text size='sm' c='dimmed'>
 					No file opened
 				</Text>
@@ -106,9 +96,8 @@ export default function Trim({ file, metadata, trim, setTrim }) {
 	}
 
 	return (
-		<div className='grid h-0 min-h-full grid-cols-1 grid-rows-[auto,1fr,auto] gap-2'>
-			<Title order={4}>Trim Video</Title>
-			<div className='app-background-dark relative flex h-0 min-h-full w-full place-content-center overflow-clip rounded-lg border border-[--tab-border-color] '>
+		<div className='grid h-0 min-h-full grid-cols-1 grid-rows-[1fr_auto] gap-2'>
+			<div className='relative flex h-0 min-h-full w-full items-center justify-center overflow-clip'>
 				{metadata?.streams.filter((stream) => stream.codec_type === 'video').at(0)
 					?.codec_name === 'hevc' && (
 					<div className='absolute flex h-full w-full items-center justify-center'>
@@ -121,7 +110,7 @@ export default function Trim({ file, metadata, trim, setTrim }) {
 					onTimeUpdate={handleTimeUpdate}
 					onPlay={() => setIsPaused(false)}
 					onPause={() => setIsPaused(true)}
-					className='aspect-video h-full cursor-pointer'
+					className='h-full max-w-full cursor-pointer rounded-lg object-contain'
 					src={`file://${file}`}
 					// controls
 					muted={isMuted}
@@ -159,24 +148,41 @@ export default function Trim({ file, metadata, trim, setTrim }) {
 
 						<div className='ml-auto flex items-center gap-2'>
 							{trim.isEnabled && (
-								<Button
-									variant='default'
-									size='compact-sm'
-									leftSection={<ArrowLineLeft size={18} weight='bold' />}
-									onClick={handleTrimStart}
-								>
-									Set Start
-								</Button>
-							)}
-							{trim.isEnabled && (
-								<Button
-									variant='default'
-									size='compact-sm'
-									onClick={handleTrimEnd}
-									rightSection={<ArrowLineRight size={18} weight='bold' />}
-								>
-									Set End
-								</Button>
+								<>
+									<Text size='sm'>
+										from{' '}
+										<Text span inherit fw={700} c='accent'>
+											{formatDuration(trim.start)}
+										</Text>{' '}
+										to{' '}
+										<Text span inherit fw={700} c='accent'>
+											{formatDuration(trim.end)}
+										</Text>
+									</Text>
+									<Text size='sm'>
+										[
+										<Text span inherit fw={700} c='accent'>
+											{formatDuration(trim.end - trim.start)}
+										</Text>
+										]
+									</Text>
+									<Button
+										variant='default'
+										size='compact-sm'
+										leftSection={<ArrowLineLeft size={18} weight='bold' />}
+										onClick={handleTrimStart}
+									>
+										Set Start
+									</Button>
+									<Button
+										variant='default'
+										size='compact-sm'
+										onClick={handleTrimEnd}
+										rightSection={<ArrowLineRight size={18} weight='bold' />}
+									>
+										Set End
+									</Button>
+								</>
 							)}
 							<Switch
 								label='Trim video'

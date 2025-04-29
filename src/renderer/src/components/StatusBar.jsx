@@ -1,39 +1,8 @@
-import { ActionIcon, Anchor, Button, Progress, Text, Tooltip } from '@mantine/core';
-import { File, Pause, Play, X } from '@phosphor-icons/react';
+import { Anchor, Button, Progress, Text, Tooltip } from '@mantine/core';
+import { File, Info, Pause, Play, X } from '@phosphor-icons/react';
 import { useEffect, useState } from 'react';
-import { formatDuration } from '../utils';
+import { estimateFileSize, formatDuration } from '../utils';
 import CopyText from './CopyText';
-
-function calculateFileSize(bitrate, duration) {
-	const fileSizeMB = (parseInt(bitrate) * Number(duration)) / (8 * 1024);
-	return fileSizeMB;
-}
-
-function estimateFileSize(config) {
-	if (
-		(config?.video?.isCompress || config?.video?.isDisabled) &&
-		(config?.audio?.isCompress || config?.audio?.isMuted)
-	) {
-		let audio = parseInt(config.audio.bitrate);
-		if (config?.audio?.isMuted) audio = 0;
-
-		let video = parseInt(config.video.bitrate);
-		if (config?.video?.isDisabled) video = 0;
-
-		const bitrate = video + audio;
-		let duration = config?.metadata?.format?.duration;
-
-		if (config?.trim?.isEnabled) {
-			duration = config.trim?.end - config.trim?.start;
-		}
-
-		const mb = `${calculateFileSize(bitrate, duration).toFixed(2)} MB`;
-
-		return mb;
-	} else {
-		return null;
-	}
-}
 
 export default function StatusBar({
 	file,
@@ -45,6 +14,7 @@ export default function StatusBar({
 	config,
 	handleFilePicker,
 	handleClear,
+	openInfoModal,
 }) {
 	const [size, setSize] = useState(0);
 	const [seconds, setSeconds] = useState(null);
@@ -74,7 +44,7 @@ export default function StatusBar({
 	};
 
 	return (
-		<div className='app-background-dark flex items-center justify-between gap-2 border-[--mantine-color-default-border] border-t px-2 py-1.5'>
+		<div className='app-background-dark flex items-center justify-between gap-2 border-(--mantine-color-default-border) border-t px-2 py-1.5'>
 			<div className='flex gap-1'>
 				{file ? (
 					<Button
@@ -163,18 +133,28 @@ export default function StatusBar({
 					>
 						{success}
 					</Anchor>
-					<CopyText value={success} />
+					<CopyText value={success} label='Copy path to clipboard' />
 				</>
 			)}
 			{!(isProcessing || success) && size && (
 				<div className='ml-auto'>
 					<Tooltip label='Estimated max file size' withArrow>
-						<Text className='shrink-0'>{size}</Text>
+						<Text className='shrink-0 whitespace-nowrap'>{size}</Text>
 					</Tooltip>
 				</div>
 			)}
 			{(isProcessing || success) && (
 				<Text className='shrink-0'>{formatDuration(seconds)}</Text>
+			)}
+			{file && (
+				<Button
+					variant='default'
+					onClick={openInfoModal}
+					size='compact-sm'
+					className='shrink-0'
+				>
+					<Info size={18} weight='bold' />
+				</Button>
 			)}
 		</div>
 	);
