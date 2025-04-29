@@ -1,4 +1,4 @@
-appId: com.electron.quviu
+appId: com.patrykku.quviu
 productName: Quviu
 directories:
     buildResources: build
@@ -6,55 +6,61 @@ files:
     - '!**/.vscode/*'
     - '!src/*'
     - '!electron.vite.config.{js,ts,mjs,cjs}'
-    - '!{.eslintignore,.eslintrc.cjs,.prettierignore,.prettierrc.yaml,dev-app-update.yml,CHANGELOG.md,README.md}'
-    - '!{.env,.env.*,.npmrc,pnpm-lock.yaml}'
+    - '!{.eslintignore,.eslintrc.cjs,.prettierignore,.prettierrc.yaml,dev-app-update.yml,CHANGELOG.md,README.md,biome.json,.gitignore,.editorconfig}'
+    - '!{.env,.env.*,.npmrc,pnpm-lock.yaml,.npmrc}'
 icon: 'build/icon.png'
 fileAssociations:
-    - ext:
-          - mp3
-          - wav
-          - flac
-          - m4a
+    - ext: mp3, wav, flac, m4a, opus
       name: Audio Files
       role: Editor
-    - ext:
-          - mp4
-          - mkv
-          - avi
-          - mov
+    - ext: mp4, mkv, avi, mov, webm
       name: Video Files
       role: Editor
 asarUnpack:
     - resources/**
     - node_modules/fluent-ffmpeg
     - out/main/chunks/*.node
+
 win:
     executableName: quviu
+    target:
+        - nsis
+        - portable
 nsis:
     artifactName: ${name}-${version}-setup.${ext}
     shortcutName: ${productName}
     uninstallDisplayName: ${productName}
     createDesktopShortcut: always
+portable:
+    artifactName: "${productName}-portable-${version}.${ext}"
+
 mac:
     entitlementsInherit: build/entitlements.mac.plist
     extendInfo:
-        # - NSCameraUsageDescription: Application requests access to the device's camera.
-        # - NSMicrophoneUsageDescription: Application requests access to the device's microphone.
         - NSDocumentsFolderUsageDescription: Application requests access to the user's Documents folder.
         - NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
     notarize: false
 dmg:
     artifactName: ${name}-${version}.${ext}
+
 linux:
     target:
-        # - AppImage
-        # - deb
+        - deb
+        - rpm
         - pacman
-        # - snap
+        - AppImage
     category: Utility
+deb:
+    depends:
+     - ffmpeg
+
+rpm:
+    depends:
+     - ffmpeg
+
+pacman:
+    depends:
+     - ffmpeg
 appImage:
     artifactName: ${name}-${version}.${ext}
 npmRebuild: false
-publish:
-    provider: generic
-    url: https://example.com/auto-updates
