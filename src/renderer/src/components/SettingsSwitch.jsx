@@ -1,24 +1,28 @@
-import { Switch, Collapse } from '@mantine/core';
+import { Collapse, Switch } from '@mantine/core';
 
-export default function SettingsSwitch({ children, condition, option, setOption, label }) {
+export default function SettingsSwitch({ children, condition, option, setOption, label, help }) {
 	return (
 		<div
-			className={`max-w-fit rounded border transition-all ${option[condition] ? 'my-1 border-[--tab-border-color] bg-[--mantine-color-dark-6]' : 'border-[--mantine-color-dark-7]'}`}
+			className={`relative max-w-fit rounded-lg border transition-all ${option[condition] ? 'app-background-alt my-1 border-(--tab-border-color)' : 'border-(--mantine-color-body)'}`}
 		>
 			<Switch
 				label={label}
-				radius='sm'
+				radius='md'
 				checked={option[condition]}
 				onChange={(event) => {
 					setOption((prev) => ({
 						...prev,
-						[condition]: event.currentTarget.checked,
+						[condition]: event.target.checked,
 					}));
 				}}
 				classNames={{ label: 'font-bold' }}
 			/>
+			<div className={`absolute top-1.5 right-1.5 ${option[condition] ? '' : 'invisible'}`}>
+				{help}
+			</div>
+
 			<Collapse in={option[condition]}>
-				<div className='ml-12 mt-2 grid gap-1.5'>{children}</div>
+				<div className='mt-2.5 ml-12 grid gap-2'>{children}</div>
 			</Collapse>
 		</div>
 	);

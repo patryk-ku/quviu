@@ -1,16 +1,37 @@
-import { Title, Text, Switch, Collapse } from '@mantine/core';
-import StreamsInfo from '../StreamsInfo';
+import { Collapse, Select, Switch, Text, TextInput } from '@mantine/core';
+import CodecInfo from '../CodecInfo';
 import SettingsSwitch from '../SettingsSwitch';
+import SimpleSwitch from '../SimpleSwitch';
+import StreamsInfo from '../StreamsInfo';
+import TitledChipGroup from '../TitledChipGroup';
 import TitledSegmentedControl from '../TitledSegmentedControl';
 
 export default function Video({ video, setVideo, metadata }) {
 	const videoStreams = metadata?.streams.filter((stream) => stream.codec_type === 'video');
 	const isVideo = videoStreams?.length > 0 ? true : false;
+	const subtitleStreams = metadata?.streams.filter((stream) => stream.codec_type === 'subtitle');
+	const isSubtitle = subtitleStreams?.length > 0 ? true : false;
+	console.log(subtitleStreams);
+	const parsedSubtitleStreams = subtitleStreams?.map((stream, index) => ({
+		value: String(index),
+		label: `${index}: ${stream.tags?.language}` || `Stream ${index}`,
+	}));
+	console.log('parsedSubtitleStreams', parsedSubtitleStreams);
+
+	const handleSubtitleFilePicker = async () => {
+		const filePath = await window.api.openAnyFile();
+
+		if (filePath && !filePath?.error) {
+			setVideo((prev) => ({
+				...prev,
+				hardsubPath: filePath,
+			}));
+		}
+	};
 
 	if (!isVideo) {
 		return (
-			<div className='grid grid-cols-1 gap-3'>
-				<Title order={4}>Video Settings</Title>
+			<div>
 				<Text size='sm' c='dimmed'>
 					No video streams detected
 				</Text>
@@ -20,17 +41,16 @@ export default function Video({ video, setVideo, metadata }) {
 
 	return (
 		<div className='grid grid-cols-1 gap-2'>
-			<Title order={4}>Video Settings</Title>
-			<StreamsInfo streams={videoStreams} />
+			<StreamsInfo streams={videoStreams} metadata={metadata} />
 			<div className='flex'>
 				<Switch
 					label='Disable Video'
-					radius='sm'
+					radius='md'
 					checked={video.isDisabled}
 					onChange={(event) => {
 						setVideo((prev) => ({
 							...prev,
-							isDisabled: event.currentTarget.checked,
+							isDisabled: event.target.checked,
 						}));
 					}}
 					className='m-[1px] pt-1'
@@ -38,15 +58,16 @@ export default function Video({ video, setVideo, metadata }) {
 				/>
 			</div>
 			<Collapse in={!video.isDisabled}>
-				<div className='grid grid-cols-1 *:-ml-2 *:p-2'>
+				<div className='*:-ml-2 grid grid-cols-1 *:p-2'>
 					<SettingsSwitch
 						option={video}
 						setOption={setVideo}
 						condition='isCompress'
 						label='Re-encode Video'
+						help={<CodecInfo />}
 					>
-						<TitledSegmentedControl
-							label='Codec:'
+						<TitledChipGroup
+							label='Codec'
 							data={[
 								{ value: 'libx264', label: 'H.264' },
 								{ value: 'libx265', label: 'H.265 HEVC' },
@@ -62,8 +83,19 @@ export default function Video({ video, setVideo, metadata }) {
 							}}
 						/>
 						<TitledSegmentedControl
-							label='Bitrate:'
-							data={['256k', '512k', '1024k', '2048k', '4096k', '8192k']}
+							label='Bitrate'
+							data={[
+								'256',
+								'512',
+								'768',
+								'1024',
+								'1500',
+								'2048',
+								'3000',
+								'4096',
+								'6000',
+								'8192',
+							]}
 							value={video.bitrate}
 							onChange={(event) => {
 								setVideo((prev) => ({
@@ -71,6 +103,8 @@ export default function Video({ video, setVideo, metadata }) {
 									bitrate: event,
 								}));
 							}}
+							custom
+							suffix=' k'
 						/>
 					</SettingsSwitch>
 
@@ -81,17 +115,8 @@ export default function Video({ video, setVideo, metadata }) {
 						label='Change Resolution'
 					>
 						<TitledSegmentedControl
-							label='Height:'
-							data={[
-								{ value: '240', label: '240p' },
-								{ value: '360', label: '360p' },
-								{ value: '480', label: '480p' },
-								{ value: '720', label: '720p' },
-								{ value: '1080', label: '1080p' },
-								{ value: '1440', label: '1440p (2K)' },
-								{ value: '2160', label: '2160p (4K)' },
-								{ value: '4320', label: '4320p (8K)' },
-							]}
+							label='Height'
+							data={['240', '360', '480', '720', '1080', '1440', '2160', '4320']}
 							value={video.resolution}
 							onChange={(event) => {
 								setVideo((prev) => ({
@@ -99,6 +124,8 @@ export default function Video({ video, setVideo, metadata }) {
 									resolution: event,
 								}));
 							}}
+							custom
+							suffix=' px'
 						/>
 					</SettingsSwitch>
 
@@ -109,7 +136,7 @@ export default function Video({ video, setVideo, metadata }) {
 						label='Change Frame Rate'
 					>
 						<TitledSegmentedControl
-							label='FPS:'
+							label='FPS'
 							data={['24', '25', '29.97', '30', '50', '59.94', '60', '120']}
 							value={video.fps}
 							onChange={(event) => {
@@ -118,8 +145,69 @@ export default function Video({ video, setVideo, metadata }) {
 									fps: event,
 								}));
 							}}
+							custom
+							allowDecimal={true}
 						/>
 					</SettingsSwitch>
+
+					<SettingsSwitch
+						option={video}
+						setOption={setVideo}
+						condition='isHardsub'
+						label='Add hardcoded subtitles'
+					>
+						<div className='grid grid-cols-[auto_1fr] items-center gap-4'>
+							<Switch
+								label='from current video'
+								radius='md'
+								checked={video.isHardsubFromInput}
+								onChange={(event) => {
+									setVideo((prev) => ({
+										...prev,
+										isHardsubFromInput: event.target.checked,
+									}));
+								}}
+								disabled={!isSubtitle}
+							/>
+							{video.isHardsubFromInput ? (
+								<Select
+									variant='filled'
+									allowDeselect={false}
+									value={video.hardsubStreamIndex}
+									onChange={(value) => {
+										setVideo((prev) => ({
+											...prev,
+											hardsubStreamIndex: value,
+										}));
+									}}
+									data={parsedSubtitleStreams}
+									className='w-[150px]'
+								/>
+							) : (
+								<TextInput
+									variant='filled'
+									value={video.hardsubPath}
+									onClick={handleSubtitleFilePicker}
+									readOnly
+									className='min-w-[550px]'
+									size='sm'
+									placeholder='Select subtitle file'
+								/>
+							)}
+						</div>
+					</SettingsSwitch>
+
+					<SimpleSwitch
+						label='Crop black bars around video'
+						checked={video.isCropdetect}
+						onChange={(event) => {
+							setVideo((prev) => ({
+								...prev,
+								isCropdetect: event.target.checked,
+							}));
+						}}
+						disabled={!video.isCompress}
+					/>
 				</div>
 			</Collapse>
 		</div>

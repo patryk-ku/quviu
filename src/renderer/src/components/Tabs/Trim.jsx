@@ -1,26 +1,16 @@
-import { useState, useRef, useEffect } from 'react';
+import { ActionIcon, Button, Collapse, RangeSlider, Slider, Switch, Text } from '@mantine/core';
 import {
-	Title,
-	Text,
-	Button,
-	Badge,
-	Slider,
-	RangeSlider,
-	ActionIcon,
-	Switch,
-	Collapse,
-} from '@mantine/core';
-import {
-	Play,
-	Pause,
-	SkipForward,
-	SkipBack,
-	SpeakerHigh,
-	SpeakerSimpleX,
 	ArrowLineLeft,
 	ArrowLineRight,
+	Pause,
+	Play,
+	SkipBack,
+	SkipForward,
+	SpeakerHigh,
+	SpeakerSimpleX,
 } from '@phosphor-icons/react';
-import { formatDuration, formatBitrate, formatFileSize, getFileExtension } from '../../utils';
+import { useEffect, useRef, useState } from 'react';
+import { formatDuration } from '../../utils';
 
 export default function Trim({ file, metadata, trim, setTrim }) {
 	const videoRef = useRef(null);
@@ -97,8 +87,7 @@ export default function Trim({ file, metadata, trim, setTrim }) {
 
 	if (!file) {
 		return (
-			<div className='grid grid-cols-1 gap-3'>
-				<Title order={4}>Trim Video</Title>
+			<div>
 				<Text size='sm' c='dimmed'>
 					No file opened
 				</Text>
@@ -107,44 +96,10 @@ export default function Trim({ file, metadata, trim, setTrim }) {
 	}
 
 	return (
-		<div className='grid h-0 min-h-full grid-cols-1 grid-rows-[auto,1fr,auto] gap-2'>
-			<div className='flex gap-4'>
-				<Title order={4}>Trim Video</Title>
-				{metadata && (
-					<div className='flex gap-2'>
-						{metadata?.format?.duration && (
-							<Badge variant='light' color='accent' size='lg' radius='sm'>
-								{formatDuration(metadata?.format?.duration)}
-							</Badge>
-						)}
-						{metadata?.format?.size && (
-							<Badge variant='light' color='accent' size='lg' radius='sm'>
-								{formatFileSize(metadata?.format?.size)}
-							</Badge>
-						)}
-						{file && (
-							<Badge variant='light' color='accent' size='lg' radius='sm'>
-								{getFileExtension(file)}
-							</Badge>
-						)}
-						{metadata?.format?.bit_rate && (
-							<Badge variant='light' color='accent' size='lg' radius='sm'>
-								{formatBitrate(metadata?.format?.bit_rate)}
-							</Badge>
-						)}
-						{metadata?.streams && (
-							<Badge variant='light' color='accent' size='lg' radius='sm'>
-								{metadata?.streams.length} streams
-							</Badge>
-						)}
-						{/* TODO: print all codecs of streams here but only for audio and video, ignore subs etc */}
-						{/* TODO: also write about resolution and fps, or move it all to settings page for audio video etc */}
-					</div>
-				)}
-			</div>
-
-			<div className='relative flex h-0 min-h-full w-full place-content-center rounded bg-[--mantine-color-dark-9]'>
-				{metadata?.streams?.at(0)?.codec_name === 'hevc' && (
+		<div className='grid h-0 min-h-full grid-cols-1 grid-rows-[1fr_auto] gap-2'>
+			<div className='relative flex h-0 min-h-full w-full items-center justify-center overflow-clip'>
+				{metadata?.streams.filter((stream) => stream.codec_type === 'video').at(0)
+					?.codec_name === 'hevc' && (
 					<div className='absolute flex h-full w-full items-center justify-center'>
 						<div>HEVC video preview is not supported</div>
 						<div></div>
@@ -155,7 +110,7 @@ export default function Trim({ file, metadata, trim, setTrim }) {
 					onTimeUpdate={handleTimeUpdate}
 					onPlay={() => setIsPaused(false)}
 					onPause={() => setIsPaused(true)}
-					className='aspect-video h-full cursor-pointer rounded'
+					className='h-full max-w-full cursor-pointer rounded-lg object-contain'
 					src={`file://${file}`}
 					// controls
 					muted={isMuted}
@@ -164,7 +119,7 @@ export default function Trim({ file, metadata, trim, setTrim }) {
 				/>
 			</div>
 
-			<div className='mb-2 grid gap-3 overflow-x-clip'>
+			<div className='mt-1 mb-2 grid gap-3 overflow-x-clip'>
 				{metadata?.format?.duration && (
 					<div className='flex items-center gap-2'>
 						<ActionIcon.Group>
@@ -193,28 +148,45 @@ export default function Trim({ file, metadata, trim, setTrim }) {
 
 						<div className='ml-auto flex items-center gap-2'>
 							{trim.isEnabled && (
-								<Button
-									variant='default'
-									size='compact-sm'
-									leftSection={<ArrowLineLeft size={18} weight='bold' />}
-									onClick={handleTrimStart}
-								>
-									Set Start
-								</Button>
-							)}
-							{trim.isEnabled && (
-								<Button
-									variant='default'
-									size='compact-sm'
-									onClick={handleTrimEnd}
-									rightSection={<ArrowLineRight size={18} weight='bold' />}
-								>
-									Set End
-								</Button>
+								<>
+									<Text size='sm'>
+										from{' '}
+										<Text span inherit fw={700} c='accent'>
+											{formatDuration(trim.start)}
+										</Text>{' '}
+										to{' '}
+										<Text span inherit fw={700} c='accent'>
+											{formatDuration(trim.end)}
+										</Text>
+									</Text>
+									<Text size='sm'>
+										[
+										<Text span inherit fw={700} c='accent'>
+											{formatDuration(trim.end - trim.start)}
+										</Text>
+										]
+									</Text>
+									<Button
+										variant='default'
+										size='compact-sm'
+										leftSection={<ArrowLineLeft size={18} weight='bold' />}
+										onClick={handleTrimStart}
+									>
+										Set Start
+									</Button>
+									<Button
+										variant='default'
+										size='compact-sm'
+										onClick={handleTrimEnd}
+										rightSection={<ArrowLineRight size={18} weight='bold' />}
+									>
+										Set End
+									</Button>
+								</>
 							)}
 							<Switch
 								label='Trim video'
-								radius='sm'
+								radius='md'
 								labelPosition='left'
 								checked={trim.isEnabled}
 								onChange={(event) =>
@@ -244,7 +216,8 @@ export default function Trim({ file, metadata, trim, setTrim }) {
 									{ value: metadata?.format?.duration },
 								]}
 								label={(value) => formatDuration(value)}
-								className='mb-2 mt-1'
+								color='accent'
+								className='mt-1 mb-2'
 								styles={{
 									thumb: {
 										backgroundColor: 'white',

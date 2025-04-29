@@ -1,28 +1,44 @@
-import { useEffect } from 'react';
-import { Title, ColorPicker, Text, ColorSwatch } from '@mantine/core';
+import {
+	Badge,
+	ColorPicker,
+	Switch,
+	Text,
+	TextInput,
+	Title,
+	useComputedColorScheme,
+	useMantineColorScheme,
+} from '@mantine/core';
 import { useLocalStorage } from '@mantine/hooks';
 import { GithubLogo, Globe } from '@phosphor-icons/react';
+import { useEffect } from 'react';
 import CopyText from '../CopyText';
 
-export default function Settings({ setColors }) {
+export default function Settings({ setColors, ffmpegPaths }) {
 	const [color, setColor] = useLocalStorage({
 		key: 'color',
 		defaultValue: '#7950f2',
 	});
 
+	const { ffmpegPath, setFfmpegPath, ffprobePath, setFfprobePath } = ffmpegPaths;
+	const { setColorScheme } = useMantineColorScheme({ keepTransitions: true });
+	const computedColorScheme = useComputedColorScheme('dark');
+	const toggleColorScheme = (checked) => {
+		setColorScheme(checked ? 'light' : 'dark');
+	};
+
 	const colorMap = {
-		'#fa5252': ['red', 'pink'],
-		'#e64980': ['pink', 'grape'],
-		'#be4bdb': ['grape', 'violet'],
-		'#7950f2': ['violet', 'grape'],
-		'#4c6ef5': ['indigo', 'cyan'],
-		'#228be6': ['blue', 'cyan'],
-		'#15aabf': ['cyan', 'green'],
-		'#12b886': ['teal', 'cyan'],
-		'#40c057': ['green', 'lime'],
-		'#82c91e': ['lime', 'teal'],
-		'#fab005': ['yellow', 'orange'],
-		'#fd7e14': ['orange', 'red'],
+		'#fa5252': ['red', 'violet'],
+		'#e64980': ['pink', 'indigo'],
+		'#be4bdb': ['grape', 'cyan'],
+		'#7950f2': ['violet', 'orange'],
+		'#4c6ef5': ['indigo', 'teal'],
+		'#228be6': ['blue', 'green'],
+		'#15aabf': ['cyan', 'lime'],
+		'#12b886': ['teal', 'violet'],
+		'#40c057': ['green', 'violet'],
+		'#82c91e': ['lime', 'yellow'],
+		'#fab005': ['yellow', 'grape'],
+		'#fd7e14': ['orange', 'violet'],
 	};
 
 	useEffect(() => {
@@ -30,25 +46,12 @@ export default function Settings({ setColors }) {
 	}, [color]);
 
 	return (
-		<div className='grid grid-cols-1 gap-2'>
-			<Title order={4}>Application Settings</Title>
-			<div className='mt-2 grid grid-cols-1 gap-6'>
+		<div className='grid grid-cols-1'>
+			<div className='grid grid-cols-1 gap-6'>
 				<div className='grid gap-1'>
 					<Title order={5}>Theme</Title>
-					<div className='mb-1 flex items-center gap-1'>
-						<Text>Current theme:</Text>
-						<ColorSwatch
-							color={`var(--mantine-color-${colorMap[color][0]}-6)`}
-							radius='sm'
-							className='ml-2'
-						/>
-						<ColorSwatch
-							color={`var(--mantine-color-${colorMap[color][1]}-6)`}
-							radius='sm'
-						/>
-					</div>
-					<div className='flex'>
-						<div className='rounded border border-[--tab-border-color] bg-[--mantine-color-dark-6] px-1.5 pb-1'>
+					<div className='grid grid-cols-[auto_1fr] gap-4'>
+						<div className='app-background-alt rounded-lg border border-(--tab-border-color) px-1.5 pb-1'>
 							<ColorPicker
 								size='xs'
 								placeholder='theme'
@@ -74,8 +77,50 @@ export default function Settings({ setColors }) {
 								swatchesPerRow={6}
 							/>
 						</div>
+						<div className='grid gap-1'>
+							<div className='flex items-center gap-1'>
+								<Text>Current theme:</Text>
+								<Badge size='md' radius='md' color={colorMap[color][0]}>
+									Primary
+								</Badge>
+								<Badge variant='gradient' size='md' radius='md'>
+									Gradient
+								</Badge>
+								<Badge size='md' radius='md' color={colorMap[color][1]}>
+									Secondary
+								</Badge>
+							</div>
+							<div className='flex'>
+								<Switch
+									label='Light theme'
+									radius='md'
+									checked={computedColorScheme === 'light'}
+									onChange={(event) => toggleColorScheme(event.target.checked)}
+								/>
+							</div>
+						</div>
 					</div>
 				</div>
+
+				<div className='grid gap-1'>
+					<Title order={5}>Custom ffmpeg paths</Title>
+					<Text size='sm' c='dimmed'>
+						May require restart.
+					</Text>
+					<TextInput
+						variant='filled'
+						label='ffmpeg'
+						value={ffmpegPath}
+						onChange={(event) => setFfmpegPath(event.target.value)}
+					/>
+					<TextInput
+						variant='filled'
+						label='ffprobe'
+						value={ffprobePath}
+						onChange={(event) => setFfprobePath(event.target.value)}
+					/>
+				</div>
+
 				<div className='grid gap-1'>
 					<Title order={5}>About</Title>
 					<div className='flex select-text items-center gap-2'>

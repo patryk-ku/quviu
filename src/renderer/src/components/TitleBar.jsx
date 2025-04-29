@@ -1,14 +1,14 @@
-import { Title, Text, ActionIcon, Tabs } from '@mantine/core';
+import { ActionIcon, Tabs, Text, Title } from '@mantine/core';
 import {
-	Minus,
-	Square,
-	X,
+	ArrowsInLineHorizontal,
 	File,
 	FrameCorners,
-	SpeakerHigh,
 	// Star,
 	GearSix,
-	ArrowsInLineHorizontal,
+	Minus,
+	SpeakerHigh,
+	Square,
+	X,
 } from '@phosphor-icons/react';
 
 export default function TitleBar({ activeTab, setActiveTab }) {
@@ -27,17 +27,17 @@ export default function TitleBar({ activeTab, setActiveTab }) {
 	return (
 		<div
 			id='title-bar'
-			className='grid select-none grid-cols-[auto,1fr,auto] items-center justify-between gap-2 bg-[--mantine-color-dark-9] p-0.5'
+			className='app-background-dark grid select-none grid-cols-[auto_1fr_auto] items-center justify-between gap-2 border-(--mantine-color-default-border) border-b p-0.5'
 		>
 			<div className='flex items-baseline gap-1 px-2 py-1'>
 				<Title order={2}>
-					<Text c='accent' span inherit>
+					<Text variant='gradient' gradient={{ deg: 317 }} span inherit>
 						Q
 					</Text>
 					uviu
 				</Title>
 				<Text size='sm' c='dimmed'>
-					v1.0.1
+					v1.0.3
 				</Text>
 			</div>
 
@@ -46,7 +46,7 @@ export default function TitleBar({ activeTab, setActiveTab }) {
 				onChange={setActiveTab}
 				variant='pills'
 				color='accent'
-				classNames={{ list: 'pb-[1px]' }}
+				classNames={{ list: 'pb-[1px]', tab: 'app-tab' }}
 			>
 				<Tabs.List justify='center'>
 					{/* <Tabs.Tab

@@ -1,6 +1,7 @@
-import { Title, TextInput, Text, Select, Switch } from '@mantine/core';
-import { FolderSimple, File } from '@phosphor-icons/react';
+import { ActionIcon, Select, Text, TextInput, Tooltip } from '@mantine/core';
+import { File, FolderSimple, PencilSimple } from '@phosphor-icons/react';
 import CopyText from '../CopyText';
+import SimpleSwitch from '../SimpleSwitch';
 
 export default function Output({
 	outputPath,
@@ -9,8 +10,9 @@ export default function Output({
 	setOutputName,
 	outputExtension,
 	setOutputExtension,
-	isOverwrite,
-	setIsOverwrite,
+	output,
+	setOutput,
+	metadata,
 }) {
 	const handleFolderPicker = async () => {
 		const folderPath = await window.api.openFolder();
@@ -20,30 +22,39 @@ export default function Output({
 		}
 	};
 
-	// TODO: When output path is emty file is saved to app dir, fix it
-
 	return (
 		<div className='grid select-none grid-cols-1 gap-2'>
-			<Title order={4}>Output file settings</Title>
 			<TextInput
+				variant='filled'
 				label='Output Folder'
 				value={outputPath}
-				// onChange={(event) => setOutputPath(event.currentTarget.value)}
 				onClick={handleFolderPicker}
-				// disabled
 				error={outputPath.length === 0 ? 'Set output path' : false}
 				leftSection={<FolderSimple size={18} weight='bold' />}
 				onChange={() => null}
 			/>
-			<div className='grid grid-cols-[1fr,auto] gap-2'>
+			<div className='grid grid-cols-[1fr_auto] gap-2'>
 				<TextInput
+					variant='filled'
 					label='File Name'
 					value={outputName}
-					onChange={(event) => setOutputName(event.currentTarget.value)}
+					onChange={(event) => setOutputName(event.target.value)}
 					leftSection={<File size={18} weight='bold' />}
+					rightSection={
+						<Tooltip label='insert original title' withArrow>
+							<ActionIcon
+								variant='subtle'
+								color='accent'
+								onClick={() => setOutputName(metadata.name)}
+							>
+								<PencilSimple size={18} weight='bold' />
+							</ActionIcon>
+						</Tooltip>
+					}
 					error={outputName.length === 0 ? 'Set output name' : false}
 				/>
 				<Select
+					variant='filled'
 					label='File Extension'
 					data={[
 						{ group: '', items: ['.mp4', '.webm', '.mkv'] },
@@ -55,21 +66,34 @@ export default function Output({
 					value={outputExtension}
 					onChange={setOutputExtension}
 					allowDeselect={false}
+					classNames={{ options: '*:min-h-[333px]' }}
 				/>
 			</div>
 			<Text size='sm' c='dimmed'>
 				Note: Not every file format is compatible with all video and audio codecs. Please
 				ensure your selected format and codec are supported.
 			</Text>
-			<div className='flex'>
-				<Switch
-					label='Overwrite file if exists'
-					mt={8}
-					radius='sm'
-					checked={isOverwrite}
-					onChange={(event) => setIsOverwrite(event.currentTarget.checked)}
-				/>
-			</div>
+			<SimpleSwitch
+				label='Overwrite file if exists'
+				checked={output.isOverwrite}
+				onChange={(event) => {
+					setOutput((prev) => ({
+						...prev,
+						isOverwrite: event.target.checked,
+					}));
+				}}
+			/>
+			<SimpleSwitch
+				label='Map all streams'
+				description="Use this to preserve all original streams e.g. subtitles in multiple languages. Caution, this may cause the conversion to fail if the output format doesn't support all streams from the input format, e.g. mkv -> mp4."
+				checked={output.isMapStreams}
+				onChange={(event) => {
+					setOutput((prev) => ({
+						...prev,
+						isMapStreams: event.target.checked,
+					}));
+				}}
+			/>
 			<div className='mt-4'>
 				<Text size='xs'>Final file path:</Text>
 				<div className='flex flex-wrap items-center gap-1'>

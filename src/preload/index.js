@@ -1,5 +1,5 @@
-import { contextBridge, ipcRenderer, shell } from 'electron';
 import { electronAPI } from '@electron-toolkit/preload';
+import { contextBridge, ipcRenderer, shell } from 'electron';
 
 // Custom APIs for renderer
 const api = {
@@ -7,6 +7,7 @@ const api = {
 	maximize: () => ipcRenderer.invoke('maximize'),
 	close: () => ipcRenderer.invoke('close'),
 	openFile: () => ipcRenderer.invoke('dialog:openFile'),
+	openAnyFile: () => ipcRenderer.invoke('dialog:openAnyFile'),
 	openFolder: () => ipcRenderer.invoke('dialog:openFolder'),
 	generateOutputVideo: (config) => ipcRenderer.invoke('generateOutputVideo', config),
 	onProgressUpdate: (callback) =>
@@ -15,6 +16,7 @@ const api = {
 	openVideo: (filePath) => {
 		shell.openPath(filePath);
 	},
+	onFileOpened: (callback) => ipcRenderer.on('file-opened', (_event, value) => callback(value)),
 };
 
 // Use `contextBridge` APIs to expose Electron APIs to
