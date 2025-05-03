@@ -68,6 +68,4 @@ jobs:
             dist/*.deb
             dist/*.rpm
             dist/*.tar.gz
-            dist/*.yml
-            dist/*.blockmap
-            dist.*.pacman
+            dist/.*.pacman
