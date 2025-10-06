@@ -1,49 +1,24 @@
 {
-	"name": "quviu",
-	"version": "1.0.3",
-	"description": "Quick video utiliies.",
-	"main": "./out/main/index.js",
-	"author": "Patryk Kurdziel <patryk.kurdziel@protonmail.com> (https://patryk-ku.ct8.pl/)",
-	"homepage": "https://github.com/patryk-ku/quviu",
-	"scripts": {
-		"format": "biome format",
-		"lint": "biome lint",
-		"biome": "biome check",
-		"start": "electron-vite preview",
-		"dev": "electron-vite dev --watch",
-		"build": "electron-vite build",
-		"postinstall": "electron-builder install-app-deps",
-		"build:unpack": "pnpm run build && electron-builder --dir",
-		"build:win": "pnpm run build && electron-builder --win --publish never",
-		"build:mac": "pnpm run build && electron-builder --mac --publish never",
-		"build:linux": "pnpm run build && electron-builder --linux --publish never"
-	},
-	"dependencies": {
-		"@electron-toolkit/preload": "^3.0.2",
-		"@electron-toolkit/utils": "^4.0.0",
-		"@mantine/core": "^7.17.5",
-		"@mantine/hooks": "^7.17.5",
-		"@phosphor-icons/react": "^2.1.7",
-		"fluent-ffmpeg": "^2.1.3"
-	},
-	"devDependencies": {
-		"@biomejs/biome": "1.9.4",
-		"@tailwindcss/postcss": "^4.1.4",
-		"@vitejs/plugin-react": "^4.4.1",
-		"electron": "^35.2.1",
-		"electron-builder": "^26.0.12",
-		"electron-vite": "^3.1.0",
-		"globals": "^16.0.0",
-		"postcss": "^8.5.3",
-		"postcss-preset-mantine": "^1.17.0",
-		"postcss-simple-vars": "^7.0.1",
-		"react": "^19.1.0",
-		"react-dom": "^19.1.0",
-		"tailwindcss": "^4.1.4",
-		"vite": "^6.3.3"
-	},
-	"pnpm": {
-		"onlyBuiltDependencies": ["electron", "electron-winstaller"],
-		"ignoredBuiltDependencies": ["@biomejs/biome", "esbuild"]
-	}
+  "name": "quviu",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "tauri": "tauri"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^2",
+    "@tauri-apps/plugin-opener": "^2",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.2.5",
+    "@tauri-apps/cli": "^2",
+    "@vitejs/plugin-react": "^4.6.0",
+    "vite": "^7.0.4"
+  }
 }

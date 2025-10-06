@@ -1,4 +1,4 @@
-<img src="resources/icon.png" align="left" width="64" height="64" />
+<img src="app-icon.png" align="left" width="64" height="64" />
 
 <h1 align="left">Quviu <img alt="GitHub Release" src="https://img.shields.io/github/v/release/patryk-ku/quviu?label=%20&color=green"> <img alt="License" src="https://img.shields.io/badge/MIT-blue?color=blue">  <img alt="Electron" src="https://img.shields.io/badge/Electron-191970?logo=Electron&logoColor=white"> <img alt="React" src="https://img.shields.io/badge/react-%2320232a.svg?logo=react&logoColor=%2361DAFB">  <img alt="Mantine" src="https://img.shields.io/badge/Mantine-ffffff?logo=Mantine&logoColor=339af0"> <img alt="Linux" src="https://img.shields.io/badge/Linux-FCC624?logo=linux&logoColor=black"> <img alt="Windows" src="https://img.shields.io/badge/Windows-0078D6?logo=windows&logoColor=white)"> <img alt="macOS" src="https://img.shields.io/badge/Mac%20OS-000000?logo=macos&logoColor=F0F0F0">
 </h1>
