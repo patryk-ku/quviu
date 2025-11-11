@@ -1,44 +1,24 @@
-import { invoke } from '@tauri-apps/api/core';
+// import { Button, Card, CardBody, Input } from '@heroui/react';
+// import { invoke } from '@tauri-apps/api/core';
 import { useState } from 'react';
-import './App.css';
+import Header from './components/Header';
+import TabView from './components/Tabs/TabView';
+import Welcome from './components/Welcome';
 
-function App() {
-	const [greetMsg, setGreetMsg] = useState('');
-	const [name, setName] = useState('');
+export default function App() {
+	const [file, setFile] = useState('');
+	const [activeTab, setActiveTab] = useState('file');
 
-	async function greet() {
-		// Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-		setGreetMsg(await invoke('greet', { name }));
+	if (!file) {
+		return <Welcome setFile={setFile} />;
 	}
 
 	return (
-		<main className='container'>
-			<h1>Welcome to Quviu Tauri version</h1>
-
-			<div className='row'>
-				<a href='?' target='_blank' rel='noopener'>
-					<img src='/icon.svg' className='logo vite' alt='Quviu logo' />
-				</a>
-			</div>
-			<p>Hello World.</p>
-
-			<form
-				className='row'
-				onSubmit={(e) => {
-					e.preventDefault();
-					greet();
-				}}
-			>
-				<input
-					id='greet-input'
-					onChange={(e) => setName(e.currentTarget.value)}
-					placeholder='Enter a name...'
-				/>
-				<button type='submit'>Greet</button>
-			</form>
-			<p>{greetMsg}</p>
-		</main>
+		<div className='flex h-screen flex-col'>
+			<Header activeTab={activeTab} setActiveTab={setActiveTab} />
+			<main className='flex-grow overflow-y-auto p-2'>
+				<TabView activeTab={activeTab} />
+			</main>
+		</div>
 	);
 }
-
-export default App;
