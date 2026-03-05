@@ -1,35 +1,15 @@
-import { Button, useDisclosure } from '@heroui/react';
-import {
-	FileMagnifyingGlassIcon,
-	PlayIcon,
-	SlidersHorizontalIcon,
-	// FileXIcon,
-	XIcon,
-} from '@phosphor-icons/react';
-import { invoke } from '@tauri-apps/api/core';
+import { Button } from '@heroui/react';
+import { XIcon } from '@phosphor-icons/react';
+
 import { useSettings } from '../contexts/SettingsContext';
 
 import Metadata from './Modals/Metadata.jsx';
 import Settings from './Modals/Settings.jsx';
+import Start from './Modals/Start.jsx';
 import TabBar from './Tabs/TabBar';
-
-async function greet() {
-	// Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-	console.log(await invoke('greet', { name: 'test' }));
-}
 
 export default function Header({ activeTab, setActiveTab }) {
 	const { updateMainSettings } = useSettings();
-	const {
-		isOpen: isMetadataOpen,
-		onOpen: onMetadataOpen,
-		onOpenChange: onMetadataOpenChange,
-	} = useDisclosure();
-	const {
-		isOpen: isSettingsOpen,
-		onOpen: onSettingsOpen,
-		onOpenChange: onSettingsOpenChange,
-	} = useDisclosure();
 
 	const handleClearFile = () => {
 		updateMainSettings('input', 'path', null);
@@ -41,18 +21,8 @@ export default function Header({ activeTab, setActiveTab }) {
 			<div className='flex flex-1 items-center gap-2'>
 				{/* <img src='/icon.svg' alt='Quviu logo' className='max-h-10' />*/}
 				{/* <span className='text-xl'>Quviu v2.0.0</span>*/}
-				<Button
-					size='md'
-					color='primary'
-					startContent={<PlayIcon size={20} weight='fill' />}
-					onPress={greet}
-				>
-					Start
-				</Button>
-				<Button isIconOnly onPress={onMetadataOpen}>
-					<FileMagnifyingGlassIcon size={20} />
-				</Button>
-				<Metadata isOpen={isMetadataOpen} onOpenChange={onMetadataOpenChange} />
+				<Start />
+				<Metadata />
 				<Button variant='flat' color='danger' isIconOnly onPress={handleClearFile}>
 					<XIcon size={20} />
 				</Button>
@@ -61,10 +31,7 @@ export default function Header({ activeTab, setActiveTab }) {
 				<TabBar activeTab={activeTab} setActiveTab={setActiveTab} />
 			</div>
 			<div className='flex flex-1 justify-end'>
-				<Button isIconOnly aria-label='Settings' onPress={onSettingsOpen}>
-					<SlidersHorizontalIcon size={20} />
-				</Button>
-				<Settings isOpen={isSettingsOpen} onOpenChange={onSettingsOpenChange} />
+				<Settings />
 			</div>
 		</header>
 	);
