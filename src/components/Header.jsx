@@ -1,6 +1,14 @@
-import { Button } from '@heroui/react';
-import { PlayIcon, SlidersHorizontalIcon, XIcon } from '@phosphor-icons/react';
+import { Button, useDisclosure } from '@heroui/react';
+import {
+	FileMagnifyingGlassIcon,
+	PlayIcon,
+	SlidersHorizontalIcon,
+	// FileXIcon,
+	XIcon,
+} from '@phosphor-icons/react';
 import { invoke } from '@tauri-apps/api/core';
+import { useSettings } from '../contexts/SettingsContext';
+import MetadataModal from './MetadataModal.jsx';
 import TabBar from './Tabs/TabBar';
 
 async function greet() {
@@ -9,6 +17,14 @@ async function greet() {
 }
 
 export default function Header({ activeTab, setActiveTab }) {
+	const { updateMainSettings } = useSettings();
+	const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+	const handleClearFile = () => {
+		updateMainSettings('input', 'path', null);
+		updateMainSettings('input', 'metadata', null);
+	};
+
 	return (
 		<header className='flex items-center justify-between px-2 pt-2'>
 			<div className='flex flex-1 items-center gap-2'>
@@ -22,7 +38,11 @@ export default function Header({ activeTab, setActiveTab }) {
 				>
 					Start
 				</Button>
-				<Button variant='flat' color='danger' isIconOnly>
+				<Button isIconOnly onPress={onOpen}>
+					<FileMagnifyingGlassIcon size={20} />
+				</Button>
+				<MetadataModal isOpen={isOpen} onOpenChange={onOpenChange} />
+				<Button variant='flat' color='danger' isIconOnly onPress={handleClearFile}>
 					<XIcon size={20} />
 				</Button>
 			</div>

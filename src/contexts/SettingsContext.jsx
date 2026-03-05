@@ -53,7 +53,10 @@ const initialSettings = {
 		overwrite: false,
 		mapAllStreams: false,
 	},
-	input: null,
+	input: {
+		path: null,
+		metadata: null,
+	},
 };
 
 const SettingsContext = createContext();
