@@ -8,7 +8,9 @@ import {
 } from '@phosphor-icons/react';
 import { invoke } from '@tauri-apps/api/core';
 import { useSettings } from '../contexts/SettingsContext';
-import MetadataModal from './MetadataModal.jsx';
+
+import Metadata from './Modals/Metadata.jsx';
+import Settings from './Modals/Settings.jsx';
 import TabBar from './Tabs/TabBar';
 
 async function greet() {
@@ -18,7 +20,16 @@ async function greet() {
 
 export default function Header({ activeTab, setActiveTab }) {
 	const { updateMainSettings } = useSettings();
-	const { isOpen, onOpen, onOpenChange } = useDisclosure();
+	const {
+		isOpen: isMetadataOpen,
+		onOpen: onMetadataOpen,
+		onOpenChange: onMetadataOpenChange,
+	} = useDisclosure();
+	const {
+		isOpen: isSettingsOpen,
+		onOpen: onSettingsOpen,
+		onOpenChange: onSettingsOpenChange,
+	} = useDisclosure();
 
 	const handleClearFile = () => {
 		updateMainSettings('input', 'path', null);
@@ -38,10 +49,10 @@ export default function Header({ activeTab, setActiveTab }) {
 				>
 					Start
 				</Button>
-				<Button isIconOnly onPress={onOpen}>
+				<Button isIconOnly onPress={onMetadataOpen}>
 					<FileMagnifyingGlassIcon size={20} />
 				</Button>
-				<MetadataModal isOpen={isOpen} onOpenChange={onOpenChange} />
+				<Metadata isOpen={isMetadataOpen} onOpenChange={onMetadataOpenChange} />
 				<Button variant='flat' color='danger' isIconOnly onPress={handleClearFile}>
 					<XIcon size={20} />
 				</Button>
@@ -50,9 +61,10 @@ export default function Header({ activeTab, setActiveTab }) {
 				<TabBar activeTab={activeTab} setActiveTab={setActiveTab} />
 			</div>
 			<div className='flex flex-1 justify-end'>
-				<Button isIconOnly aria-label='Settings'>
+				<Button isIconOnly aria-label='Settings' onPress={onSettingsOpen}>
 					<SlidersHorizontalIcon size={20} />
 				</Button>
+				<Settings isOpen={isSettingsOpen} onOpenChange={onSettingsOpenChange} />
 			</div>
 		</header>
 	);
